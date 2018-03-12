@@ -7,12 +7,16 @@ import {
     FETCH_FEATURE
 } from './types';
 
-const ROOT_URL = 'http://localhost:3090';
+const ROOT_URL = 'http://localhost:8080/api';
 
-export const signinUser = ({ email, password }) => {
+export const signinUser = ({ username, password }) => {
+    console.log('asi')
     return (dispatch) => {
         // submit email/password to the server
-        axios.post(`${ROOT_URL}/signin`, { email, password })
+        axios.post('http://localhost:8080/api/login', { username, password },{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          })
             .then(response => {
 
                 // if request is good...
@@ -20,7 +24,8 @@ export const signinUser = ({ email, password }) => {
                 dispatch({ type: AUTH_USER });
 
                 // - save the jwt token
-                localStorage.setItem('token', response.data.token);
+                console.log(response.data);
+                localStorage.setItem('token', response.data.AuthToken);
 
                 // - redirect to the route '/feature'
                 History.push('/feature');
@@ -36,7 +41,10 @@ export const signinUser = ({ email, password }) => {
 export const signupUser = ({ email, password }) => {
     return (dispatch) => {
         // submit email/password to the server
-        axios.post(`${ROOT_URL}/signup`, { email, password })
+        axios.post(`${ROOT_URL}/signup`, { email, password },{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          })
             .then(response => {
                 dispatch({ type: AUTH_USER });
                 localStorage.setItem('token', response.data.token);
@@ -63,7 +71,10 @@ export const signoutUser = () => {
 export const fetchFeature = () => {
     return (dispatch) => {
         axios.get(ROOT_URL, {
-            headers: { authorization: localStorage.getItem('token') }
+            headers: { authorization: localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+               }
         })
         .then(response =>{
             dispatch({

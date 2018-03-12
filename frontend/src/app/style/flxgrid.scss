@@ -1,0 +1,140 @@
+$default:1280px;
+$md:1280px;
+$sm:1024px;
+$xs:768px;
+$ps:480px;
+$responsive-sizes:(
+  "default":("min-width": $default),
+  "md":("max-width": $md),
+  "sm":("max-width": $sm),
+  "xs":("max-width": $xs),
+  "ps":("max-width": $ps)
+);
+$orientations: "left" "right";
+$columns:12;
+.row {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  // margin-right: -0.5rem;
+  // margin-left: -0.5rem;
+}
+.a{
+  background: blue;
+}
+.b{
+  background: tomato;
+}
+.c{
+  background: #333;
+}
+.d{
+  background: green;
+}
+.e{
+  background: mediumseagreen;
+}
+@mixin rowalign($align) {
+  justify-content: $align;
+}
+@mixin colalign($align) {
+  align-items: $align;
+}
+@mixin rowalignment($size) {
+  @if ($size == default){
+    .start{
+      @include rowalign(flex-start);
+    }
+    .center{
+      @include rowalign(center);
+    }
+    .end{
+      @include rowalign(flex-end);
+    }
+    .top{
+      @include colalign(flex-start);
+    }
+    .middle{
+      @include colalign(center);
+    }
+    .bottom{
+      @include colalign(flex-end);
+    }
+    .around{
+      @include rowalign(space-around);
+    }
+    .between{
+      @include rowalign(space-between);
+    }
+  } @else {
+      .start-#{$size}{
+        @include rowalign(flex-start);
+      }
+      .center-#{$size}{
+        @include rowalign(center);
+      }
+      .end-#{$size}{
+        @include rowalign(flex-end);
+      }
+      .top-#{$size}{
+        @include colalign(flex-start);
+      }
+      .middle-#{$size}{
+        @include colalign(center);
+      }
+      .bottom-#{$size}{
+        @include colalign(flex-end);
+      }
+      .around-#{$size}{
+        @include rowalign(space-around);
+      }
+      .between-#{$size}{
+        @include rowalign(space-between);
+      }
+    }
+  }
+
+@each $key, $value in $responsive-sizes {
+  @if ($key == default){
+    $min-width: map-get($value, "min-width");
+    @media screen and (min-width: $min-width) {
+      @include rowalignment(default);
+      @for $i from 1 through $columns {
+        .col--#{$i} {
+          -ms-flex-preferred-size: (100%/12*$i);
+          flex-basis: (100%/12*$i);
+          max-width: (100%/12*$i);
+        }
+    }
+    @each $orient in $orientations{
+      @for $i from 1 through $columns {
+        .col-off--#{$orient}--#{$i} {
+         margin-#{$orient}: (100%/12*$i);
+        }
+      }
+    }
+  }
+  }@else{
+    $max-width: map-get($value, "max-width");
+    @media screen and (max-width: $max-width) {
+      @include rowalignment($key);
+      @for $i from 1 through $columns {
+        .col--#{$key}--#{$i} {
+          -ms-flex-preferred-size: (100%/12*$i);
+          flex-basis: (100%/12*$i);
+          max-width: (100%/12*$i);
+        }
+    }
+    @each $orient in $orientations{
+      @for $i from 1 through $columns {
+        .col-off--#{$key}--#{$orient}--#{$i} {
+         margin-#{$orient}: (100%/12*$i);
+        }
+      }
+    }
+    }
+  }
+
+}

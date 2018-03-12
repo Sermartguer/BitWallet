@@ -1,0 +1,27 @@
+.navbar{
+    background: $colorBase;
+}
+
+.navbar__item{
+    text-align: center;
+    list-style: none;
+    font-size: 20px;
+    padding: 20px;
+    .navbar__item--color{
+        color: rgba(242, 238, 255, .8)
+    }
+    a{
+        padding: 20px;
+        text-decoration: none;  
+    }
+    a:hover{
+       color: white;
+    }
+    .navbar__item--title{
+        color: white
+    }
+    .title--color{
+        color: white;
+        font-weight: bold;
+    }
+}

@@ -10,8 +10,8 @@ import { AUTH_USER } from './actions/types';
 
 import rootReducer from './reducers';
 
-//import './style/style.css';
-
+import './style/flxgrid.scss';
+import './style/style.scss';
 //import registerServiceWorker from './registerServiceWorker';
 
 /*
@@ -34,7 +34,7 @@ const token = localStorage.getItem('token');
 // if we have a token, consiger the user to be signed in
 if (token) {
     // we need to update application state
-    store.dispatch({ type: AUTH_USER });
+    store.dispatch({token:token, type: AUTH_USER });
 }
 
 ReactDOM.render(

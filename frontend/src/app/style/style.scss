@@ -1,0 +1,19 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+    overflow-x: hidden
+}
+html {
+    min-height: 100%;
+    position: relative;
+  }
+$colorBase:#0667d0;
+@import "./header.scss";
+@import "./footer.scss";
+.modal__header{
+    font-size: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9e9e9;
+    text-align: center;
+}

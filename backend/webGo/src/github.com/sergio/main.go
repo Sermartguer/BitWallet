@@ -196,7 +196,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	var params map[string]string
 	json.Unmarshal(dat, &params)
 	log.Printf(params["Username"])
-	credentials := GetCredentials(params["Username"], params["Password"])
+	credentials := GetCredentials(params["username"], params["password"])
 
 	out, _ := json.MarshalIndent(&credentials, "", "  ")
 	fmt.Fprintf(w, string(out))

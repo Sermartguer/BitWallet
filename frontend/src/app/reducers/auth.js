@@ -3,12 +3,14 @@ import {
     UNAUTH_USER,
     AUTH_ERROR
 } from '../actions/types';
+var jwtDecode = require('jwt-decode');
 
 export const reducer = (state = {}, action) => {
 
     switch (action.type) {
         case AUTH_USER:
-            return { ...state, error: '', authenticated: true }
+            var decoded = jwtDecode(action.token);
+            return { ...state, error: '', authenticated: true, username:decoded.sub }
         case UNAUTH_USER:
             return { ...state, authenticated: false }
         case AUTH_ERROR:
