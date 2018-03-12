@@ -186,6 +186,8 @@ func GetCredentials(username, password string) Creds {
 		credentials.AuthToken, err = token.SignedString([]byte("biscuits and gravy"))
 		if err != nil {
 			log.Println(err)
+		} else {
+			log.Println(credentials.AuthToken)
 		}
 	}
 	return credentials
@@ -195,12 +197,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// Unmarshall this into a map
 	var params map[string]string
 	json.Unmarshal(dat, &params)
-	log.Printf(params["Username"])
+	log.Printf(params["username"])
 	credentials := GetCredentials(params["username"], params["password"])
 
-	out, _ := json.MarshalIndent(&credentials, "", "  ")
-	fmt.Fprintf(w, string(out))
-
+	out, _ := json.Marshal(&credentials)
+	log.Printf(string(out))
+	//fmt.Fprintf(w, string(out))
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
 }
 
 func hasValidToken(jwtToken string) bool {

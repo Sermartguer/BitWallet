@@ -21,16 +21,17 @@ export const signinUser = ({ username, password }) => {
 
                 // if request is good...
                 // - update state to indicate user is authenticated
-                dispatch({ type: AUTH_USER });
-
-                // - save the jwt token
                 console.log(response.data);
                 localStorage.setItem('token', response.data.AuthToken);
+                dispatch({ token:response.data.AuthToken,type: AUTH_USER });
+                // - save the jwt token
+                
 
                 // - redirect to the route '/feature'
-                History.push('/feature');
+                //History.push('/feature');
 
-            }).catch(() => {
+            }).catch((err) => {
+                console.log(err)
                 // if request is bad...
                 // - show an error to the user
                 dispatch(authError('Bad Login Info'));
@@ -51,6 +52,7 @@ export const signupUser = ({ email, password }) => {
                 History.push('/feature');
             })
             .catch(err => {
+                console.log(err)
                 dispatch(authError(err.response.data.error));
             });
     };
