@@ -21,6 +21,15 @@ type Creds struct {
 	IsLoggedIn  bool
 }
 
+func Islogged(w http.ResponseWriter, r *http.Request) {
+	//var jwtResponse jwtKey
+	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request
+	// Unmarshall this into a map
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+	log.Println(reflect.TypeOf(params["jwt"]))
+	hasValidToken(params["jwt"])
+}
 func Login(w http.ResponseWriter, r *http.Request) {
 	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request
 	// Unmarshall this into a map
@@ -33,15 +42,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(out))
 
 }
-func idLogged(w http.ResponseWriter, r *http.Request) {
-	//var jwtResponse jwtKey
-	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request
-	// Unmarshall this into a map
-	var params map[string]string
-	json.Unmarshal(dat, &params)
-	log.Println(reflect.TypeOf(params["jwt"]))
-	hasValidToken(params["jwt"])
-}
+
 func hasValidToken(jwtToken string) bool {
 	ret := false
 	token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {

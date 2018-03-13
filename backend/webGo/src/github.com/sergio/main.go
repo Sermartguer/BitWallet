@@ -1,17 +1,15 @@
 package main
 
 import (
-	"database/sql"
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"reflect"
 	"strconv"
 	"time"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	"./common"
+	"./users"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
@@ -46,7 +44,7 @@ func GetNoteHandler(w http.ResponseWriter, r *http.Request) {
 
 	var notes []Note
 
-	db := dbConn()
+	db := common.DbConn()
 	selDB, err := db.Query("SELECT * FROM test")
 	if err != nil {
 		panic(err.Error())
@@ -91,7 +89,7 @@ func PostNoteHandler(w http.ResponseWriter, r *http.Request) {
 	k := strconv.Itoa(id)
 	noteStore[k] = note
 
-	db := dbConn()
+	db := common.DbConn()
 
 	insForm, err := db.Prepare("INSERT INTO test (title, description, create_at) VALUES(?,?,?)")
 	if err != nil {
@@ -146,105 +144,14 @@ func DeleteUsersHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func dbConn() (db *sql.DB) {
-	dbDriver := "mysql"
-	dbUser := "root"
-	dbPass := "root"
-	dbName := "testing"
-	db, err := sql.Open(dbDriver, dbUser+":"+dbPass+"@/"+dbName)
-	if err != nil {
-		panic(err.Error())
-	}
-	return db
-}
-func GetCredentials(username, password string) Creds {
-	credentials := Creds{
-		Status:      "UNAUTHORIZED",
-		APIKey:      "",
-		AccountType: "",
-		Email:       "",
-		AuthToken:   "",
-		IsLoggedIn:  false,
-	}
-	if (username == "admin") && (password == "admin") {
-		credentials.Status = "OK"
-		credentials.APIKey = "12345"
-		credentials.AccountType = "admin"
-		credentials.Email = "admin@example.com"
-		credentials.IsLoggedIn = true
-		// Now create a JWT for user
-		// Create the token
-		token := jwt.New(jwt.SigningMethodHS256)
-		claims := make(jwt.MapClaims)
-		// Set some claims
-		claims["sub"] = username
-		claims["iss"] = "example.com"
-		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
-
-		token.Claims = claims
-		var err error
-		credentials.AuthToken, err = token.SignedString([]byte("biscuits and gravy"))
-		if err != nil {
-			log.Println(err)
-		} else {
-			log.Println(credentials.AuthToken)
-		}
-	}
-	return credentials
-}
-func Login(w http.ResponseWriter, r *http.Request) {
-	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request
-	// Unmarshall this into a map
-	var params map[string]string
-	json.Unmarshal(dat, &params)
-	log.Printf(params["username"])
-	credentials := GetCredentials(params["username"], params["password"])
-
-	out, _ := json.Marshal(&credentials)
-	log.Printf(string(out))
-	//fmt.Fprintf(w, string(out))
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(out)
-}
-
-func hasValidToken(jwtToken string) bool {
-	ret := false
-	token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-		}
-		return myLookupKey(), nil
-	})
-
-	if err == nil && token.Valid {
-		ret = true
-	}
-	log.Println(ret)
-
-	return ret
-}
-func myLookupKey() []byte {
-	return []byte("biscuits and gravy")
-}
-func idLogged(w http.ResponseWriter, r *http.Request) {
-	//var jwtResponse jwtKey
-	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request
-	// Unmarshall this into a map
-	var params map[string]string
-	json.Unmarshal(dat, &params)
-	log.Println(reflect.TypeOf(params["jwt"]))
-	hasValidToken(params["jwt"])
-
-}
 func main() {
 	r := mux.NewRouter().StrictSlash(false)
 	r.HandleFunc("/api/notes", GetNoteHandler).Methods("GET")
 	r.HandleFunc("/api/notes", PostNoteHandler).Methods("POST")
 	r.HandleFunc("/api/notes/{id}", PutNoteHandler).Methods("PUT")
 	r.HandleFunc("/api/notes/{id}", DeleteUsersHandler).Methods("DELETE")
-	r.HandleFunc("/api/login", Login).Methods("POST")
-	r.HandleFunc("/api/isLoged", idLogged).Methods("POST")
+	r.HandleFunc("/api/login", users.Login).Methods("POST")
+	r.HandleFunc("/api/isLoged", users.Islogged).Methods("POST")
 	server := &http.Server{
 		Addr:           ":8080",
 		Handler:        cors.Default().Handler(r),
