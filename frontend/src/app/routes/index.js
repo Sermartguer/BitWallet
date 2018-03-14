@@ -7,7 +7,7 @@ import Signout from '../components/auth/signout';
 import Signup from '../components/auth/signup';
 import Feature from '../components/feature';
 import Welcome from '../components/welcome';
-
+import Dashboard from '../components/dashboard';
 const Routes = () => {
     return (
         <App>
@@ -16,6 +16,7 @@ const Routes = () => {
             <Route exact path="/signout" component={Signout} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/feature" component={RequireAuth(Feature)} />
+            <Route exact path="/dashboard" component={RequireAuth(Dashboard)} />
         </App>
     );
 };

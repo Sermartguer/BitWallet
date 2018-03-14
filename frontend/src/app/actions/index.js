@@ -28,7 +28,7 @@ export const signinUser = ({ username, password }) => {
                 
 
                 // - redirect to the route '/feature'
-                //History.push('/feature');
+                History.push('/feature');
 
             }).catch((err) => {
                 console.log(err)

@@ -19,6 +19,7 @@
     "prop-types": "^15.6.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-flexbox-grid": "^2.0.0",
     "react-icons": "^2.2.5",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.2",

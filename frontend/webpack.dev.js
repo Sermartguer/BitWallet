@@ -15,13 +15,20 @@ module.exports = {
       exclude: /node_modules/
     }, 
     {
-      test: /\.scss|css$/,
-      use: [
-        'style-loader',
-        'css-loader',
-        'sass-loader'
-      ]
+      test: /\.css$/,
+      loader: 'style-loader!css-loader',
+      include: /flexboxgrid/
     },
+    {
+      test: /\.scss$/,
+      use: [{
+          loader: "style-loader" // creates style nodes from JS strings
+      }, {
+          loader: "css-loader" // translates CSS into CommonJS
+      }, {
+          loader: "sass-loader" // compiles Sass to CSS
+      }]
+  },
     {
         test: /\.(png|jpg|gif)$/,
         use: [

@@ -1,7 +1,20 @@
 .navbar{
     background: $colorBase;
-}
+    display: flex;
+    justify-content: space-around;
 
+}
+header{
+    box-shadow: 0 2px 15px rgba(84,96,103,.25);
+     box-shadow: 0 7px 14px 0 rgba(50,50,93,.1), 0 3px 6px 0 rgba(0,0,0,.07);
+}
+.navbar__items{
+    display: flex;
+    li{
+        list-style: none;
+
+    }
+}
 .navbar__item{
     text-align: center;
     list-style: none;
@@ -25,3 +38,8 @@
         font-weight: bold;
     }
 }
+@media (max-width: 1024px) {
+    .navbar__item{
+        font-size: medium;
+    }
+ }

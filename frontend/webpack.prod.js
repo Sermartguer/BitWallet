@@ -25,11 +25,19 @@ module.exports = {
                 use: 'babel-loader',
             },
             {
-                test: /\.scss|css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: ['css-loader', 'sass-loader']
-                })
+                test: /\.css$/,
+                loader: 'style-loader!css-loader',
+                include: /flexboxgrid/
+              },
+              {
+                test: /\.scss$/,
+                use: [{
+                    loader: "style-loader" // creates style nodes from JS strings
+                }, {
+                    loader: "css-loader" // translates CSS into CommonJS
+                }, {
+                    loader: "sass-loader" // compiles Sass to CSS
+                }]
             },
             {
                 test: /\.(eot|woff|woff2|ttf|svg|ico|png|jpe?g|gif)$/,

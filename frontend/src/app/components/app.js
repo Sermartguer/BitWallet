@@ -6,12 +6,8 @@ class App extends Component {
     return (
       <div>
         <Header />
-        <div className="container" style={{ marginTop: '50px' }}>
-          <div className="row">
-            <div className="col-md-12">
+        <div className="cont">
               {this.props.children}
-            </div>
-          </div>
         </div>
         <Footer />
       </div>

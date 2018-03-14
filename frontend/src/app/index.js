@@ -10,8 +10,8 @@ import { AUTH_USER } from './actions/types';
 
 import rootReducer from './reducers';
 
-import './style/flxgrid.scss';
-import './style/style.scss';
+// import './style/flxgrid.scss';
+ import './style/style.scss';
 //import registerServiceWorker from './registerServiceWorker';
 
 /*

@@ -8,12 +8,27 @@ html {
     min-height: 100%;
     position: relative;
   }
-$colorBase:#0667d0;
+$colorBase:#0099e5;
 @import "./header.scss";
 @import "./footer.scss";
+@import "./dashboard.scss";
 .modal__header{
     font-size: 30px;
     padding-bottom: 10px;
     border-bottom: 1px solid #e9e9e9;
     text-align: center;
 }
+.all{
+    height: 100vh;
+}
+.all2{
+    background: lighten($color: $colorBase, $amount: 10%)
+}
+body{
+    background: rgb(244, 247, 250);
+}
+@media (max-width: 768px) {
+    .all{
+        height: 20vh;
+        }
+ }
