@@ -9,7 +9,9 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/asaskevich/govalidator"
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/rs/xid"
 )
 
 type Creds struct {
@@ -19,6 +21,12 @@ type Creds struct {
 	Email       string
 	AuthToken   string
 	IsLoggedIn  bool
+}
+type User struct {
+	ID       string `json:"id" valid:"-"`
+	Username string `json:"username" valid:"required~Username is blank"`
+	Email    string `json:"email" valid:"email"`
+	Password string `json:"password" valid:"length(5|10)"`
 }
 
 func Islogged(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +50,42 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(out))
 
 }
+func Register(w http.ResponseWriter, r *http.Request) {
+	user_data := User{
+		ID:       "Undefined",
+		Username: "",
+		Email:    "",
+		Password: "",
+	}
+	govalidator.SetFieldsRequiredByDefault(true)
+	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request
+	// Unmarshall this into a map
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+	var id = xid.New()
+	user_data.ID = id.String()
+	user_data.Username = params["username"]
+	user_data.Email = params["email"]
+	user_data.Password = params["password"]
 
+	result, err := govalidator.ValidateStruct(user_data)
+	if err != nil {
+		println("error: " + err.Error())
+	}
+	println(result)
+	log.Printf(params["username"])
+	log.Printf(params["email"])
+	log.Printf(params["password"])
+	log.Printf(params["acc_type"])
+	out, _ := json.MarshalIndent(&user_data, "", "  ")
+
+	log.Printf(string(out))
+	//credentials := GetCredentials(params["username"], params["password"])
+
+	//out, _ := json.MarshalIndent(&credentials, "", "  ")
+	fmt.Fprintf(w, "Successs")
+
+}
 func hasValidToken(jwtToken string) bool {
 	ret := false
 	token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {

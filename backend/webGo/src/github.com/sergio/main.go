@@ -152,8 +152,9 @@ func main() {
 	r.HandleFunc("/api/notes/{id}", DeleteUsersHandler).Methods("DELETE")
 	r.HandleFunc("/api/login", users.Login).Methods("POST")
 	r.HandleFunc("/api/isLoged", users.Islogged).Methods("POST")
+	r.HandleFunc("/api/register", users.Register).Methods("POST")
 	server := &http.Server{
-		Addr:           ":8080",
+		Addr:           ":8081",
 		Handler:        cors.Default().Handler(r),
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
