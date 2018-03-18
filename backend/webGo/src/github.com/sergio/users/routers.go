@@ -11,7 +11,7 @@ import (
 
 	"github.com/asaskevich/govalidator"
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/rs/xid"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Creds struct {
@@ -23,10 +23,15 @@ type Creds struct {
 	IsLoggedIn  bool
 }
 type User struct {
-	ID       string `json:"id" valid:"-"`
-	Username string `json:"username" valid:"required~Username is blank"`
-	Email    string `json:"email" valid:"email"`
-	Password string `json:"password" valid:"length(5|10)"`
+	ID          string `json:"id" valid:"-"`
+	Username    string `json:"username" valid:"required~Username is blank"`
+	Email       string `json:"email" valid:"email"`
+	Password    string `json:"password" valid:"length(5|10)"`
+	CreatedAt   string `json:"create_at" valid:"-"`
+	AccountType string `json:"acc_type" valid:"optional"`
+}
+type Error struct {
+	TextError string `json:"error"`
 }
 
 func Islogged(w http.ResponseWriter, r *http.Request) {
@@ -51,40 +56,29 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 }
 func Register(w http.ResponseWriter, r *http.Request) {
-	user_data := User{
-		ID:       "Undefined",
-		Username: "",
-		Email:    "",
-		Password: "",
-	}
+	w.Header().Set("Content-Type", "application/json")
+
 	govalidator.SetFieldsRequiredByDefault(true)
 	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request
-	// Unmarshall this into a map
-	var params map[string]string
-	json.Unmarshal(dat, &params)
-	var id = xid.New()
-	user_data.ID = id.String()
-	user_data.Username = params["username"]
-	user_data.Email = params["email"]
-	user_data.Password = params["password"]
+	user_data := ValidateParams(dat)
 
-	result, err := govalidator.ValidateStruct(user_data)
-	if err != nil {
-		println("error: " + err.Error())
+	if !user_data.Error {
+		log.Printf(user_data.TextError)
+		j, err := json.Marshal(user_data.TextError)
+		if err != nil {
+			panic(err)
+		}
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(j)
+	} else {
+		saved := SaveUser(user_data)
+		if saved {
+			log.Printf("Saved on DB")
+			w.WriteHeader(http.StatusCreated)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 	}
-	println(result)
-	log.Printf(params["username"])
-	log.Printf(params["email"])
-	log.Printf(params["password"])
-	log.Printf(params["acc_type"])
-	out, _ := json.MarshalIndent(&user_data, "", "  ")
-
-	log.Printf(string(out))
-	//credentials := GetCredentials(params["username"], params["password"])
-
-	//out, _ := json.MarshalIndent(&credentials, "", "  ")
-	fmt.Fprintf(w, "Successs")
-
 }
 func hasValidToken(jwtToken string) bool {
 	ret := false
