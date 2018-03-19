@@ -43,18 +43,18 @@ func Islogged(w http.ResponseWriter, r *http.Request) {
 	log.Println(reflect.TypeOf(params["jwt"]))
 	hasValidToken(params["jwt"])
 }
-func Login(w http.ResponseWriter, r *http.Request) {
-	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request
-	// Unmarshall this into a map
-	var params map[string]string
-	json.Unmarshal(dat, &params)
-	log.Printf(params["username"])
-	credentials := GetCredentials(params["username"], params["password"])
 
-	out, _ := json.MarshalIndent(&credentials, "", "  ")
-	fmt.Fprintf(w, string(out))
+// func Login(w http.ResponseWriter, r *http.Request) {
+// 	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request
+// 	// Unmarshall this into a map
+// 	var params map[string]string
+// 	json.Unmarshal(dat, &params)
+// 	log.Printf(params["username"])
+// 	credentials := GetCredentials(params["username"], params["password"])
 
-}
+// 	out, _ := json.MarshalIndent(&credentials, "", "  ")
+// 	fmt.Fprintf(w, string(out))
+// }
 func Register(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -98,7 +98,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusCreated)
 		return
 	}
-
 }
 func hasValidToken(jwtToken string) bool {
 	ret := false

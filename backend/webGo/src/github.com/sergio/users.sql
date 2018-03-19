@@ -1,14 +1,14 @@
 CREATE TABLE `users` (
-  `id` int(6) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(30) NOT NULL,
-  `email` varchar(30) NOT NULL,
-  `password` varchar(30) NOT NULL,
-  `firstname` varchar(30) NOT NULL,
-  `surname` varchar(30) NOT NULL,
-  `picture` varchar(30) NOT NULL,
-  `acc_type` varchar(30) NOT NULL,
-  `create_at` varchar(30) NOT NULL,
-  `update_at` varchar(30) NOT NULL,
-  `active` varchar(30) NOT NULL,
+  `id` VARCHAR(50) NOT NULL,
+  `username` VARCHAR(30) NOT NULL,
+  `email` VARCHAR(30) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
+  `firstname` VARCHAR(30) DEFAULT NULL,
+  `surname` VARCHAR(30) DEFAULT NULL,
+  `picture` VARCHAR(30) DEFAULT NULL,
+  `acc_type` VARCHAR(30) NOT NULL,
+  `create_at` VARCHAR(30) NOT NULL,
+  `update_at` VARCHAR(30) NOT NULL,
+  `active` VARCHAR(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
