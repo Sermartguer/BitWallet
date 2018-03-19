@@ -59,26 +59,46 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	govalidator.SetFieldsRequiredByDefault(true)
-	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request
-	user_data := ValidateParams(dat)
-
-	if !user_data.Error {
-		log.Printf(user_data.TextError)
-		j, err := json.Marshal(user_data.TextError)
-		if err != nil {
-			panic(err)
-		}
-		w.WriteHeader(http.StatusUnauthorized)
+	dat, _ := ioutil.ReadAll(r.Body)
+	userData := ValidateParams(dat)
+	var ok bool
+	ok = true
+	if !userData.Error {
+		log.Printf(userData.TextError)
+		j, _ := json.Marshal(userData.TextError)
+		ok = false
+		w.WriteHeader(http.StatusUnprocessableEntity)
 		w.Write(j)
-	} else {
-		saved := SaveUser(user_data)
-		if saved {
-			log.Printf("Saved on DB")
-			w.WriteHeader(http.StatusCreated)
-		} else {
-			w.WriteHeader(http.StatusInternalServerError)
-		}
+		return
 	}
+
+	match := CheckPasswordHash(userData.Password2, userData.Password)
+	if !match {
+		ok = false
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		j, _ := json.Marshal("Passwords does not match")
+		w.Write(j)
+		return
+	}
+	userExist := CheckUser(userData)
+	if userExist {
+		w.WriteHeader(http.StatusBadRequest)
+		j, _ := json.Marshal("Username or email already exist")
+		w.Write(j)
+		return
+	}
+	saved := SaveUser(userData)
+	if !saved {
+		ok = false
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if ok {
+		log.Printf("Saved on DB")
+		w.WriteHeader(http.StatusCreated)
+		return
+	}
+
 }
 func hasValidToken(jwtToken string) bool {
 	ret := false
