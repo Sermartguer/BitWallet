@@ -39,3 +39,48 @@ func CheckUser(user_data UserModelValidator) bool {
 	defer db.Close()
 	return true
 }
+func SearchUser(username string) bool {
+	db := common.DbConn()
+	err := db.QueryRow("SELECT username FROM users WHERE username=?", username).Scan(&username)
+	switch {
+	case err == sql.ErrNoRows:
+		log.Printf("No user with that username.")
+		return false
+	case err != nil:
+		log.Fatal(err)
+		return false
+	default:
+		return true
+		fmt.Printf("Username is %s\n", username)
+	}
+	defer db.Close()
+	return false
+}
+func GetPassword(username string) string {
+	db := common.DbConn()
+	err := db.QueryRow("SELECT password FROM users WHERE username=?", username).Scan(&username)
+	switch {
+	case err == sql.ErrNoRows:
+		log.Printf("No user with that username.")
+	case err != nil:
+		log.Fatal(err)
+	default:
+		fmt.Printf("password is %s\n", username)
+	}
+	defer db.Close()
+	return username
+}
+func GetEmail(username string) string {
+	db := common.DbConn()
+	err := db.QueryRow("SELECT email FROM users WHERE username=?", username).Scan(&username)
+	switch {
+	case err == sql.ErrNoRows:
+		log.Printf("No user with that username.")
+	case err != nil:
+		log.Fatal(err)
+	default:
+		fmt.Printf("email is %s\n", username)
+	}
+	defer db.Close()
+	return username
+}

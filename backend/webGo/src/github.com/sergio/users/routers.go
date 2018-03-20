@@ -15,12 +15,7 @@ import (
 )
 
 type Creds struct {
-	Status      string
-	APIKey      string
-	AccountType string
-	Email       string
-	AuthToken   string
-	IsLoggedIn  bool
+	AuthToken string
 }
 type User struct {
 	ID          string `json:"id" valid:"-"`
@@ -44,17 +39,32 @@ func Islogged(w http.ResponseWriter, r *http.Request) {
 	hasValidToken(params["jwt"])
 }
 
-// func Login(w http.ResponseWriter, r *http.Request) {
-// 	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request
-// 	// Unmarshall this into a map
-// 	var params map[string]string
-// 	json.Unmarshal(dat, &params)
-// 	log.Printf(params["username"])
-// 	credentials := GetCredentials(params["username"], params["password"])
+func Login(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request
+	// Unmarshall this into a map
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+	userExist := SearchUser(params["username"])
+	if !userExist {
+		w.WriteHeader(http.StatusBadRequest)
+		j, _ := json.Marshal("Username not found")
+		w.Write(j)
+		return
+	}
+	passwordHash := GetPassword(params["username"])
+	checkPass := CheckPasswordHash(params["password"], passwordHash)
+	if !checkPass {
+		w.WriteHeader(http.StatusBadRequest)
+		j, _ := json.Marshal("Password not match")
+		w.Write(j)
+		return
+	}
 
-// 	out, _ := json.MarshalIndent(&credentials, "", "  ")
-// 	fmt.Fprintf(w, string(out))
-// }
+	credentials := GetCredentials(params["username"], params["password"], GetEmail(params["username"]))
+	out, _ := json.MarshalIndent(&credentials, "", "  ")
+	fmt.Fprintf(w, string(out))
+}
 func Register(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -116,40 +126,29 @@ func hasValidToken(jwtToken string) bool {
 
 	return ret
 }
-func GetCredentials(username, password string) Creds {
+func GetCredentials(username string, password string, email string) Creds {
 	credentials := Creds{
-		Status:      "UNAUTHORIZED",
-		APIKey:      "",
-		AccountType: "",
-		Email:       "",
-		AuthToken:   "",
-		IsLoggedIn:  false,
+		AuthToken: "",
 	}
-	if (username == "admin") && (password == "admin") {
-		credentials.Status = "OK"
-		credentials.APIKey = "12345"
-		credentials.AccountType = "admin"
-		credentials.Email = "admin@example.com"
-		credentials.IsLoggedIn = true
-		// Now create a JWT for user
-		// Create the token
-		token := jwt.New(jwt.SigningMethodHS256)
-		claims := make(jwt.MapClaims)
-		// Set some claims
-		claims["sub"] = username
-		claims["iss"] = "example.com"
-		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+	// Now create a JWT for user
+	// Create the token
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := make(jwt.MapClaims)
+	// Set some claims
+	claims["sub"] = username
+	claims["iss"] = email
+	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
-		token.Claims = claims
-		var err error
-		credentials.AuthToken, err = token.SignedString([]byte("biscuits and gravy"))
-		if err != nil {
-			log.Println(err)
-		}
+	token.Claims = claims
+	var err error
+	credentials.AuthToken, err = token.SignedString([]byte("do or do not there is no try"))
+	if err != nil {
+		log.Println(err)
 	}
+
 	return credentials
 }
 
 func myLookupKey() []byte {
-	return []byte("biscuits and gravy")
+	return []byte("do or do not there is no try")
 }
