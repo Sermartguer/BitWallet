@@ -12,7 +12,7 @@ class Signin extends PureComponent {
     renderError() {
         if (this.props.errorMessage) {
             return (
-                <div className="alert alert-danger">
+                <div className="alert__danger">
                     <string>Oops! {this.props.errorMessage}</string>
                 </div>
             );
@@ -21,20 +21,24 @@ class Signin extends PureComponent {
 
     render() {
         const { handleSubmit } = this.props;
-
         return (
-            <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-                <fieldset className="form-group">
-                    <label>Username:</label>
-                    <Field className="form-control" name="username" component="input" type="text" />
-                </fieldset>
-                <fieldset className="form-group">
-                    <label>Password:</label>
-                    <Field className="form-control" name="password" component="input" type="password" />
-                </fieldset>
-                {this.renderError()}
-                <button action="submit" className="btn btn-primary">Sign in</button>
-            </form>
+            <div className="login">
+                <div className="login__modal">
+                    <form className="modal" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+                        <span className="login__title">Login</span>
+                        <div className="input__pattert">
+                            <Field className="form__input" name="username" component="input" type="text" placeholder="Usename"/>
+                        </div>
+                        <div className="input__pattert">
+                            <Field className="form__input" name="password" component="input" type="password" placeholder="Password"/>
+                        </div>
+                        {this.renderError()}
+                        <div className="form__button__pattern">
+                            <button className="form__button" action="submit" >Sign in</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         );
     }
 }

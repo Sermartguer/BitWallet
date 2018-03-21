@@ -31,10 +31,10 @@ export const signinUser = ({ username, password }) => {
                 History.push('/feature');
 
             }).catch((err) => {
-                console.log(err)
+                console.log(err.response)
                 // if request is bad...
                 // - show an error to the user
-                dispatch(authError('Bad Login Info'));
+                dispatch(authError(err.response.data));
             });
     };
 };

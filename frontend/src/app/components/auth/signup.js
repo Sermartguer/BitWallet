@@ -34,27 +34,21 @@ class Signup extends PureComponent {
 
         return (
             <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-                <fieldset className="form-group">
                     <Field
                         name="email"
                         label="Email"
                         component={this.renderField}
                         type="text" />
-                </fieldset>
-                <fieldset className="form-group">
                     <Field
                         name="password"
                         label="Password"
                         component={this.renderField}
                         type="password" />
-                </fieldset>
-                <fieldset className="form-group">
                     <Field
                         name="passwordConfirmation"
                         label="Password Confirmation"
                         component={this.renderField}
                         type="password" />
-                </fieldset>
                 {this.renderError()}
                 <button type="submit" className="btn btn-primary" disabled={submitting}>Sign Up</button>
 

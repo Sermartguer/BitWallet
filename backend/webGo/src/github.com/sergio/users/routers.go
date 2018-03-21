@@ -17,14 +17,7 @@ import (
 type Creds struct {
 	AuthToken string
 }
-type User struct {
-	ID          string `json:"id" valid:"-"`
-	Username    string `json:"username" valid:"required~Username is blank"`
-	Email       string `json:"email" valid:"email"`
-	Password    string `json:"password" valid:"length(5|10)"`
-	CreatedAt   string `json:"create_at" valid:"-"`
-	AccountType string `json:"acc_type" valid:"optional"`
-}
+
 type Error struct {
 	TextError string `json:"error"`
 }
@@ -67,29 +60,27 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 func Register(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-
 	govalidator.SetFieldsRequiredByDefault(true)
 	dat, _ := ioutil.ReadAll(r.Body)
+
+	//Validacio de camps
 	userData := ValidateParams(dat)
-	var ok bool
-	ok = true
 	if !userData.Error {
 		log.Printf(userData.TextError)
 		j, _ := json.Marshal(userData.TextError)
-		ok = false
 		w.WriteHeader(http.StatusUnprocessableEntity)
 		w.Write(j)
 		return
 	}
-
+	//Comparacio entre els camps de contrasenya
 	match := CheckPasswordHash(userData.Password2, userData.Password)
 	if !match {
-		ok = false
 		w.WriteHeader(http.StatusUnprocessableEntity)
 		j, _ := json.Marshal("Passwords does not match")
 		w.Write(j)
 		return
 	}
+	//Comprovacio si el usuari ja existeix en la BD
 	userExist := CheckUser(userData)
 	if userExist {
 		w.WriteHeader(http.StatusBadRequest)
@@ -97,17 +88,15 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		w.Write(j)
 		return
 	}
+	//Registrar l'usuari en la BD
 	saved := SaveUser(userData)
 	if !saved {
-		ok = false
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	if ok {
-		log.Printf("Saved on DB")
-		w.WriteHeader(http.StatusCreated)
-		return
-	}
+	//
+	log.Printf("Saved on DB")
+	w.WriteHeader(http.StatusCreated)
 }
 func hasValidToken(jwtToken string) bool {
 	ret := false

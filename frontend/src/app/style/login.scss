@@ -1,0 +1,59 @@
+.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+.login__modal{
+    background: white;
+    padding: 77px 55px 33px 55px;
+    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    width: 280px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.modal{
+    width: 100%;
+}
+.modal__title{
+}
+.login__title{
+    font-size: 35px;
+    color: $colorBase;
+    display: block;
+    line-height: 1.2;
+    text-align: center;
+    margin-bottom: 25px;
+}
+.input__pattert{
+    width: 100%;
+    border-bottom: 2px solid #adadad;
+    margin-bottom: 37px;
+}
+.form__input{
+    border: none;
+    outline: none;
+    font-size: 15px;
+    height: 45px;
+    width: 100%;
+}
+.form__button__pattern{
+    width: 100%;
+    display: block;
+    
+}
+.form__button{
+    border-radius: 25px;
+    width: 100%;
+    height: 50px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    background: $colorBase;
+    color: white;
+}
+.alert__danger{
+    color: red;
+    text-align: center;
+    margin-bottom: 15px;
+}
