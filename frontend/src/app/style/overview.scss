@@ -1,0 +1,128 @@
+.overview{
+    display: flex;
+    flex-direction: column;
+    margin:30px;
+}
+.overview__detail{
+    display: flex;
+}
+
+.pane{
+    background: white;
+    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    margin:10px;
+    padding: 10px;
+    width: auto;
+    min-width: auto;
+}
+.pane__body{
+    display: flex;
+    justify-content: space-around;
+
+}
+.body__info{
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+.info__title{
+    margin:5px;
+    font-size: 150%;
+}
+.info__amount{
+    margin:5px;
+    font-size: 100%;
+}
+.info__total{
+    margin:5px;
+    color: #858585;
+    font-size: 100%;
+}
+.body__img{
+    max-width: 30%;
+}
+.img{
+    width: 100%;
+}
+.info__desc{
+    display: flex;
+    flex-direction: column;
+}
+.transaction{
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    align-items: center;
+}
+.transaction__mount{
+    display: flex;
+    padding-right: 10px;
+}
+.transaction__to{
+    font-size: 100%;
+    color: #858585;
+    text-overflow: ellipsis;
+}
+@media (max-width: 1120px) {
+    .info__title{
+        font-size: 100%;
+    }
+    .info__amount{
+        font-size: 80%;
+    }
+    .info__total{
+        font-size: 80%;
+    }
+ }
+ @media (max-width: 700px) {
+     .pane__body{
+        flex-direction: column;
+        align-items: center;
+     }
+     .body__img{
+        width: 100%;
+     }
+     .info__title{
+         text-align: center;
+     }
+     .info__desc{
+         flex-direction: row;
+     }
+
+     .info__title{
+        font-size: 100%;
+    }
+    .info__amount{
+        font-size: 60%;
+    }
+    .info__total{
+        font-size: 60%;
+    }
+    .transaction{
+        display: none;
+    }
+ }
+ @media (max-width: 500px) {
+    .overview__detail{
+       flex-direction: column;
+    }
+    .pane__body{
+        flex-direction: row;
+    }
+    .body__img {
+        max-width: 20%;
+    }
+    .info__title{
+        font-size: 150%;
+    }
+    .info__amount{
+        font-size: 100%;
+    }
+    .info__total{
+        font-size: 100%;
+    }
+    .transaction{
+        display: flex;
+    }
+}

@@ -6,9 +6,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
           
 module.exports = {
-
+    context: path.resolve('src'),
     entry: {
-        bundle: path.resolve(__dirname, 'src') + '/app/index.js',
+        bundle: path.resolve(__dirname, 'src') + './app/index.js',
         vendor: ['react', 'react-dom', 'react-router-dom']
     },
     output: {
@@ -44,6 +44,18 @@ module.exports = {
                 use: ['file-loader?name=[name].[ext]&outputPath=app/assets/images/',
                       'image-webpack-loader']
             },
+            {
+                test: /\.(gif|png|jpe?g|svg)$/i,
+                use: [
+                  'file-loader',
+                  {
+                    loader: 'image-webpack-loader',
+                    options: {
+                      bypassOnDebug: true,
+                    },
+                  },
+                ],
+              }
         ]
     },
     plugins: [
