@@ -26,8 +26,12 @@ class Signin extends PureComponent {
                 <div className="login__modal">
                     <form className="modal" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
                         <span className="login__title">Login</span>
+                        <div className="login__question">
+                            <span className="question--color">Don't have an account? </span>
+                            <a className="question__a" href="/signup">Sign Up</a>
+                        </div>
                         <div className="input__pattert">
-                            <Field className="form__input" name="username" component="input" type="text" placeholder="Usename"/>
+                            <Field className="form__input" name="username" component="input" type="text" placeholder="Username"/>
                         </div>
                         <div className="input__pattert">
                             <Field className="form__input" name="password" component="input" type="password" placeholder="Password"/>

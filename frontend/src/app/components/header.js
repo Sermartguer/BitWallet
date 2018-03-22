@@ -27,7 +27,7 @@ class Header extends PureComponent {
             ];
         } else {
             return [
-                <div key="logo" class="">
+                <div key="logo" className="">
                     <li key="logo" className="navbar__item">
                         <span className="navbar__item title--color">BitWallet</span>
                     </li>

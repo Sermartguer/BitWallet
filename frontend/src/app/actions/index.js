@@ -39,21 +39,23 @@ export const signinUser = ({ username, password }) => {
     };
 };
 
-export const signupUser = ({ email, password }) => {
+export const signupUser = ({ username, email, password,password2,acc_type="basic" }) => {
     return (dispatch) => {
+        console.log( username)
         // submit email/password to the server
-        axios.post(`${ROOT_URL}/signup`, { email, password },{
+        axios.post('http://localhost:8080/api/register', { username, email, password,password2,acc_type },{
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
           })
             .then(response => {
+                console.log(response);
                 dispatch({ type: AUTH_USER });
                 localStorage.setItem('token', response.data.token);
                 History.push('/feature');
             })
             .catch(err => {
-                console.log(err)
-                dispatch(authError(err.response.data.error));
+                console.log(err.response)
+                dispatch(authError(err.response.data));
             });
     };
 };
