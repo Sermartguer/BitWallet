@@ -146,6 +146,7 @@ func DeleteUsersHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	r := mux.NewRouter().StrictSlash(false)
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	r.HandleFunc("/api/notes", GetNoteHandler).Methods("GET")
 	r.HandleFunc("/api/notes", PostNoteHandler).Methods("POST")
 	r.HandleFunc("/api/notes/{id}", PutNoteHandler).Methods("PUT")

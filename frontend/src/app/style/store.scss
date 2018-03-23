@@ -1,0 +1,20 @@
+.dashboard__order{
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.order{
+    display: flex;
+    margin:5px;
+}
+.order__info{
+    margin:10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.dashboard__title{
+    margin: 5px;
+    padding:5px;
+    font-size: 30px;
+    border-bottom: 2px solid #666;
+}

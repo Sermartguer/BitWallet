@@ -1,12 +1,27 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-
+import Orders from './store/orders';
 class Buy extends PureComponent {
     render() {
         return (
-            <div className="dash">
-            Buy
+            <div>
+                <div className="dash dashboard__title">
+                    <span>Buy Orders</span>
+                </div>
+                <div className="dash dashboard__order">
+                    <Orders />
+                    <Orders />
+                    <Orders />
+                    <Orders />
+                    <Orders />
+                    <Orders />
+                    <Orders />
+                    <Orders />
+                    <Orders />
+                    <Orders />
+                    <Orders />
+                </div>
             </div>
         );
     }
