@@ -64,6 +64,24 @@
     color: #858585;
     text-overflow: ellipsis;
 }
+
+.chart__pane{
+    min-height: 300px;
+}
+.transaction__pane{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.pane__title{
+    font-size: 25px;
+}
+.full__pane{
+    width: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+}
 @media (max-width: 1120px) {
     .info__title{
         font-size: 100%;

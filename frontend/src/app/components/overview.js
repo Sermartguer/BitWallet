@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import CurrencyPane from './overview/currencyPane';
+import Chart from './overview/chart';
+import TransactionPane from './overview/transactionPane';
 class Overview extends PureComponent {
     render() {
         return (
@@ -11,8 +13,12 @@ class Overview extends PureComponent {
                     <CurrencyPane props={false}/>
                     <CurrencyPane props={false}/>
                 </div>
-                <div>a</div>
-                <div>a</div>
+                <div>
+                    <Chart />
+                </div>
+                <div>
+                    <TransactionPane />
+                </div>
             </div>
         );
     }
