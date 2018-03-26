@@ -49,9 +49,9 @@ export const signupUser = ({ username, email, password,password2,acc_type="basic
           })
             .then(response => {
                 console.log(response);
-                dispatch({ type: AUTH_USER });
-                localStorage.setItem('token', response.data.token);
-                History.push('/feature');
+                //dispatch({ type: AUTH_USER });
+                //localStorage.setItem('token', response.data.token);
+                History.push('/');
             })
             .catch(err => {
                 console.log(err.response)

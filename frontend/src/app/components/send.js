@@ -5,8 +5,10 @@ import * as actions from '../actions';
 class Send extends PureComponent {
     render() {
         return (
-            <div className="dash">
-            Send
+            <div className="dash overview">
+                <div className="pane chart__pane">
+                    a
+                </div>
             </div>
         );
     }

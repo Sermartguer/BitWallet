@@ -26,13 +26,34 @@ CREATE TABLE users (
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE addrs (
-  id_addrs VARCHAR(50) NOT NULL,
+  id_addrs INT(50) NOT NULL AUTO_INCREMENT,
   id_user VARCHAR(50) NOT NULL,
   address VARCHAR(30) NOT NULL,
-  amount VARCHAR(30) NOT NULL,
   currency VARCHAR(30) NOT NULL,
   create_at VARCHAR(30) NOT NULL,
   PRIMARY KEY (id_addrs),
   FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+CREATE TABLE users_total (
+  id_user_curr INT(50) NOT NULL AUTO_INCREMENT,
+  id_user VARCHAR(50) NOT NULL,
+  amount DECIMAL(30,25) NOT NULL,
+  currency VARCHAR(30) NOT NULL,
+  create_at VARCHAR(30) NOT NULL,
+  PRIMARY KEY (id_user_curr),
+  FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+DELIMITER $$
+
+CREATE TRIGGER add_addreses AFTER INSERT
+    ON users
+    FOR EACH ROW BEGIN
+	INSERT INTO users_total (id_user,amount,currency,create_at) VALUES (NEW.id,0,'BTC',NOW());
+	INSERT INTO users_total (id_user,amount,currency,create_at) VALUES (NEW.id,0,'DOGE',NOW());
+	INSERT INTO users_total (id_user,amount,currency,create_at) VALUES (NEW.id,0,'LTC',NOW());
+    END$$
+
+DELIMITER ;
 EOF

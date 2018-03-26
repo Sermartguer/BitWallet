@@ -5,7 +5,9 @@ class Orders extends PureComponent {
     constructor(props){
         super(props)
         this.state = {
-            type: props.type
+            amount: props.props.amount,
+            currency: props.props.currency,
+            price: props.props.price
         }
     }
     render() {
@@ -17,15 +19,15 @@ class Orders extends PureComponent {
                     </div>
                     <div className="order__info">
                         <div>
-                            <span className="">Amount: 25 DOGE</span>
+                            <span className="">Amount: {this.state.amount} {this.state.currency}</span>
                         </div>
                         <div>
-                            <span>Price: 0.015$ </span>
+                            <span>Price: {this.state.price}$ </span>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <button className="form__button">Buy DOGE</button>
+                <div className="order__buy">
+                    <button className="order__button">Buy DOGE</button>
                 </div>
             </div>
         );
