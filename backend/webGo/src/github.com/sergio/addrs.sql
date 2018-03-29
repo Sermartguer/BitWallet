@@ -1,7 +1,7 @@
 CREATE TABLE `addrs` (
-  `id_addrs` VARCHAR(50) NOT NULL,
+  `id_addrs` INT(50) NOT NULL AUTO_INCREMENT,
   `id_user` VARCHAR(50) NOT NULL,
-  `address` VARCHAR(30) NOT NULL,
+  `address` VARCHAR(50) NOT NULL,
   `currency` VARCHAR(30) NOT NULL,
   `create_at` VARCHAR(30) NOT NULL,
   PRIMARY KEY (`id_addrs`),

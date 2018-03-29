@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
 	"./common"
+	"./dashboard"
 	"./users"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -145,15 +145,7 @@ func DeleteUsersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusNoContent)
 }
-func tstdoge(w http.ResponseWriter, r *http.Request) {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 
-	doge := os.Getenv("TSTDOGECOIN")
-	log.Printf(doge)
-}
 func main() {
 	r := mux.NewRouter().StrictSlash(false)
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
@@ -164,7 +156,7 @@ func main() {
 	r.HandleFunc("/api/login", users.Login).Methods("POST")
 	r.HandleFunc("/api/isLoged", users.Islogged).Methods("POST")
 	r.HandleFunc("/api/register", users.Register).Methods("POST")
-	r.HandleFunc("/api/tst", tstdoge).Methods("GET")
+	r.HandleFunc("/api/tst", dashboard.GetNewAddress).Methods("POST")
 	server := &http.Server{
 		Addr:           ":8080",
 		Handler:        cors.Default().Handler(r),
@@ -172,7 +164,10 @@ func main() {
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
-
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	log.Println("Listening http://localhost:8080 ...")
 	log.Fatal(server.ListenAndServe())
 }
