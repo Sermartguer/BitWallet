@@ -5,9 +5,9 @@
 echo "Enter Database name:"
 read dbname
 echo "Enter MySqlUser"
-read mysquser
+read mysqluser
 
-mysql -u$mysquser -p << EOF
+mysql -u$mysqluser -p << EOF
 create database $dbname;
 use $dbname;
 CREATE TABLE accounts (
@@ -28,7 +28,7 @@ CREATE TABLE accounts (
 CREATE TABLE addrs (
   id_addrs INT(50) NOT NULL AUTO_INCREMENT,
   id_user VARCHAR(50) NOT NULL,
-  address VARCHAR(30) NOT NULL,
+  address VARCHAR(50) NOT NULL,
   currency VARCHAR(30) NOT NULL,
   create_at VARCHAR(30) NOT NULL,
   PRIMARY KEY (id_addrs),
@@ -69,12 +69,12 @@ CREATE TRIGGER add_addreses AFTER INSERT
 
 DELIMITER ;
 
-USE `BitWallet`;
-DROP procedure IF EXISTS `get_accounts`;
+USE BitWallet;
+DROP procedure IF EXISTS get_accounts;
 
 DELIMITER $$
-USE `BitWallet`$$
-CREATE PROCEDURE `get_accounts` (IN id_account VARCHAR(50))
+USE BitWallet$$
+CREATE PROCEDURE get_accounts (IN id_account VARCHAR(50))
 BEGIN
  SELECT address FROM addrs WHERE id_user = id_account;
 END$$
