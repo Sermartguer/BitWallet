@@ -4,8 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
+	"time"
 
+	"../common"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
@@ -40,31 +44,32 @@ func GetNewAddress(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Println(err)
 	}
-	// res, err := http.Get(os.Getenv("BASE_API") + "/get_new_address/?api_key=" + os.Getenv(params["currency"]))
-	// if err != nil {
-	// 	panic(err.Error())
-	// }
+	res, err := http.Get(os.Getenv("BASE_API") + "/get_new_address/?api_key=" + os.Getenv(params["currency"]))
+	if err != nil {
+		panic(err.Error())
+	}
 
-	// body, err := ioutil.ReadAll(res.Body)
-	// if err != nil {
-	// 	panic(err.Error())
-	// }
-	// data := &NewAddress{
-	// 	Data: &Address{},
-	// }
-	// err = json.Unmarshal(body, data)
-	// fmt.Println(data.Data.Address)
-	// s2, _ := json.Marshal(data)
-	// fmt.Println(string(s2))
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		panic(err.Error())
+	}
+	data := &NewAddress{
+		Data: &Address{},
+	}
+	err = json.Unmarshal(body, data)
+	fmt.Println(data.Data.Address)
+	s2, _ := json.Marshal(data)
+	fmt.Println(string(s2))
 
-	// db := common.DbConn()
+	db := common.DbConn()
 
-	// insForm, err := db.Prepare("INSERT INTO addrs (id_user,address,currency,create_at) VALUES(?,?,?,?)")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// insForm.Exec("barvjsivcst3i5u87eog", data.Data.Address, params["currency"], time.Now())
-	// defer db.Close()
+	insForm, err := db.Prepare("INSERT INTO addrs (id_user,address,currency,create_at) VALUES(?,?,?,?)")
+	if err != nil {
+		log.Fatal(err)
+	}
+	insForm.Exec("bb0aioivcst3dif3k93g", data.Data.Address, params["currency"], time.Now())
+
+	defer db.Close()
 	// w.WriteHeader(http.StatusOK)
 	// w.Write(s2)
 }

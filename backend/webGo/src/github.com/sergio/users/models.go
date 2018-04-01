@@ -11,7 +11,7 @@ import (
 func SaveUser(user_data UserModelValidator) bool {
 	db := common.DbConn()
 
-	insForm, err := db.Prepare("INSERT INTO users (id, username, email,password,acc_type,update_at, create_at,active) VALUES(?,?,?,?,?,?,?,?)")
+	insForm, err := db.Prepare("INSERT INTO accounts (id, username, email,password,acc_type,update_at, create_at,active) VALUES(?,?,?,?,?,?,?,?)")
 	if err != nil {
 		return false
 		log.Fatal(err)
@@ -26,7 +26,7 @@ func CheckUser(user_data UserModelValidator) bool {
 	//Check if username exist on DB
 	username := user_data.Username
 	email := user_data.Email
-	err := db.QueryRow("SELECT username,email FROM users WHERE username=? OR email=? ", username, email).Scan(&username, &email)
+	err := db.QueryRow("SELECT username,email FROM accounts WHERE username=? OR email=? ", username, email).Scan(&username, &email)
 	switch {
 	case err == sql.ErrNoRows:
 		log.Printf("No user with that username.")
@@ -42,7 +42,7 @@ func CheckUser(user_data UserModelValidator) bool {
 }
 func SearchUser(username string) bool {
 	db := common.DbConn()
-	err := db.QueryRow("SELECT username FROM users WHERE username=?", username).Scan(&username)
+	err := db.QueryRow("SELECT username FROM accounts WHERE username=?", username).Scan(&username)
 	switch {
 	case err == sql.ErrNoRows:
 		log.Printf("No user with that username.")
@@ -59,7 +59,7 @@ func SearchUser(username string) bool {
 }
 func GetPassword(username string) string {
 	db := common.DbConn()
-	err := db.QueryRow("SELECT password FROM users WHERE username=?", username).Scan(&username)
+	err := db.QueryRow("SELECT password FROM accounts WHERE username=?", username).Scan(&username)
 	switch {
 	case err == sql.ErrNoRows:
 		log.Printf("No user with that username.")
@@ -73,7 +73,7 @@ func GetPassword(username string) string {
 }
 func GetEmail(username string) string {
 	db := common.DbConn()
-	err := db.QueryRow("SELECT email FROM users WHERE username=?", username).Scan(&username)
+	err := db.QueryRow("SELECT email FROM accounts WHERE username=?", username).Scan(&username)
 	switch {
 	case err == sql.ErrNoRows:
 		log.Printf("No user with that username.")

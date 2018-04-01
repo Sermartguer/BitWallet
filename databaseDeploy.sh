@@ -10,7 +10,7 @@ read mysquser
 mysql -u$mysquser -p << EOF
 create database $dbname;
 use $dbname;
-CREATE TABLE users (
+CREATE TABLE accounts (
   id VARCHAR(50) NOT NULL,
   username VARCHAR(30) NOT NULL,
   email VARCHAR(30) NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE addrs (
   currency VARCHAR(30) NOT NULL,
   create_at VARCHAR(30) NOT NULL,
   PRIMARY KEY (id_addrs),
-  FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE
+  FOREIGN KEY (id_user) REFERENCES accounts(id) ON DELETE CASCADE
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE users_total (
@@ -42,18 +42,42 @@ CREATE TABLE users_total (
   currency VARCHAR(30) NOT NULL,
   create_at VARCHAR(30) NOT NULL,
   PRIMARY KEY (id_user_curr),
-  FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE
+  FOREIGN KEY (id_user) REFERENCES accounts(id) ON DELETE CASCADE
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+CREATE TABLE transactions (
+  id_transactions INT(50) NOT NULL AUTO_INCREMENT,
+  id_account VARCHAR(50) NOT NULL,
+  send_to VARCHAR(30) NOT NULL,
+  hash_id VARCHAR(50) NOT NULL,
+  amount DECIMAL(30,25) NOT NULL,
+  currency VARCHAR(30) NOT NULL,
+  trans_time VARCHAR(30) NOT NULL,
+  PRIMARY KEY (id_transactions),
+  FOREIGN KEY (id_account) REFERENCES accounts(id) ON DELETE CASCADE
+) ENGINE=INNODB AUTO_INCREMENT=00001 DEFAULT CHARSET=latin1;
 
 DELIMITER $$
 
 CREATE TRIGGER add_addreses AFTER INSERT
-    ON users
+    ON accounts
     FOR EACH ROW BEGIN
 	INSERT INTO users_total (id_user,amount,currency,create_at) VALUES (NEW.id,0,'BTC',NOW());
 	INSERT INTO users_total (id_user,amount,currency,create_at) VALUES (NEW.id,0,'DOGE',NOW());
 	INSERT INTO users_total (id_user,amount,currency,create_at) VALUES (NEW.id,0,'LTC',NOW());
     END$$
+
+DELIMITER ;
+
+USE `BitWallet`;
+DROP procedure IF EXISTS `get_accounts`;
+
+DELIMITER $$
+USE `BitWallet`$$
+CREATE PROCEDURE `get_accounts` (IN id_account VARCHAR(50))
+BEGIN
+ SELECT address FROM addrs WHERE id_user = id_account;
+END$$
 
 DELIMITER ;
 EOF
