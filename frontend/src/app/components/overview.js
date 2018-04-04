@@ -8,22 +8,36 @@ class Overview extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-            currencyDetail: ''
+        
           };
-       // this.onButtonClick = this.onButtonClick.bind(this);
     }
-    componentWillMount(){ 
-        this.state.currencyDetail = this.props.getUserBasic();
+    componentWillMount(){
+        this.props.getUserBasic();
+    }
+    renderCurrency() {
+        if (this.props.overview) {
+            console.log(this.props.overview)
+            return (
+                    <CurrencyPane props={true}/>,
+                    <CurrencyPane props={true}/>
+            );
+        }
     }
     render() {
-        console.log(this.state.currencyDetail)
-        let currency = this.state.currencyDetail.map(item=>{
-            return <CurrencyPane props={item}/>
-        });
+        console.log(this.props.overview)
+        if(this.props.overview !== undefined){
+            console.log('a')
+            var curr = this.props.overview.map((item, index)=>{
+                console.log(item)
+                return <CurrencyPane key={index} props={{currency:item.currency, amount:item.amount}}/>
+            })
+        }else{
+            var curr = 'Loading...'
+        }
         return (
             <div className="dash overview">
                 <div className="overview__detail">
-                    {currency}
+                    {curr}
                 </div>
                 <div>
                     <Chart />
@@ -37,8 +51,7 @@ class Overview extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state)
-    return { overview: state.overview }
+    return { overview: state.overview.overview }
 }
 
 export default connect(mapStateToProps, actions)(Overview);

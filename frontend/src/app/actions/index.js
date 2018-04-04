@@ -4,7 +4,8 @@ import {
     AUTH_USER,
     UNAUTH_USER,
     AUTH_ERROR,
-    FETCH_FEATURE
+    FETCH_FEATURE,
+    GET_USER_BASIC
 } from './types';
 
 const ROOT_URL = 'http://localhost:8080/api';
@@ -91,17 +92,16 @@ export const fetchFeature = () => {
 export const getUserBasic = () =>{
     let token = {token: localStorage.getItem('token')}
     console.log(token)
-    axios.post('http://localhost:8080/api/getUserData',  token ,{
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-      })
-        .then(response => {
-            console.log(response.data);
-            dispatch({
-                type: GET_USER_BASIC,
-                payload: response.data
-             });
-        }).catch((err) => {
-            console.log(err.response)
-        });
+    return (dispatch) => {
+        // submit email/password to the server
+        axios.post('http://localhost:8080/api/getUserData',  token ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }).then(response => {
+                dispatch({type: GET_USER_BASIC, payload:response.data});
+            }).catch((err) => {
+                console.log(err)
+            });
+    };
+
 }

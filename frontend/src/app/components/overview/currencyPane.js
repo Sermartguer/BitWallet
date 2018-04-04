@@ -6,7 +6,9 @@ class CurrencyPane extends PureComponent {
     constructor(props){
         super(props)
         this.state = {
-            transactions: props.props
+            transactions: props.props,
+            currency: props.props.currency,
+            amount: props.props.amount
         }
     }
     render() {
@@ -19,7 +21,7 @@ class CurrencyPane extends PureComponent {
                     <div className="body__info">
                         <span className="info__title">Monedaasdad</span>
                         <div className="info__desc">
-                            <span className="info__amount">1500.02 DOGE</span>
+                            <span className="info__amount">{parseFloat(this.state.amount)} {this.state.currency}</span>
                             <span className="info__total">5.30$</span>
                         </div>
                     </div>

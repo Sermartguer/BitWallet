@@ -9,10 +9,12 @@ class Dashboard extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-            component: Overview
+            component: Overview,
+            currencyDetail: ''
           };
         this.onButtonClick = this.onButtonClick.bind(this);
     }
+    
     onButtonClick(e) {
         console.log(e.target.id)
         let component;

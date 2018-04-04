@@ -11,6 +11,7 @@ class Signin extends PureComponent {
 
     renderError() {
         if (this.props.errorMessage) {
+            console.log(this.props.errorMessage)
             return (
                 <div className="alert__danger">
                     <string>Oops! {this.props.errorMessage}</string>
@@ -48,6 +49,7 @@ class Signin extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
+    console.log(state.auth )
     return { errorMessage: state.auth.error }
 };
 
