@@ -76,7 +76,7 @@ DELIMITER $$
 USE BitWallet$$
 CREATE PROCEDURE get_accounts (IN id_account VARCHAR(50))
 BEGIN
- SELECT address FROM addrs WHERE id_user = id_account;
+ SELECT address,currency FROM addrs WHERE id_user = id_account;
 END$$
 
 DELIMITER ;

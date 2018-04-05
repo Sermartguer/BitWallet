@@ -5,7 +5,8 @@ import {
     UNAUTH_USER,
     AUTH_ERROR,
     FETCH_FEATURE,
-    GET_USER_BASIC
+    GET_USER_BASIC,
+    GET_USER_ADDRESSES
 } from './types';
 
 const ROOT_URL = 'http://localhost:8080/api';
@@ -103,5 +104,32 @@ export const getUserBasic = () =>{
                 console.log(err)
             });
     };
-
+}
+export const getUserAddresses = () =>{
+    let token = {token: localStorage.getItem('token')}
+    return (dispatch) => {
+        // submit email/password to the server
+        axios.post('http://localhost:8080/api/getAddresses',  token ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }).then(response => {
+                dispatch({type: GET_USER_ADDRESSES, payload:response.data});
+            }).catch((err) => {
+                console.log(err)
+            });
+    };   
+}
+export const addNewAddress = (id) => {
+    let response = {token: localStorage.getItem('token'),currency:id}
+    return (dispatch) => {
+        // submit email/password to the server
+        axios.post('http://localhost:8080/api/getNewAddress', response ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }).then(response => {
+                dispatch({type: GET_USER_ADDRESSES, payload:response.data});
+            }).catch((err) => {
+                console.log(err)
+            });
+    };
 }

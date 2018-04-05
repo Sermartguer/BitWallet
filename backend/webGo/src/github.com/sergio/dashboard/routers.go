@@ -46,12 +46,14 @@ func GetNewAddress(w http.ResponseWriter, r *http.Request) {
 		Data: &Address{},
 	}
 	json.Unmarshal(body, data)
-	s2, _ := json.Marshal(data)
-
 	save := SaveAddress(userID, data.Data.Address, params["currency"])
+
 	if save {
+		dataAdd := GetAddresses(userID)
+		j, _ := json.Marshal(dataAdd)
+		fmt.Println(string(j))
 		w.WriteHeader(http.StatusOK)
-		w.Write(s2)
+		w.Write(j)
 	}
 }
 
@@ -71,6 +73,29 @@ func GetUserGenericData(w http.ResponseWriter, r *http.Request) {
 	}
 	id := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
 	data := GetGenericData(id)
+
+	j, _ := json.Marshal(data)
+	fmt.Println(string(j))
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+}
+func GetUserAddresses(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	dat, _ := ioutil.ReadAll(r.Body)
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+
+	claims, err := common.GetTokenParsed(params["token"])
+	if err == false {
+		j, _ := json.Marshal("Error in token check")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(j)
+		return
+	}
+	id := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+	data := GetAddresses(id)
 
 	j, _ := json.Marshal(data)
 	fmt.Println(string(j))

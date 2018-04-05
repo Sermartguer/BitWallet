@@ -13,6 +13,10 @@ type Data struct {
 	Amount   string `json:"amount"`
 	Currency string `json:"currency"`
 }
+type GetAddressesStructure struct {
+	Address  string `json:"address"`
+	Currency string `json:"currency"`
+}
 
 func GetIdByUsername(username string) string {
 	db := common.DbConn()
@@ -59,6 +63,28 @@ func GetGenericData(id_account string) []Data {
 		}
 		row.Amount = responseAmount
 		row.Currency = responseCurrency
+		data = append(data, row)
+	}
+	db.Close()
+	return data
+}
+func GetAddresses(id string) []GetAddressesStructure {
+	var data []GetAddressesStructure
+	db := common.DbConn()
+	rows, err := db.Query("CALL get_accounts(?)", id)
+	if err != nil {
+		panic(err.Error())
+	}
+	row := GetAddressesStructure{}
+	for rows.Next() {
+		var currency string
+		var address string
+		err = rows.Scan(&address, &currency)
+		if err != nil {
+			panic(err.Error())
+		}
+		row.Currency = currency
+		row.Address = address
 		data = append(data, row)
 	}
 	db.Close()

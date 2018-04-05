@@ -9,3 +9,27 @@
     display: flex;
     min-width: 1000px;
 }
+.add__title{
+    font-size: 20px;
+    text-align:center;
+}
+.add__address{
+    display: flex;
+    flex-direction: column;
+}
+.add__cursor{
+    cursor: pointer;
+    border-bottom: 1px solid #333;
+    font-size: 17px;
+    text-align: center;
+    padding:2%;
+}
+.address_info{
+    padding: 5px;
+}
+.address__pane{
+
+}
+.sendView{
+
+}
