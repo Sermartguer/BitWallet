@@ -57,6 +57,17 @@ CREATE TABLE transactions (
   FOREIGN KEY (id_account) REFERENCES accounts(id) ON DELETE CASCADE
 ) ENGINE=INNODB AUTO_INCREMENT=00001 DEFAULT CHARSET=latin1;
 
+CREATE TABLE orders (
+  id_order INT(50) NOT NULL AUTO_INCREMENT,
+  id_account VARCHAR(50) NOT NULL,
+  amount INT(30) NOT NULL,
+  currency VARCHAR(30) NOT NULL,
+  price INT(30) NOT NULL,
+  create_at VARCHAR(30) NOT NULL,
+  PRIMARY KEY (id_order),
+  FOREIGN KEY (id_account) REFERENCES accounts(id) ON DELETE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
 DELIMITER $$
 
 CREATE TRIGGER add_addreses AFTER INSERT
@@ -69,11 +80,7 @@ CREATE TRIGGER add_addreses AFTER INSERT
 
 DELIMITER ;
 
-USE BitWallet;
-DROP procedure IF EXISTS get_accounts;
-
 DELIMITER $$
-USE BitWallet$$
 CREATE PROCEDURE get_accounts (IN id_account VARCHAR(50))
 BEGIN
  SELECT address,currency FROM addrs WHERE id_user = id_account;
