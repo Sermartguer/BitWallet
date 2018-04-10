@@ -9,14 +9,15 @@ export default function (ComposedComponent) {
         }
 
         componentWillMount() {
-            if (!this.props.authenticated) {
-                this.props.history.push('/');
+            if (this.props.authenticated === undefined) {
+                console.log('undefined')
+                this.props.history.push('/signin');
             }
         }
 
         componentWillUpdate(nextProps) {
-            if (!nextProps.authenticated) {
-                this.props.history.push('/');
+            if (this.props.authenticated === undefined) {
+                this.props.history.push('/signin');
             }
         }
 
@@ -26,6 +27,7 @@ export default function (ComposedComponent) {
     }
 
     function mapStateToProps(state) {
+        console.log(state)
         return { authenticated: state.auth.authenticated };
     }
 

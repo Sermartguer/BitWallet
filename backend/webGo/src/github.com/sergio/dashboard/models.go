@@ -90,3 +90,6 @@ func GetAddresses(id string) []GetAddressesStructure {
 	db.Close()
 	return data
 }
+func SaveOrder(id_account string, amount string, currency string, price string) {
+
+}

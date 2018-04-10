@@ -103,3 +103,20 @@ func GetUserAddresses(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(j)
 }
+func CreateOrder(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	dat, _ := ioutil.ReadAll(r.Body)
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+	claims, err := common.GetTokenParsed(params["token"])
+	if err == false {
+		j, _ := json.Marshal("Error in token check")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(j)
+		return
+	}
+	id := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+	SaveOrder(id, params["amount"], params["currency"], params["price"])
+
+}

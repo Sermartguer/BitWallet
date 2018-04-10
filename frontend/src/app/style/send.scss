@@ -27,9 +27,63 @@
 .address_info{
     padding: 5px;
 }
+.sendView{
+    justify-content: center;
+    min-width: 100vh;
+}
+.dash__send{
+    display: flex;
+    justify-content: center;
+}
+.dash__send--size{
+    width: 80%;
+}
+.react-tabs__tab{
+    -webkit-filter: grayscale(100%); /* Ch 23+, Saf 6.0+, BB 10.0+ */
+    filter: grayscale(100%); /* FF 35+ */
+}
+.react-tabs__tab:hover {
+    transition: filter .5s ease-in-out;
+    -webkit-filter: grayscale(0%); /* Ch 23+, Saf 6.0+, BB 10.0+ */
+    filter: grayscale(0%); /* FF 35+ */
+}
+.react-tabs__tab--selected{
+    transition: filter .5s ease-in-out;
+    -webkit-filter: grayscale(0%); /* Ch 23+, Saf 6.0+, BB 10.0+ */
+    filter: grayscale(0%); /* FF 35+ */
+    border: none !important;
+}
+.react-tabs__tab-list{
+    text-align: center;
+}
+.pane__currency{
+    
+}
 .address__pane{
 
 }
 .sendView{
 
+
 }
+.table__styles{
+    border-collapse: collapse;
+}
+.ReactTable .rt-tbody .rt-td{
+    border:none;
+    text-align: center;
+    padding: 15px;
+}
+@media (max-width: 550px) {
+    .dash__send--size{
+        width: 95%;
+    }
+    .add__address{
+        font-size: 2vh;
+    }
+ }
+@media (max-width: 1024px) {
+    .dash__send{
+        align-items: center;
+    }
+ }

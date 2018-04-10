@@ -10,15 +10,8 @@ import { AUTH_USER } from './actions/types';
 
 import rootReducer from './reducers';
 
-// import './style/flxgrid.scss';
- import './style/style.scss';
-//import registerServiceWorker from './registerServiceWorker';
+import './style/style.scss';
 
-/*
-// UNCOMMENT IT FOR PRODUCTION
-const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
-const store = createStoreWithMiddleware(rootReducer);
-*/
 
 /* COMMENT IT OUT FOR PRODUCTION */
 const store = createStore(
@@ -28,7 +21,7 @@ const store = createStore(
         window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
     )
 );
-//
+
 
 const token = localStorage.getItem('token');
 // if we have a token, consiger the user to be signed in
