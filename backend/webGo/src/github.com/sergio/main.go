@@ -159,6 +159,8 @@ func main() {
 	r.HandleFunc("/api/getNewAddress", dashboard.GetNewAddress).Methods("POST")
 	r.HandleFunc("/api/getUserData", dashboard.GetUserGenericData).Methods("POST")
 	r.HandleFunc("/api/getAddresses", dashboard.GetUserAddresses).Methods("POST")
+	r.HandleFunc("/api/saveOrder", dashboard.CreateOrder).Methods("POST")
+	r.HandleFunc("/api/getOrders", dashboard.GetOrdersEndpoint).Methods("POST")
 	server := &http.Server{
 		Addr:           ":8080",
 		Handler:        cors.Default().Handler(r),
