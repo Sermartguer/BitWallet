@@ -4,12 +4,14 @@ import { reducer as featureReducer } from './feature';
 import { reducer as formReducer } from 'redux-form';
 import { reducer as overviewReducer } from './overview.reducer';
 import { reducer as sendReducer } from './send.reducer';
+import { reducer as buyReducer } from './buy.reducer';
 const rootReducer = combineReducers({
     form: formReducer,
     auth: authReducer,
     features: featureReducer,
     overview: overviewReducer,
-    send: sendReducer
+    send: sendReducer,
+    buy: buyReducer
 });
 
 export default rootReducer;

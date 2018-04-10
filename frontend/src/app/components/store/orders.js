@@ -22,7 +22,7 @@ class Orders extends PureComponent {
                             <span className="">Amount: {this.state.amount} {this.state.currency}</span>
                         </div>
                         <div>
-                            <span>Price: {this.state.price}$ </span>
+                            <span>Price: {this.state.price}$ /{this.state.currency}</span>
                         </div>
                     </div>
                 </div>

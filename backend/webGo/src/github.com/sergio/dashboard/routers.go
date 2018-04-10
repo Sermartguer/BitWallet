@@ -134,19 +134,20 @@ func GetOrdersEndpoint(w http.ResponseWriter, r *http.Request) {
 	var params map[string]string
 	json.Unmarshal(dat, &params)
 
-	claims, err := common.GetTokenParsed(params["token"])
+	_, err := common.GetTokenParsed(params["token"])
 	if err == false {
 		j, _ := json.Marshal("Error in token check")
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(j)
 		return
+	} else {
+		data := GetOrders()
+
+		j, _ := json.Marshal(data)
+		fmt.Println(string(j))
+
+		w.WriteHeader(http.StatusOK)
+		w.Write(j)
 	}
-	id := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
-	data := GetOrders(id)
 
-	j, _ := json.Marshal(data)
-	fmt.Println(string(j))
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(j)
 }

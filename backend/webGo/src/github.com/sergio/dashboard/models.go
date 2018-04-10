@@ -106,10 +106,10 @@ func SaveOrder(id_account string, amount string, currency string, price string) 
 	defer db.Close()
 	return true
 }
-func GetOrders(id_account string) []GetOrdersStructure {
+func GetOrders() []GetOrdersStructure {
 	var data []GetOrdersStructure
 	db := common.DbConn()
-	rows, err := db.Query("SELECT amount,currency,price,create_at FROM orders WHERE id_account=?", id_account)
+	rows, err := db.Query("SELECT amount,currency,price,create_at FROM orders")
 	if err != nil {
 		panic(err.Error())
 	}
