@@ -6,6 +6,7 @@ import Orders from './store/orders';
 class Buy extends PureComponent {
     componentWillMount(){
         this.props.getOrders();
+        this.props.getUserOrders();
     }
     render() {
         if(this.props.buy){
@@ -14,6 +15,13 @@ class Buy extends PureComponent {
                             let price = Math.round(order.price * 100)/100;
                             return <Orders props={{amount:amount,currency:order.currency,price:price}}/>
                         });
+        }
+        if(this.props.userOrders){
+            var userOrders = this.props.userOrders.map((order,index)=>{
+                let amount = Math.round(order.amount * 100)/100;
+                let price = Math.round(order.price * 100)/100;
+                return <Orders props={{amount:amount,currency:order.currency,price:price}}/>
+            });
         }
         return (
             <div>
@@ -30,11 +38,7 @@ class Buy extends PureComponent {
                         </div>
                         <div className="dash dashboard__sell">
                         <div className="dash dashboard__order">
-                            <Orders props={{amount:25,currency:'DOGE',price:0.015}}/>
-                            <Orders props={{amount:25,currency:'DOGE',price:0.015}}/>
-                            <Orders props={{amount:25,currency:'DOGE',price:0.015}}/>
-                            <Orders props={{amount:25,currency:'DOGE',price:0.015}}/>
-                            <Orders props={{amount:25,currency:'DOGE',price:0.015}}/>
+                            {userOrders}
                         </div>
                 </div>
                     </div>
@@ -70,7 +74,10 @@ class Buy extends PureComponent {
 
 const mapStateToProps = (state) => {
     console.log(state)
-    return { buy: state.buy.buy }
+    return { 
+                buy: state.buy.buy,
+                userOrders:state.buy.userOrder
+            }
 }
 
 export default connect(mapStateToProps, actions)(Buy);

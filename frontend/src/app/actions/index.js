@@ -7,7 +7,8 @@ import {
     FETCH_FEATURE,
     GET_USER_BASIC,
     GET_USER_ADDRESSES,
-    GET_ORDERS
+    GET_ORDERS,
+    GET_USER_ORDERS
 } from './types';
 
 const ROOT_URL = 'http://localhost:8080/api';
@@ -144,6 +145,21 @@ export const getOrders = () => {
           }).then(response => {
               console.log(response)
                 dispatch({type: GET_ORDERS, payload:response.data});
+            }).catch((err) => {
+                console.log(err)
+            });
+    };
+}
+export const getUserOrders = () => {
+    let token = {token: localStorage.getItem('token')}
+    return (dispatch) => {
+        // submit email/password to the server
+        axios.post('http://localhost:8080/api/getUserOrders', token ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }).then(response => {
+              console.log(response)
+                dispatch({type: GET_USER_ORDERS, payload:response.data});
             }).catch((err) => {
                 console.log(err)
             });
