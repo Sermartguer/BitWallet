@@ -132,3 +132,29 @@ func GetOrders() []GetOrdersStructure {
 	db.Close()
 	return data
 }
+func GetUserOrders(id_account string) []GetOrdersStructure {
+	var data []GetOrdersStructure
+	db := common.DbConn()
+	rows, err := db.Query("SELECT amount,currency,price,create_at FROM orders WHERE id_account=?", id_account)
+	if err != nil {
+		panic(err.Error())
+	}
+	row := GetOrdersStructure{}
+	for rows.Next() {
+		var responseAmount string
+		var responseCurrency string
+		var responsePrice string
+		var responseCreateAt string
+		err = rows.Scan(&responseAmount, &responseCurrency, &responsePrice, &responseCreateAt)
+		if err != nil {
+			panic(err.Error())
+		}
+		row.Amount = responseAmount
+		row.Currency = responseCurrency
+		row.Price = responsePrice
+		row.CreateAt = responseCreateAt
+		data = append(data, row)
+	}
+	db.Close()
+	return data
+}

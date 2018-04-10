@@ -87,9 +87,9 @@ class Send extends PureComponent {
                 <div className="pane pane__currency">
                     <Tabs>
                         <TabList className="react-tabs__tab-list">
-                            {this.state.isThorIn && <Tab><img src="https://cdn.worldvectorlogo.com/logos/bitcoin.svg" alt="Bitcoin" height="32" width="32" /></Tab>}
-                            {this.state.isHulkIn && <Tab><img src="https://cdn.worldvectorlogo.com/logos/dogecoin.svg" alt="Hulk" height="32" width="32" /></Tab>}
-                            {this.state.isIronmanIn && <Tab><img src="https://cdn.worldvectorlogo.com/logos/litecoin.svg" alt="Ironman" height="32" width="32" /></Tab>}
+                            {this.state.isThorIn && <Tab><img src="http://localhost:8080/static/bitcoin.svg" alt="Bitcoin" height="32" width="32" /></Tab>}
+                            {this.state.isHulkIn && <Tab><img src="http://localhost:8080/static/dogecoin.svg" alt="Hulk" height="32" width="32" /></Tab>}
+                            {this.state.isIronmanIn && <Tab><img src="http://localhost:8080/static/litecoin.svg" alt="Ironman" height="32" width="32" /></Tab>}
                         </TabList>
                         {this.state.isThorIn && 
                         <TabPanel>

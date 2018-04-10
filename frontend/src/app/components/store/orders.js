@@ -11,11 +11,19 @@ class Orders extends PureComponent {
         }
     }
     render() {
+        var curr = null;
+        if(this.state.currency === "DOGE"){
+            curr = "dogecoin";
+        }else if(this.state.currency === "BTC"){
+            curr = "bitcoin";
+        }else if(this.state.currency === "LTC"){
+            curr = "litecoin";
+        }
         return (
             <div className="pane order__pane">
                 <div className="order">
                     <div>
-                        <img src="http://localhost:8080/static/avatar.png" width="100" height="100"></img>
+                        <img src={'http://localhost:8080/static/'+curr+'.svg'} width="60" height="60"></img>
                     </div>
                     <div className="order__info">
                         <div>
