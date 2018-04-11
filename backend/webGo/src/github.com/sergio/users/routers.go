@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"time"
 
+	"../common"
 	"github.com/asaskevich/govalidator"
 	jwt "github.com/dgrijalva/jwt-go"
 	_ "github.com/go-sql-driver/mysql"
@@ -94,7 +95,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	//
+	//Enviar email
+	common.SendMail("check", userData.Username, userData.Email)
+	//Enviar al frontend
 	log.Printf("Saved on DB")
 	w.WriteHeader(http.StatusCreated)
 }
