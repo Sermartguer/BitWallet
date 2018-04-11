@@ -6,3 +6,4 @@ export const GET_USER_BASIC = 'getUserBasic';
 export const GET_USER_ADDRESSES = 'getUserAddresses';
 export const GET_ORDERS = 'getOrders';
 export const GET_USER_ORDERS = 'getUserOrders';
+export const SAVE_ORDER = 'addNewOrder';

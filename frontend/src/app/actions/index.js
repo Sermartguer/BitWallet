@@ -8,7 +8,8 @@ import {
     GET_USER_BASIC,
     GET_USER_ADDRESSES,
     GET_ORDERS,
-    GET_USER_ORDERS
+    GET_USER_ORDERS,
+    SAVE_ORDER
 } from './types';
 
 const ROOT_URL = 'http://localhost:8080/api';
@@ -163,5 +164,24 @@ export const getUserOrders = () => {
             }).catch((err) => {
                 console.log(err)
             });
+    };
+}
+export const addNewOrder = (orderData) => {
+    let response = {token: localStorage.getItem('token'),amount:orderData.amount,price:orderData.price,currency:orderData.currency}
+    return (dispatch) => {
+        // submit email/password to the server
+        axios.post('http://localhost:8080/api/saveOrder', response ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }).then(response => {
+                dispatch({type: SAVE_ORDER, payload:response.data});
+            }).catch((err) => {
+                console.log(err)
+            });
+    };
+}
+export const disableOrderNew = () => {
+    return (dispatch) => {
+        dispatch({type: SAVE_ORDER, payload:false});
     };
 }

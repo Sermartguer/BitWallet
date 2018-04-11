@@ -119,7 +119,9 @@ func CreateOrder(w http.ResponseWriter, r *http.Request) {
 	id := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
 	db_save := SaveOrder(id, params["amount"], params["currency"], params["price"])
 	if db_save {
+		j, _ := json.Marshal("Order OK")
 		w.WriteHeader(http.StatusOK)
+		w.Write(j)
 		return
 	} else {
 		j, _ := json.Marshal("Database error")

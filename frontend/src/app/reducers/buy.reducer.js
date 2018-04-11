@@ -1,6 +1,7 @@
 import {
     GET_ORDERS,
-    GET_USER_ORDERS
+    GET_USER_ORDERS,
+    SAVE_ORDER
 } from '../actions/types';
 
 export const reducer = (state = {}, action) => {
@@ -10,7 +11,9 @@ export const reducer = (state = {}, action) => {
         console.log(action.payload)
             return { ...state, buy: action.payload}
         case GET_USER_ORDERS:
-            return {...state,userOrder: action.payload}
+            return {...state, userOrder: action.payload}
+        case SAVE_ORDER:
+            return {...state, newOrder: action.payload}
         default:
             return state;
     }
