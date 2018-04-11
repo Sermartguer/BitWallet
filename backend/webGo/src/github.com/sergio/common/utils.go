@@ -2,8 +2,13 @@ package common
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+	"os"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/sendgrid/sendgrid-go"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 func GetTokenParsed(t string) (jwt.MapClaims, bool) {
@@ -17,5 +22,22 @@ func GetTokenParsed(t string) (jwt.MapClaims, bool) {
 		return claims, true
 	} else {
 		return nil, false
+	}
+}
+func SendMail(w http.ResponseWriter, r *http.Request) {
+	from := mail.NewEmail("BitWallet", "bitwallet@bitwallet.com")
+	subject := "Sending with SendGrid is Fun"
+	to := mail.NewEmail("Example User", "sermartguer@gmail.com")
+	plainTextContent := "and easy to do anywhere, even with Go"
+	htmlContent := "<strong>and easy to do anywhere, even with Go</strong>"
+	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
+	response, err := client.Send(message)
+	if err != nil {
+		log.Println(err)
+	} else {
+		fmt.Println(response.StatusCode)
+		fmt.Println(response.Body)
+		fmt.Println(response.Headers)
 	}
 }

@@ -10,7 +10,7 @@ class Header extends PureComponent {
             return [
             <div key="logo" className="">
                 <li key="logo" className="navbar__item">
-                    <span className="navbar__item title--color">BitWallet</span>
+                    <Link to='/' className="navbar__item title--color">BitWallet</Link>
                 </li>
             </div>,
             <div key="menu" className="navbar__items">
@@ -29,7 +29,7 @@ class Header extends PureComponent {
             return [
                 <div key="logo" className="">
                     <li key="logo" className="navbar__item">
-                        <span className="navbar__item title--color">BitWallet</span>
+                        <Link to='/' className="navbar__item title--color">BitWallet</Link>
                     </li>
                 </div>,
                 <div key="menu" className="navbar__items">

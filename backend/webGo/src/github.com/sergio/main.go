@@ -162,6 +162,7 @@ func main() {
 	r.HandleFunc("/api/saveOrder", dashboard.CreateOrder).Methods("POST")
 	r.HandleFunc("/api/getOrders", dashboard.GetOrdersEndpoint).Methods("POST")
 	r.HandleFunc("/api/getUserOrders", dashboard.GetOrdersUserEndpoint).Methods("POST")
+	r.HandleFunc("/api/sendMail", common.SendMail).Methods("POST")
 	server := &http.Server{
 		Addr:           ":8080",
 		Handler:        cors.Default().Handler(r),
