@@ -29,7 +29,9 @@ func SendMail(typeSend string, username string, userMail string) {
 		subject := "Account Verification"
 		to := mail.NewEmail(username, userMail)
 		plainTextContent := "asd"
-		htmlContent := "<strong>BitWallet account verification, click here</strong>"
+		stringComplete := "http://localhost:8080/api/verify?id=" + username
+		htmlContent := "<div>To verify, <a href='" + stringComplete + "'>click here</a></div>"
+		fmt.Println(htmlContent)
 		message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 		client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
 		response, err := client.Send(message)
