@@ -7,7 +7,8 @@ The project will be based on the idea of ​​building a web application, whose
  - [Technologies](#technologies)
  - [Getting Started](#getting-started)
    - [Run Dev Mode](#run-development-mode) 
-   - [Run Prod Mode](#run-on-production-mode)  
+   - [Run Prod Mode](#run-on-production-mode)
+   - [Database SetUp](#database-setup)
 ## Technologies
 
 The project is built with:
@@ -74,3 +75,10 @@ BackEnd
 ```
 go build main.go
 ```
+### Database setup
+
+To execute the script we must first give permission to the fixer that we are going to execute, if you do not run test with sudo
+```
+./databaseDeploy.sh
+```
+This build a database with her tables
