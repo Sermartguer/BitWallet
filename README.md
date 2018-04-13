@@ -4,8 +4,10 @@ BitWallet is the result of the final project of 2ºDAW of Sergio Martinez Guerre
 
 The project will be based on the idea of ​​building a web application, whose functionality will be established as a virtual cryptocurrency wallet.
 
- [here](#technologies)
-
+ - [Technologies](#technologies)
+ - [Getting Started](#getting-started)
+   - [Run Dev Mode](#run-development-mode) 
+   - [Run Prod Mode](#run-on-production-mode)  
 ## Technologies
 
 The project is built with:
