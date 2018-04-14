@@ -1,0 +1,187 @@
+.welcome{
+    display: flex;
+    flex-direction: column;
+}
+.welcome__price{
+    min-height: 60vh;
+    
+}
+.price{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.price--color{
+    //background: $colorBase 24%, rgb(15, 98, 189) 168%;
+    background: linear-gradient($colorBase 24%, rgb(15, 111, 189) 168%);
+    color: white;
+}
+.price--title{
+    font-size: 36px;
+    font-weight: 500;
+    text-align: center;
+}
+.price__button{
+    display: flex;
+    justify-content: center;
+}
+.btn{
+    outline:none;
+    cursor: pointer;
+    padding: 16px 32px;
+    border-radius: 4px;
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    margin:15px;
+}
+
+.btn__started--color{
+    color: $colorBase;
+    background: white;
+}
+.btn__started--font{
+    font-weight: 500;
+    font-size: 16px;
+}
+.price__curr{
+    display: flex;
+    justify-content: space-around;
+}
+.currInfo__panel{
+    margin:10px;
+    padding: 10px;
+    width: auto;
+    min-width: auto;
+}
+.currInfo__panel:hover{
+    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+}
+.currInfo__panel--color{
+    background: white;
+    color: black;
+}
+//Panel
+.panel{
+    min-width: 20%;
+    margin-top: 30px;
+    border-radius: 4px;
+}
+//Panel Header
+.panel__header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 7px;
+    border-bottom:1px solid rgba(78, 92, 110, 0.192);
+}
+.panel__title{
+    display: flex;
+    align-items: center;
+}
+.panel__title--color{
+    color: rgb(78, 92, 110);
+}
+.panel__title__img--size{
+    margin-right:5px;
+}
+.panel__update{
+    font-size: 13px;
+}
+.panel__update--color{
+    color:rgb(78, 92, 110)
+}
+//Panel Body
+.panel__body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 7px;
+}
+.body__pattern{
+
+}
+.body__pattern--color{
+    color: rgb(78, 92, 110);
+}
+.body__pattern--size{
+    font-size: 30px;
+}
+//Panel Footer
+.panel__button{
+    display: flex;
+    justify-content: center;
+}
+.btn__more--color {
+    background: $colorBase;
+    color: white;
+}
+.btn__more--font{
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.welcome__info{
+    min-height: 30vh;
+}
+.item__top{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin:20px;
+}
+.item__title{
+    font-size: 30px;
+}
+.item__subtitle{
+    font-size:  17px;
+}
+.item__subtitle--color{
+    color:rgb(78, 92, 110);
+}
+.info{
+    display: flex;
+    justify-content: center;
+    
+}
+.info__item{
+    background: white;
+    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    margin:10px;
+    padding: 10px;
+    width: auto;
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.info__icon{
+    background: #0f6fbd;
+    border-radius: 50%;
+    padding: 10%;
+}
+.info__icon--size{
+    font-size: 30px;
+}
+.info__icon--color{
+    color:white;
+}
+.info__pattern{
+    font-size: 25px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+.info__desc{
+    font-size: 15px;
+    text-align: center;
+    color: rgb(78, 92, 110);
+}
+.welcome__plans{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.plan__center{
+    text-align: center;
+}
