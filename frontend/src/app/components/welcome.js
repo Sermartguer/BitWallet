@@ -104,13 +104,53 @@ class Welcome extends PureComponent {
                     
                 </div>
                 <div className="welcome__plans">
-                    <span className="info__pattern">Are you a company?</span>
-                    <span>Register with our business plan and get improvements, such as:</span>
-                    <ul className="">
-                        <li className="plan__center">Less taxes</li>
-                        <li className="plan__center">Vendor tools</li>
-                        <li className="plan__center">Vccount report at all times</li>
-                    </ul>
+                    <h1 className="plans__title">BitWallet Plans</h1>
+                    <div className="plans__cards">
+                        <div className="card card__basic card__basic--color">
+                            <div className="basic__header">
+                                <h1 className="header__title">Basic</h1>
+                            </div>
+                            <div className="basic__body">
+                                <div className="body__item body__item--basic">
+                                    Save multiple cryptocurrencies
+                                </div>
+                                <div className="body__item body__item--basic">
+                                    Exchange and purchase
+                                </div>
+                                <div className="body__item">
+                                    Send and recive
+                                </div>
+                            </div>
+                            <div className="basic__footer">
+                                <button className="btn btn__basic--color"> Get Plan</button>
+                            </div>
+                        </div>
+                        <div className="card card__business card__business--color">
+                            <div className="business__header">
+                                <h1 className="header__title">Business</h1>
+                            </div>
+                            <div className="business__body">
+                                <div className="body__item body__item--business">
+                                    Save multiple cryptocurrencies
+                                </div>
+                                <div className="body__item body__item--business">
+                                    Exchange and purchase
+                                </div>
+                                <div className="body__item body__item--business">
+                                    Send and recive
+                                </div>
+                                <div className="body__item body__item--business">
+                                    Business tools
+                                </div>
+                                <div className="body__item">
+                                    Minimum fees
+                                </div>
+                            </div>
+                            <div className="business__footer">
+                                <button className="btn btn__business btn__business--color">Get Plan</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
