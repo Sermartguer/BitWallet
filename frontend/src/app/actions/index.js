@@ -44,10 +44,11 @@ export const signinUser = ({ username, password }) => {
     };
 };
 
-export const signupUser = ({ username, email, password,password2,acc_type="basic" }) => {
+export const signupUser = ({ username, email, password,password2,account }) => {
     return (dispatch) => {
         console.log( username)
         // submit email/password to the server
+        let acc_type = account;
         axios.post('http://localhost:8080/api/register', { username, email, password,password2,acc_type },{
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',

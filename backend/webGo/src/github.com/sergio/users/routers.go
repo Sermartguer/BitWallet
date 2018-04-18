@@ -96,7 +96,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//Enviar email
-	common.SendMail("check", userData.Username, userData.Email)
+	common.SendMail("check", userData.ID, userData.Username, userData.Email)
 	//Enviar al frontend
 	log.Printf("Saved on DB")
 	w.WriteHeader(http.StatusCreated)

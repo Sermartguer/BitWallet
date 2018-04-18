@@ -23,13 +23,13 @@ func GetTokenParsed(t string) (jwt.MapClaims, bool) {
 		return nil, false
 	}
 }
-func SendMail(typeSend string, username string, userMail string) {
+func SendMail(typeSend string, id string, username string, userMail string) {
 	from := mail.NewEmail("BitWallet", "bitwallet@bitwallet.com")
 	if typeSend == "check" {
 		subject := "Account Verification"
 		to := mail.NewEmail(username, userMail)
 		plainTextContent := "asd"
-		stringComplete := "http://localhost:8080/api/verify?id=" + username
+		stringComplete := "http://localhost:5000/verify/" + id
 		htmlContent := "<div>To verify, <a href='" + stringComplete + "'>click here</a></div>"
 		fmt.Println(htmlContent)
 		message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)

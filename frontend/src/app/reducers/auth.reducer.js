@@ -6,7 +6,6 @@ import {
 var jwtDecode = require('jwt-decode');
 
 export const reducer = (state = {}, action) => {
-
     switch (action.type) {
         case AUTH_USER:
         try {
