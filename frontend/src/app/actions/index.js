@@ -186,3 +186,17 @@ export const disableOrderNew = () => {
         dispatch({type: SAVE_ORDER, payload:false});
     };
 }
+export const verifyAccount = (id) => {
+    console.log(id)
+    let response = {id:id}
+    return (dispatch) => {
+        axios.post('http://localhost:8080/api/verifyAccount', response ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }).then(response => {
+                console.log(response)
+            }).catch((err) => {
+                console.log(err)
+            });
+    };
+}

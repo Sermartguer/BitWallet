@@ -3,6 +3,18 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 class Welcome extends PureComponent {
+    constructor(props){
+        super(props);
+        this.state = {
+            currencyDetail: this.props.match.params.id
+          };
+    }
+    componentWillMount(){
+        console.log(this.props.match.params.id);
+        if(this.props.match.params.id){
+            this.props.verifyAccount(this.props.match.params.id);
+        }
+    }
     render() {
         return (
             <div className="welcome">

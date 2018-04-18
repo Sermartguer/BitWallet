@@ -17,6 +17,7 @@ const Routes = () => {
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/feature" component={RequireAuth(Feature)} />
             <Route exact path="/dashboard" component={RequireAuth(Dashboard)} />
+            <Route exact path="/verify/:id" component={Welcome} />
         </App>
     );
 };

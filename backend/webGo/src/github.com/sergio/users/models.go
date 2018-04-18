@@ -85,3 +85,20 @@ func GetEmail(username string) string {
 	defer db.Close()
 	return username
 }
+func Verify(id string) bool {
+	db := common.DbConn()
+
+	insForm, err := db.Prepare("UPDATE accounts SET active=true WHERE id=?")
+	if err != nil {
+		panic(err)
+	}
+	_, err = insForm.Exec(id)
+
+	if err != nil {
+		log.Fatal(err)
+		return false
+
+	}
+	defer db.Close()
+	return true
+}

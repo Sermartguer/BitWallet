@@ -144,3 +144,20 @@ func GetCredentials(username string, password string, email string) Creds {
 func myLookupKey() []byte {
 	return []byte("do or do not there is no try")
 }
+func VerifyAccount(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	dat, _ := ioutil.ReadAll(r.Body)
+	// Read the body of the POST request
+	// Unmarshall this into a map
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+	ver := Verify(params["id"])
+	if ver {
+		w.WriteHeader(http.StatusOK)
+	} else {
+		w.WriteHeader(http.StatusBadRequest)
+		j, _ := json.Marshal("Error on verify")
+		w.Write(j)
+	}
+	log.Println(params["id"])
+}
