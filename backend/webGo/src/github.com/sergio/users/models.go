@@ -102,3 +102,33 @@ func Verify(id string) bool {
 	defer db.Close()
 	return true
 }
+func Update(firstname string, surname string, id string) bool {
+	log.Println(firstname)
+	db := common.DbConn()
+	insForm, err := db.Prepare("UPDATE accounts SET firstname=?, surname=? WHERE id=?")
+	if err != nil {
+		panic(err)
+	}
+	_, err = insForm.Exec(firstname, surname, id)
+
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	defer db.Close()
+	return true
+}
+func GetIdByUsername(username string) string {
+	db := common.DbConn()
+	err := db.QueryRow("SELECT id FROM accounts WHERE username=?", username).Scan(&username)
+	switch {
+	case err == sql.ErrNoRows:
+		log.Printf("No user with that username.")
+	case err != nil:
+		log.Fatal(err)
+	default:
+		fmt.Printf("email is %s\n", username)
+	}
+	defer db.Close()
+	return username
+}

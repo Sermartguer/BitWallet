@@ -33,7 +33,7 @@ export const signinUser = ({ username, password }) => {
                 
 
                 // - redirect to the route '/feature'
-                History.push('/feature');
+                History.push('/');
 
             }).catch((err) => {
                 console.log(err.response)
@@ -199,4 +199,7 @@ export const verifyAccount = (id) => {
                 console.log(err)
             });
     };
+}
+export const updateProfile = (formValues) =>{
+    console.log(formValues);
 }

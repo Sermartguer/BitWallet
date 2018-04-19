@@ -18,7 +18,7 @@ class Header extends PureComponent {
                     <Link className="navbar__item--color" to='/dashboard'>Dashboard</Link>
                 </li>
                 <li key="username" className="navbar__item">
-                    <Link className="navbar__item--color" to="#">{this.props.username}</Link>
+                    <Link className="navbar__item--color" to="/profile">{this.props.username}</Link>
                 </li>
                 <li key="logout" className="navbar__item">
                     <Link className="navbar__item--color" to="/signout" >Logout</Link>

@@ -8,6 +8,7 @@ import Signup from '../components/auth/signup';
 import Feature from '../components/feature';
 import Welcome from '../components/welcome';
 import Dashboard from '../components/dashboard';
+import Profile from '../components/profile';
 const Routes = () => {
     return (
         <App>
@@ -17,6 +18,7 @@ const Routes = () => {
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/feature" component={RequireAuth(Feature)} />
             <Route exact path="/dashboard" component={RequireAuth(Dashboard)} />
+            <Route exact path="/profile" component={RequireAuth(Profile)} />
             <Route exact path="/verify/:id" component={Welcome} />
         </App>
     );

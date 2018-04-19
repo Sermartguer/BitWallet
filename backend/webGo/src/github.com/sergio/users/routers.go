@@ -161,3 +161,29 @@ func VerifyAccount(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println(params["id"])
 }
+func UpdateProfile(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	dat, _ := ioutil.ReadAll(r.Body)
+	// Read the body of the POST request
+	// Unmarshall this into a map
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+	log.Println(params["fistname"])
+	claims, err := common.GetTokenParsed(params["token"])
+	if err == false {
+		j, _ := json.Marshal("Error in token check")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(j)
+		return
+	}
+
+	userID := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+	updateCheck := Update(params["fistname"], params["surname"], userID)
+	if updateCheck {
+		w.WriteHeader(http.StatusOK)
+	} else {
+		w.WriteHeader(http.StatusBadRequest)
+		j, _ := json.Marshal("Error on update")
+		w.Write(j)
+	}
+}
