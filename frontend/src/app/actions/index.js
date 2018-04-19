@@ -189,11 +189,13 @@ export const disableOrderNew = () => {
 export const verifyAccount = (id) => {
     console.log(id)
     let response = {id:id}
-    return (dispatch) => {
-        axios.post('http://localhost:8080/api/verifyAccount', response ,{
+    var config = {
+        headers: {
             'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-          }).then(response => {
+            'Content-Type': 'application/json',}
+      };
+    return (dispatch) => {
+        axios.post('http://localhost:8080/api/verifyAccount', response ,config).then(response => {
                 console.log(response)
             }).catch((err) => {
                 console.log(err)
@@ -202,4 +204,15 @@ export const verifyAccount = (id) => {
 }
 export const updateProfile = (formValues) =>{
     console.log(formValues);
+    formValues.token = localStorage.getItem('token')
+    return (dispatch) => {
+        axios.post('http://localhost:8080/api/updateProfile', formValues ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }).then(response => {
+                console.log(response)
+            }).catch((err) => {
+                console.log(err)
+            });
+    };
 }

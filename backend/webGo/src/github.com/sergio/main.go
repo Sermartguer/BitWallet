@@ -163,7 +163,7 @@ func main() {
 	r.HandleFunc("/api/getOrders", dashboard.GetOrdersEndpoint).Methods("POST")
 	r.HandleFunc("/api/getUserOrders", dashboard.GetOrdersUserEndpoint).Methods("POST")
 	r.HandleFunc("/api/verifyAccount", users.VerifyAccount).Methods("POST")
-	r.HandleFunc("/api/updateProfile", users.UpdateProfile).Methods("PUT")
+	r.HandleFunc("/api/updateProfile", users.UpdateProfile).Methods("POST")
 	server := &http.Server{
 		Addr:           ":8080",
 		Handler:        cors.Default().Handler(r),
