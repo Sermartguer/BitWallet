@@ -14,7 +14,6 @@ class Dashboard extends PureComponent {
           };
         this.onButtonClick = this.onButtonClick.bind(this);
     }
-    
     onButtonClick(e) {
         console.log(e.target.id)
         let component;

@@ -9,6 +9,9 @@ import Feature from '../components/feature';
 import Welcome from '../components/welcome';
 import Dashboard from '../components/dashboard';
 import Profile from '../components/profile';
+import ProfileMiddleware from '../components/feature';
+import Recover from '../components/auth/recover';
+import NewPassword from '../components/auth/newPass';
 const Routes = () => {
     return (
         <App>
@@ -18,8 +21,10 @@ const Routes = () => {
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/feature" component={RequireAuth(Feature)} />
             <Route exact path="/dashboard" component={RequireAuth(Dashboard)} />
-            <Route exact path="/profile" component={RequireAuth(Profile)} />
+            <Route exact path="/profile" component={RequireAuth(ProfileMiddleware)} />
             <Route exact path="/verify/:id" component={Welcome} />
+            <Route exact path="/recover" component={Recover}/>
+            <Route exact path="/newpassword/:id" component={NewPassword}/>
         </App>
     );
 };

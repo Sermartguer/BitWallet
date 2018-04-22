@@ -21,7 +21,6 @@ class Send extends PureComponent {
     }
     renderCurrency() {
         if (this.props.addresses) {
-            console.log(his.props.addresses)
             return (
                     <span>a</span>
             );

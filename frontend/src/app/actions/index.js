@@ -9,7 +9,8 @@ import {
     GET_USER_ADDRESSES,
     GET_ORDERS,
     GET_USER_ORDERS,
-    SAVE_ORDER
+    SAVE_ORDER,
+    GET_PROFILE_DATA
 } from './types';
 
 const ROOT_URL = 'http://localhost:8080/api';
@@ -207,6 +208,47 @@ export const updateProfile = (formValues) =>{
     formValues.token = localStorage.getItem('token')
     return (dispatch) => {
         axios.post('http://localhost:8080/api/updateProfile', formValues ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }).then(response => {
+                console.log(response)
+            }).catch((err) => {
+                console.log(err)
+            });
+    };
+}
+export const getProfileData = () =>{
+    let token = {token:localStorage.getItem('token')};
+    return (dispatch) => {
+        axios.post('http://localhost:8080/api/getAccountProfile', token ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }).then(response => {
+                console.log(response)
+                dispatch({type: GET_PROFILE_DATA, payload:response.data[0]});
+            }).catch((err) => {
+                console.log(err)
+            });
+    };
+}
+export const recoverPassword = (email) =>{
+    console.log(email)
+    /*return (dispatch) => {
+        axios.post('http://localhost:8080/api/recoverPassword', response ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }).then(response => {
+                console.log(response)
+                dispatch({type: GET_PROFILE_DATA, payload:response.data[0]});
+            }).catch((err) => {
+                console.log(err)
+            });
+    };*/
+}
+export const newPassword = (form) =>{
+    console.log(form)
+    return (dispatch) => {
+        axios.post('http://localhost:8080/api/newPassword', form ,{
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
           }).then(response => {

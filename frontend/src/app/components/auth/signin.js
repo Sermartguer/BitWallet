@@ -30,6 +30,9 @@ class Signin extends PureComponent {
                         <div className="login__question">
                             <span className="question--color">Don't have an account? </span>
                             <a className="question__a" href="/signup">Sign Up</a>
+                            <br/>
+                            <span className="question--color">Forgot password? </span>
+                            <a className="question__a" href="/recover">Recover</a>
                         </div>
                         <div className="input__pattert">
                             <Field className="form__input" name="username" component="input" type="text" placeholder="Username"/>

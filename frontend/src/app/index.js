@@ -28,6 +28,7 @@ const token = localStorage.getItem('token');
 if (token) {
     // we need to update application state
     store.dispatch({token:token, type: AUTH_USER });
+    
 }
 
 ReactDOM.render(

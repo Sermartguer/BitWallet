@@ -187,3 +187,58 @@ func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 		w.Write(j)
 	}
 }
+func GetAccountProfile(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	dat, _ := ioutil.ReadAll(r.Body)
+	// Read the body of the POST request
+	// Unmarshall this into a map
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+	log.Println(params["fistname"])
+	claims, err := common.GetTokenParsed(params["token"])
+	if err == false {
+		j, _ := json.Marshal("Error in token check")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(j)
+		return
+	}
+	userID := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+	data := GetAccount(userID)
+	j, _ := json.Marshal(data)
+	fmt.Println(string(j))
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+}
+func NewPassword(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	dat, _ := ioutil.ReadAll(r.Body)
+	// Read the body of the POST request
+	// Unmarshall this into a map
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+
+	passwordHash, _ := HashPassword(params["password"])
+	passCheck := CheckPasswordHash(params["repassword"], passwordHash)
+	if passCheck {
+		log.Println("OK")
+		passDB := NewAccountPassword(passwordHash, params["id"])
+		if passDB {
+			j, _ := json.Marshal("OK")
+			w.WriteHeader(http.StatusOK)
+			w.Write(j)
+			return
+		} else {
+			j, _ := json.Marshal("Not updated")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(j)
+			return
+		}
+	} else {
+		j, _ := json.Marshal("Passwords not match")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(j)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}

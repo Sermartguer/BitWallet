@@ -8,6 +8,14 @@ import (
 	"../common"
 )
 
+type AccountStruct struct {
+	Username   string `json:"username"`
+	Email      string `json:"email"`
+	FirstName  string `json:"firstname"`
+	Surname    string `json:"surname"`
+	AcountType string `json:"acc_type"`
+}
+
 func SaveUser(user_data UserModelValidator) bool {
 	db := common.DbConn()
 
@@ -131,4 +139,47 @@ func GetIdByUsername(username string) string {
 	}
 	defer db.Close()
 	return username
+}
+func GetAccount(id string) []AccountStruct {
+	var data []AccountStruct
+	db := common.DbConn()
+	rows, err := db.Query("SELECT username,email,firstname,surname,acc_type FROM accounts WHERE id=?", id)
+	if err != nil {
+		panic(err.Error())
+	}
+	row := AccountStruct{}
+	for rows.Next() {
+		var responseUsername string
+		var responseEmail string
+		var responseFirstName string
+		var responseSurname string
+		var responseAcountType string
+		err = rows.Scan(&responseUsername, &responseEmail, &responseFirstName, &responseSurname, &responseAcountType)
+		if err != nil {
+			panic(err.Error())
+		}
+		row.Username = responseUsername
+		row.Email = responseEmail
+		row.FirstName = responseFirstName
+		row.Surname = responseSurname
+		row.AcountType = responseAcountType
+		data = append(data, row)
+	}
+	db.Close()
+	return data
+}
+func NewAccountPassword(password string, id string) bool {
+	db := common.DbConn()
+	insForm, err := db.Prepare("UPDATE accounts SET password=? WHERE id=?")
+	if err != nil {
+		panic(err)
+	}
+	_, err = insForm.Exec(password, id)
+
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	defer db.Close()
+	return true
 }

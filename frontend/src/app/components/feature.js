@@ -1,22 +1,28 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-
-class Feature extends PureComponent {
-
+import Profile from './profile';
+class ProfileMiddleware extends PureComponent {
+    componentWillMount(){
+        this.props.getProfileData();
+    }
     render() {
+        if(this.props.datos){
+            console.log(this.props.datos)
+            var profile = <Profile profileData={{username:this.props.datos.username,email:this.props.datos.email,firstname:this.props.datos.firstname,surname:this.props.datos.surname}}></Profile>
+        }else{
+            var profile = 'Loading...'
+        }
         return (
             <div>
-                <h4>Feature</h4><small>You must be logged in to see the features</small>
-                <ul>
-                </ul>
+                {profile}
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => {
-    return { features: state.features.homePageFeatures }
+    return { datos: state.auth.profileData }
 }
 
-export default connect(mapStateToProps, actions)(Feature);
+export default connect(mapStateToProps, actions)(ProfileMiddleware);
