@@ -140,6 +140,20 @@ func GetIdByUsername(username string) string {
 	defer db.Close()
 	return username
 }
+func GetIdByEmail(email string) string {
+	db := common.DbConn()
+	err := db.QueryRow("SELECT id FROM accounts WHERE email=?", email).Scan(&email)
+	switch {
+	case err == sql.ErrNoRows:
+		log.Printf("No user with that username.")
+	case err != nil:
+		log.Fatal(err)
+	default:
+		fmt.Printf("email is %s\n", email)
+	}
+	defer db.Close()
+	return email
+}
 func GetAccount(id string) []AccountStruct {
 	var data []AccountStruct
 	db := common.DbConn()

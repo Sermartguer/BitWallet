@@ -210,6 +210,16 @@ func GetAccountProfile(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(j)
 }
+func RecoverPassword(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	dat, _ := ioutil.ReadAll(r.Body)
+	// Read the body of the POST request
+	// Unmarshall this into a map
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+	id := GetIdByEmail(params["email"])
+	common.SendMail("newPassword", id, params["email"], params["email"])
+}
 func NewPassword(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	dat, _ := ioutil.ReadAll(r.Body)

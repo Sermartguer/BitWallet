@@ -42,6 +42,23 @@ func SendMail(typeSend string, id string, username string, userMail string) {
 			fmt.Println(response.Body)
 			fmt.Println(response.Headers)
 		}
+	} else if typeSend == "newPassword" {
+		subject := "Account Verification"
+		to := mail.NewEmail(username, userMail)
+		plainTextContent := "asd"
+		stringComplete := "http://localhost:5000/newpassword/" + id
+		htmlContent := "<div>To recover password, <a href='" + stringComplete + "'>click here</a></div>"
+		fmt.Println(htmlContent)
+		message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+		client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
+		response, err := client.Send(message)
+		if err != nil {
+			log.Println(err)
+		} else {
+			fmt.Println(response.StatusCode)
+			fmt.Println(response.Body)
+			fmt.Println(response.Headers)
+		}
 	}
 
 }

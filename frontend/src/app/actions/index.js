@@ -233,17 +233,18 @@ export const getProfileData = () =>{
 }
 export const recoverPassword = (email) =>{
     console.log(email)
-    /*return (dispatch) => {
-        axios.post('http://localhost:8080/api/recoverPassword', response ,{
+    return (dispatch) => {
+        axios.post('http://localhost:8080/api/recoverPassword', email ,{
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
           }).then(response => {
                 console.log(response)
-                dispatch({type: GET_PROFILE_DATA, payload:response.data[0]});
+                History.push('/');
+                //dispatch({type: GET_PROFILE_DATA, payload:response.data[0]});
             }).catch((err) => {
                 console.log(err)
             });
-    };*/
+    };
 }
 export const newPassword = (form) =>{
     console.log(form)
@@ -252,6 +253,7 @@ export const newPassword = (form) =>{
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
           }).then(response => {
+                History.push('/');
                 console.log(response)
             }).catch((err) => {
                 console.log(err)

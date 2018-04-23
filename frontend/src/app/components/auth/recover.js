@@ -33,7 +33,7 @@ class Recover extends PureComponent {
                     <span>Enter email to recover your password</span>
                     <form className="modal" onSubmit={this.handleSubmit}>
                         <div className="input__pattert">
-                            <input className="form__input" name="email"  type="text" defaultValue={this.state.email} onChange={this.handleInputChange} placeholder="Email"/>
+                            <input className="form__input" name="email" type="text" defaultValue={this.state.email} onChange={this.handleInputChange} placeholder="Email"/>
                         </div>
                         <div className="form__button__pattern">
                             <button className="form__button" action="submit" >Sign in</button>
