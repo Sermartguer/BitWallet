@@ -1,4 +1,4 @@
-# BitWallet
+# <img src="https://dewey.tailorbrands.com/production/brand_version_mockup_image/210/772120210_d432d2e2-d0b2-4d80-8157-21aab5e0a427.png" width="200"></img>
 
 BitWallet is the result of the final project of 2ºDAW of Sergio Martinez Guerrero.
 
