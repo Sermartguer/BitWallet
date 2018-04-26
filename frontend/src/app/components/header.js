@@ -10,7 +10,7 @@ class Header extends PureComponent {
             return [
             <div key="logo" className="">
                 <li key="logo" className="navbar__item">
-                    <Link to='/' className="navbar__item title--color">BitWallet</Link>
+                    <Link to='/' className="navbar__item title--color"><img src="http://localhost:8080/static/bitwallet_logo5.png" width="100"></img></Link>
                 </li>
             </div>,
             <div key="menu" className="navbar__items">
