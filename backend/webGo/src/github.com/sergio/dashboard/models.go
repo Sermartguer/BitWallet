@@ -23,6 +23,13 @@ type GetOrdersStructure struct {
 	Price    string `json:"price"`
 	CreateAt string `json:"create_at"`
 }
+type TransactionsStructure struct {
+	SendTo    string `json:"send_to"`
+	HashId    string `json:"hash_id"`
+	Amount    string `json:"amount"`
+	Currency  string `json:"currency"`
+	TransTime string `json:"trans_time"`
+}
 
 func GetIdByUsername(username string) string {
 	db := common.DbConn()
@@ -153,6 +160,34 @@ func GetUserOrders(id_account string) []GetOrdersStructure {
 		row.Currency = responseCurrency
 		row.Price = responsePrice
 		row.CreateAt = responseCreateAt
+		data = append(data, row)
+	}
+	db.Close()
+	return data
+}
+func UserTransactions(id_account string) []TransactionsStructure {
+	var data []TransactionsStructure
+	db := common.DbConn()
+	rows, err := db.Query("SELECT send_to,hash_id,amount,currency,trans_time FROM transactions WHERE id_account=?", id_account)
+	if err != nil {
+		panic(err.Error())
+	}
+	row := TransactionsStructure{}
+	for rows.Next() {
+		var responseSendTo string
+		var responseHashId string
+		var responseAmount string
+		var responseCurrency string
+		var responseTransTime string
+		err = rows.Scan(&responseSendTo, &responseHashId, &responseAmount, &responseCurrency, &responseTransTime)
+		if err != nil {
+			panic(err.Error())
+		}
+		row.SendTo = responseSendTo
+		row.HashId = responseHashId
+		row.Amount = responseAmount
+		row.Currency = responseCurrency
+		row.TransTime = responseTransTime
 		data = append(data, row)
 	}
 	db.Close()

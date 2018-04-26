@@ -3,34 +3,28 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import ReactTable from "react-table";
 class TransactionPane extends PureComponent {
-    constructor(props){
-        super(props)
-        this.state = {
-            transactions: props.props
-        }
-        
-    }
     render() {
-        const data = [{
-            action:'Recive',
-            moneda: 'DOGE',
-            amount: '26 DOGE',
-            to: 'DNJDAHShduhasdaiBSDHSA',
-            date: '27/04/18'
-          },{
-            action:'Send',
-            moneda: 'BTC',
-            amount: '0.04 BTC',
-            to: 'DNJDAHShduhasdaiBSDHSA',
-            date: '26/04/18'
-          },
-          {
-            action:'Send',
-            moneda: 'LTC',
-            amount: '1.15 LTC',
-            to: 'DNJDAHShduhasdaiBSDHSA',
-            date: '26/04/18'
-          }]
+       if(this.props.trans !== undefined){
+            var data = [];
+            this.props.trans.map((transaction)=>{
+                let object = {}
+                if(Math.sign(transaction.amount) === 1){
+                    object.action = 'Recive';
+                }else{
+                    object.action = 'Send';
+                }
+                object.moneda = transaction.currency;
+                object.amount = Math.round(transaction.amount * 100)/100;
+                object.to = transaction.send_to;
+                let d = new Date(transaction.trans_time)
+                var curr_date = d.getDate();
+                var curr_month = d.getMonth() + 1;
+                var curr_year = d.getFullYear();
+                object.date = curr_date + "/" + curr_month + "/" + curr_year;
+                data.push(object);
+            });
+        }else{
+        }
         
           const columns = [
             {
@@ -64,7 +58,9 @@ class TransactionPane extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
-    return { features: state.features.homePageFeatures }
+    return { 
+        trans: state.overview.transactions
+     }
 }
 
 export default connect(mapStateToProps, actions)(TransactionPane);

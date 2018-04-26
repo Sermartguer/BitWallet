@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"reflect"
+	"unsafe"
 
 	"../common"
 )
@@ -174,5 +177,51 @@ func GetOrdersUserEndpoint(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write(j)
 	}
+}
+func GetCoinPrice(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
+	dat, _ := ioutil.ReadAll(r.Body)
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+
+	body := GetCurrencyPrice(os.Getenv(params["currency"] + "TST"))
+	if string(body) == "Error" {
+		j, _ := json.Marshal("Block.io error")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(j)
+		return
+	}
+	//result := BytesToString(body)
+	//j, _ := json.Marshal(result)
+	w.WriteHeader(http.StatusOK)
+	w.Write(body)
+}
+func BytesToString(b []byte) string {
+	bh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sh := reflect.StringHeader{bh.Data, bh.Len}
+	return *(*string)(unsafe.Pointer(&sh))
+}
+func GetTransactions(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	dat, _ := ioutil.ReadAll(r.Body)
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+
+	claims, err := common.GetTokenParsed(params["token"])
+	if err == false {
+		j, _ := json.Marshal("Error in token check")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(j)
+		return
+	}
+
+	userID := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+	data := UserTransactions(userID)
+	j, _ := json.Marshal(data)
+	fmt.Println(string(j))
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
 }

@@ -13,8 +13,8 @@ class TransactionSection extends PureComponent {
         return (
             <div>
                 {this.state.transactions ? <div className="transaction">
-                    <span className="transaction__mount">-350 DOGE</span>
-                    <span className="transaction__to">to:DaoisdhashdbHJSIHGAFsdfsdFDFE</span>
+                    <span className="transaction__mount">{Math.round(this.state.transactions.amount * 100)/100 } {this.state.transactions.currency}</span>
+                    <span className="transaction__to">to:{this.state.transactions.send_to}</span>
                 </div> : <div className="transaction">
                     <span className="transaction__mount">No transactions found</span>
                 </div>}

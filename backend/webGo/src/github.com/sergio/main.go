@@ -167,6 +167,8 @@ func main() {
 	r.HandleFunc("/api/getAccountProfile", users.GetAccountProfile).Methods("POST")
 	r.HandleFunc("/api/recoverPassword", users.RecoverPassword).Methods("POST")
 	r.HandleFunc("/api/newPassword", users.NewPassword).Methods("POST")
+	r.HandleFunc("/api/getCurrencyPrice", dashboard.GetCoinPrice).Methods("POST")
+	r.HandleFunc("/api/getUserTrans", dashboard.GetTransactions).Methods("POST")
 	server := &http.Server{
 		Addr:           ":8080",
 		Handler:        cors.Default().Handler(r),
