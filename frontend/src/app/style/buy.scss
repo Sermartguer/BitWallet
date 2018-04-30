@@ -16,3 +16,65 @@ label > input{ /* HIDE RADIO */
     justify-content: center;
     align-items: center;
   }
+ 
+  .doge--color{
+    background: #c2a634;
+  }
+  .litecoin--color{
+    background: #bdbdbd;
+  }
+  .button--color{
+    background: #c2a634;
+    color: white;
+  }
+  .bitcoin--color{
+    background: #f58f1b;
+    color: white;
+  }
+ .header__card{
+  min-width: 300px;
+  min-height: 30px;
+  text-align: center;
+ }
+ .body__card{
+   display: flex;
+   flex-direction: column;
+  align-items: baseline;
+  padding: 10px;
+ }
+ .text__card{
+   font-size: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+ }
+ .footer__card{
+   display: flex;
+   justify-content: center;
+   padding: 10px;
+ }
+  .buy__resposive{
+   justify-content: center;
+  }
+@media (max-width:1400px){
+  .responsive__user{
+    flex-direction: column;
+    align-items: center;
+  }
+}
+ @media (max-width: 1024px) {
+  .buy__resposive{
+    width: 60%;
+    margin: 0 auto;
+  }
+}
+@media (max-width: 500px) {
+  .buy__resposive{
+    width: 100%;
+    margin: 0 auto;
+  }
+  .saleOrders{
+    width: 100%;
+    margin:0px;
+  }
+}

@@ -37,9 +37,13 @@
     display: flex;
 }
 .saleOrders{
-    width: 60%;
+    width: 70%;
     margin-right: 5%;
 }
 .sale{
     width: 25%;
+}
+.align__aviable{
+    display: flex;
+    justify-content: center;
 }

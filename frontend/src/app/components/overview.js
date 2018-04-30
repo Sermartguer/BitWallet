@@ -32,26 +32,32 @@ class Overview extends PureComponent {
                 let curr;
                 let trans;
                 if(item.currency === 'BTC'){
-                    curr = this.props.BTC.data
-                    this.props.transactions.map((transaction)=>{
-                        if(transaction.currency === 'BTC'){
-                            trans = transaction
-                        }
-                    });
+                    curr = this.props.BTC.data;
+                    if(this.props.transactions !== null){
+                        this.props.transactions.map((transaction)=>{
+                            if(transaction.currency === 'BTC'){
+                                trans = transaction
+                            }
+                        });
+                    }
                 }else if( item.currency === 'LTC'){
-                    curr = this.props.LTC.data
-                    this.props.transactions.map((transaction)=>{
-                        if(transaction.currency === 'LTC'){
-                            trans = transaction
-                        }
-                    });
+                    curr = this.props.LTC.data;
+                    if(this.props.transactions !== null){
+                        this.props.transactions.map((transaction)=>{
+                            if(transaction.currency === 'LTC'){
+                                trans = transaction
+                            }
+                        });
+                    }
                 }else if(item.currency === 'DOGE'){
                     curr = this.props.DOGE.data;
-                    this.props.transactions.map((transaction)=>{
-                        if(transaction.currency === 'DOGE'){
-                            trans = transaction
-                        }
-                    });
+                    if(this.props.transactions !== null){
+                        this.props.transactions.map((transaction)=>{
+                            if(transaction.currency === 'DOGE'){
+                                trans = transaction
+                            }
+                        });
+                    }
                 }
                 return <CurrencyPane key={index} props={{currency:item.currency, amount:item.amount,prices:curr,transactions:this.props.transactions,transaction:trans}}/>
             })

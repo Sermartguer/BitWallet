@@ -24,6 +24,12 @@ class CurrencyPane extends PureComponent {
         }
         let price = eval(this.state.amount * this.state.prices[0].price);
         let mon = this.state.prices[0].price_base;
+        var transactionUI;
+        if(this.state.transactions !== undefined){
+            transactionUI = <TransactionSection transactions={this.state.transactions} />
+        }else{
+            transactionUI =  <span className="center__trans">No transactions found</span>;
+        }
         return (
             <div className="pane">
                 <div className="pane__body">
@@ -38,7 +44,7 @@ class CurrencyPane extends PureComponent {
                         </div>
                     </div>
                 </div>
-                <TransactionSection transactions={this.state.transactions} />
+                    {transactionUI}
             </div>
         );
     }
