@@ -12,6 +12,7 @@ import Profile from '../components/profile';
 import ProfileMiddleware from '../components/feature';
 import Recover from '../components/auth/recover';
 import NewPassword from '../components/auth/newPass';
+import PinView from '../components/pinView';
 const Routes = () => {
     return (
         <App>
@@ -22,7 +23,7 @@ const Routes = () => {
             <Route exact path="/feature" component={RequireAuth(Feature)} />
             <Route exact path="/dashboard" component={RequireAuth(Dashboard)} />
             <Route exact path="/profile" component={RequireAuth(ProfileMiddleware)} />
-            <Route exact path="/verify/:id" component={Welcome} />
+            <Route exact path="/verify/:id" component={PinView} />
             <Route exact path="/recover" component={Recover}/>
             <Route exact path="/newpassword/:id" component={NewPassword}/>
         </App>

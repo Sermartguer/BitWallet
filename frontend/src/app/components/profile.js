@@ -9,7 +9,8 @@ class Profile extends PureComponent {
             username: this.props.profileData.username,
             email: this.props.profileData.email,
             firstname: this.props.profileData.firstname,
-            surname: this.props.profileData.surname
+            surname: this.props.profileData.surname,
+            mobile_pin:this.props.profileData.mobile_pin
           };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -47,6 +48,9 @@ class Profile extends PureComponent {
                             </div>
                             <div className="input__pattert">
                                 <input className="form__input" type="text" name="surname" placeholder="Surname" defaultValue={this.state.surname} onChange={this.handleChange}/>
+                            </div>
+                            <div>
+                                {this.state.mobile_pin}
                             </div>
                             <div className="form__button__pattern">
                                 <button className="form__button" action="submit" >Update Profile</button>

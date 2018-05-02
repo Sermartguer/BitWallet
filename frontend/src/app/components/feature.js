@@ -9,7 +9,7 @@ class ProfileMiddleware extends PureComponent {
     render() {
         if(this.props.datos){
             console.log(this.props.datos)
-            var profile = <Profile profileData={{username:this.props.datos.username,email:this.props.datos.email,firstname:this.props.datos.firstname,surname:this.props.datos.surname}}></Profile>
+            var profile = <Profile profileData={{username:this.props.datos.username,email:this.props.datos.email,firstname:this.props.datos.firstname,surname:this.props.datos.surname,mobile_pin:this.props.datos.mobile_hash}}></Profile>
         }else{
             var profile = 'Loading...'
         }

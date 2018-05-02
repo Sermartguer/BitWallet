@@ -57,13 +57,10 @@ export const signupUser = ({ username, email, password,password2,account }) => {
             'Content-Type': 'application/json',
           })
             .then(response => {
-                console.log(response);
-                //dispatch({ type: AUTH_USER });
-                //localStorage.setItem('token', response.data.token);
-                History.push('/');
+                localStorage.setItem('pin',false);
             })
             .catch(err => {
-                console.log(err.response)
+                console.log(err.response);
                 dispatch(authError(err.response.data));
             });
     };
@@ -189,16 +186,13 @@ export const disableOrderNew = () => {
         dispatch({type: SAVE_ORDER, payload:false});
     };
 }
-export const verifyAccount = (id) => {
-    console.log(id)
-    let response = {id:id}
-    var config = {
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',}
-      };
+export const verifyAccount = (verifyPin) => {
+    console.log(verifyPin)
     return (dispatch) => {
-        axios.post('http://localhost:8080/api/verifyAccount', response ,config).then(response => {
+        axios.post('http://localhost:8080/api/verifyAccount', verifyPin ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          }).then(response => {
                 console.log(response)
             }).catch((err) => {
                 console.log(err)
@@ -288,4 +282,18 @@ export const getUserTransactions = () => {
         }).catch((err) => {
         });
     };
+}
+export const setPin = (pin) =>{
+    return (dispatch) => {
+        console.log(pin)
+        /*axios.post('http://localhost:8080/api/getUserTrans', token ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+        }).then(response => {
+            console.log(response.data)
+            dispatch({type: GET_TRANSACTIONS, payload:response.data})
+        }).catch((err) => {
+        });
+    };*/
+    }
 }

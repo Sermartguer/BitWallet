@@ -7,6 +7,7 @@ class Signup extends PureComponent {
     handleFormSubmit(formProps) {
         console.log(formProps)
         this.props.signupUser(formProps)
+
     }
 
     renderField = ({ input, label, type, meta: { touched, error },className="form__input" }) => (

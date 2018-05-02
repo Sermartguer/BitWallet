@@ -89,8 +89,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		w.Write(j)
 		return
 	}
+
 	//Registrar l'usuari en la BD
-	saved := SaveUser(userData)
+	saved := SaveUser(userData, "mob-"+userData.ID)
 	if !saved {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -151,7 +152,7 @@ func VerifyAccount(w http.ResponseWriter, r *http.Request) {
 	// Unmarshall this into a map
 	var params map[string]string
 	json.Unmarshal(dat, &params)
-	ver := Verify(params["id"])
+	ver := Verify(params["param"], params["pin"])
 	if ver {
 		w.WriteHeader(http.StatusOK)
 	} else {
@@ -159,7 +160,7 @@ func VerifyAccount(w http.ResponseWriter, r *http.Request) {
 		j, _ := json.Marshal("Error on verify")
 		w.Write(j)
 	}
-	log.Println(params["id"])
+	log.Println(params["param"])
 }
 func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -194,7 +195,6 @@ func GetAccountProfile(w http.ResponseWriter, r *http.Request) {
 	// Unmarshall this into a map
 	var params map[string]string
 	json.Unmarshal(dat, &params)
-	log.Println(params["fistname"])
 	claims, err := common.GetTokenParsed(params["token"])
 	if err == false {
 		j, _ := json.Marshal("Error in token check")

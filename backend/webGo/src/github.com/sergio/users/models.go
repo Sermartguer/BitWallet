@@ -16,15 +16,15 @@ type AccountStruct struct {
 	AcountType string `json:"acc_type"`
 }
 
-func SaveUser(user_data UserModelValidator) bool {
+func SaveUser(user_data UserModelValidator, mobile string) bool {
 	db := common.DbConn()
 
-	insForm, err := db.Prepare("INSERT INTO accounts (id, username, email,password,acc_type,update_at, create_at,active) VALUES(?,?,?,?,?,?,?,?)")
+	insForm, err := db.Prepare("INSERT INTO accounts (id, username, email,password,acc_type,update_at, create_at, active, mobile_hash) VALUES(?,?,?,?,?,?,?,?,?)")
 	if err != nil {
 		return false
 		log.Fatal(err)
 	}
-	insForm.Exec(user_data.ID, user_data.Username, user_data.Email, user_data.Password, user_data.AccountType, user_data.CreatedAt, user_data.CreatedAt, false)
+	insForm.Exec(user_data.ID, user_data.Username, user_data.Email, user_data.Password, user_data.AccountType, user_data.CreatedAt, user_data.CreatedAt, false, mobile)
 	defer db.Close()
 	return true
 }
@@ -93,14 +93,14 @@ func GetEmail(username string) string {
 	defer db.Close()
 	return username
 }
-func Verify(id string) bool {
+func Verify(id string, pin string) bool {
 	db := common.DbConn()
 
-	insForm, err := db.Prepare("UPDATE accounts SET active=true WHERE id=?")
+	insForm, err := db.Prepare("UPDATE accounts SET active=true, pin=? WHERE id=?")
 	if err != nil {
 		panic(err)
 	}
-	_, err = insForm.Exec(id)
+	_, err = insForm.Exec(pin, id)
 
 	if err != nil {
 		log.Fatal(err)
@@ -157,9 +157,10 @@ func GetIdByEmail(email string) string {
 func GetAccount(id string) []AccountStruct {
 	var data []AccountStruct
 	db := common.DbConn()
-	rows, err := db.Query("SELECT username,email,firstname,surname,acc_type FROM accounts WHERE id=?", id)
+	rows, err := db.Query("SELECT username,email,firstname,surname,acc_type,mobile_hash FROM accounts WHERE id=?", id)
 	if err != nil {
-		panic(err.Error())
+		log.Printf("Err1")
+		log.Printf(err.Error())
 	}
 	row := AccountStruct{}
 	for rows.Next() {
@@ -170,7 +171,8 @@ func GetAccount(id string) []AccountStruct {
 		var responseAcountType string
 		err = rows.Scan(&responseUsername, &responseEmail, &responseFirstName, &responseSurname, &responseAcountType)
 		if err != nil {
-			panic(err.Error())
+			log.Printf("Err2")
+			log.Printf(err.Error())
 		}
 		row.Username = responseUsername
 		row.Email = responseEmail

@@ -25,6 +25,7 @@
     "react-flexbox-grid": "^2.0.0",
     "react-icons": "^2.2.5",
     "react-modal": "^3.4.4",
+    "react-pin-input": "^0.6.6",
     "react-redux": "^5.0.5",
     "react-redux-toastr": "^7.2.3",
     "react-router-dom": "^4.1.2",

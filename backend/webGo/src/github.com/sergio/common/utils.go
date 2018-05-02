@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"reflect"
+	"unsafe"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/sendgrid/sendgrid-go"
@@ -61,4 +63,9 @@ func SendMail(typeSend string, id string, username string, userMail string) {
 		}
 	}
 
+}
+func BytesToString(b []byte) string {
+	bh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
+	sh := reflect.StringHeader{bh.Data, bh.Len}
+	return *(*string)(unsafe.Pointer(&sh))
 }
