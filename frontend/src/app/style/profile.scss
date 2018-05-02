@@ -41,3 +41,44 @@
     flex-direction: column;
     align-items: center;
 }
+.body_titlePin{
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    font-size: 25px;
+}
+.body__pin{
+    background: #ececec;
+    padding: 10px;
+    border-radius: 5px;
+    margin:5px;
+    text-align: center;
+}
+.box__footer{
+    display: flex;
+    justify-content: space-around;
+}
+.footer__pin{
+    display: flex;
+    flex-direction: column;
+}
+.pin__title{
+    font-size: 25px;
+}
+.pin__button{
+    background: transparent;
+    border:none;
+    border:2px solid red;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 20px;
+    color: red;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.pin__button:hover{
+    background: red;
+    border:2px solid red;
+    color: white;
+    cursor: pointer;
+}

@@ -26,7 +26,7 @@ class Profile extends PureComponent {
         this.setState({[name]: event.target.value});
     }
     render() {
-        console.log(this.props)
+        console.log(this.state)
         return (
             <div className="profile">
                 <div className="profile__box">
@@ -49,13 +49,24 @@ class Profile extends PureComponent {
                             <div className="input__pattert">
                                 <input className="form__input" type="text" name="surname" placeholder="Surname" defaultValue={this.state.surname} onChange={this.handleChange}/>
                             </div>
-                            <div>
-                                {this.state.mobile_pin}
-                            </div>
                             <div className="form__button__pattern">
                                 <button className="form__button" action="submit" >Update Profile</button>
                             </div>
                         </form>
+                        <span className="body_titlePin">Mobile pin</span>
+                        <div className="body__pin">
+                            {this.state.mobile_pin}
+                        </div>
+                    </div>
+                    <div className="box__footer">
+                        <div className="footer__pin">
+                            <span className="pin__title">Reset pin</span>
+                            <button className="pin__button">Reset</button>
+                        </div>
+                        <div className="footer__pin">
+                            <span className="pin__title">Recover password</span>
+                            <button className="pin__button">Recover</button>
+                        </div>
                     </div>
                 </div>
             </div>

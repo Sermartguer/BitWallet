@@ -14,6 +14,7 @@ type AccountStruct struct {
 	FirstName  string `json:"firstname"`
 	Surname    string `json:"surname"`
 	AcountType string `json:"acc_type"`
+	MobileHash string `json:"mobile_hash"`
 }
 
 func SaveUser(user_data UserModelValidator, mobile string) bool {
@@ -169,7 +170,8 @@ func GetAccount(id string) []AccountStruct {
 		var responseFirstName string
 		var responseSurname string
 		var responseAcountType string
-		err = rows.Scan(&responseUsername, &responseEmail, &responseFirstName, &responseSurname, &responseAcountType)
+		var responseMobileHash string
+		err = rows.Scan(&responseUsername, &responseEmail, &responseFirstName, &responseSurname, &responseAcountType, &responseMobileHash)
 		if err != nil {
 			log.Printf("Err2")
 			log.Printf(err.Error())
@@ -179,6 +181,7 @@ func GetAccount(id string) []AccountStruct {
 		row.FirstName = responseFirstName
 		row.Surname = responseSurname
 		row.AcountType = responseAcountType
+		row.MobileHash = responseMobileHash
 		data = append(data, row)
 	}
 	db.Close()
