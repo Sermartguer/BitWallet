@@ -40,7 +40,7 @@ class Overview extends PureComponent {
                             }
                         });
                     }
-                }else if( item.currency === 'LTC'){
+                }else if(item.currency === 'LTC'){
                     curr = this.props.LTC.data;
                     if(this.props.transactions !== null){
                         this.props.transactions.map((transaction)=>{
@@ -81,7 +81,6 @@ class Overview extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state)
     return { 
         overview: state.overview.overview,
         currencyPrice: state.overview.currencyPrice,
