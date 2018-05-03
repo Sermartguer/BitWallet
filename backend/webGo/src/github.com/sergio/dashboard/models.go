@@ -46,16 +46,16 @@ func GetIdByUsername(username string) string {
 	return username
 }
 
-func SaveAddress(id string, address string, currency string) bool {
+func SaveAddress(id string, address string, currency string, label string) bool {
 	db := common.DbConn()
 	fmt.Println(id)
 	fmt.Println(address)
 	fmt.Println(currency)
-	insForm, err := db.Prepare("INSERT INTO addrs (id_user,address,currency,create_at) VALUES(?,?,?,?)")
+	insForm, err := db.Prepare("INSERT INTO addrs (id_user,address,label,currency,create_at) VALUES(?,?,?,?,?)")
 	if err != nil {
 		return false
 	}
-	insForm.Exec(id, address, currency, time.Now())
+	insForm.Exec(id, address, label, currency, time.Now())
 	defer db.Close()
 	return true
 }

@@ -37,7 +37,7 @@ func GetNewAddress(w http.ResponseWriter, r *http.Request) {
 
 	userID := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
 
-	body := NewAddressEndpoint(params["currency"])
+	body := NewAddressEndpoint(params["currency"], params["label"])
 	if string(body) == "Error" {
 		j, _ := json.Marshal("Block.io error")
 		w.WriteHeader(http.StatusBadRequest)
@@ -49,7 +49,7 @@ func GetNewAddress(w http.ResponseWriter, r *http.Request) {
 		Data: &Address{},
 	}
 	json.Unmarshal(body, data)
-	save := SaveAddress(userID, data.Data.Address, params["currency"])
+	save := SaveAddress(userID, data.Data.Address, params["currency"], params["label"])
 
 	if save {
 		dataAdd := GetAddresses(userID)

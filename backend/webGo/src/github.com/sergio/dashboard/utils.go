@@ -7,8 +7,8 @@ import (
 	"os"
 )
 
-func NewAddressEndpoint(currency string) []byte {
-	res, err := http.Get(os.Getenv("BASE_API") + "/get_new_address/?api_key=" + os.Getenv(currency))
+func NewAddressEndpoint(currency string, label string) []byte {
+	res, err := http.Get(os.Getenv("BASE_API") + "/get_new_address/?api_key=" + os.Getenv(currency) + "&label=" + label)
 	if err != nil {
 		return []byte("Error")
 	}

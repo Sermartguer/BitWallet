@@ -31,6 +31,7 @@ CREATE TABLE addrs (
   id_addrs INT(50) NOT NULL AUTO_INCREMENT,
   id_user VARCHAR(50) NOT NULL,
   address VARCHAR(50) NOT NULL,
+  label VARCHAR(50) NOT NULL,
   currency VARCHAR(30) NOT NULL,
   create_at VARCHAR(30) NOT NULL,
   PRIMARY KEY (id_addrs),
