@@ -59,6 +59,23 @@ func SaveAddress(id string, address string, currency string, label string) bool 
 	defer db.Close()
 	return true
 }
+func CheckAddress(id string, currency string) bool {
+	db := common.DbConn()
+	err := db.QueryRow("SELECT address,currency FROM addrs WHERE id_user=? AND currency=?", id, currency).Scan(&id, &currency)
+	switch {
+	case err == sql.ErrNoRows:
+		log.Printf("No user with that username.")
+		return false
+	case err != nil:
+		log.Fatal(err)
+		return false
+	default:
+		fmt.Printf("id is %s\n", id)
+		return true
+	}
+	defer db.Close()
+	return true
+}
 func GetGenericData(id_account string) []Data {
 	var data []Data
 	db := common.DbConn()

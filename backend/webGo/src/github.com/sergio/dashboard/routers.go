@@ -37,6 +37,13 @@ func GetNewAddress(w http.ResponseWriter, r *http.Request) {
 
 	userID := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
 
+	checkAddress := CheckAddress(userID, params["currency"])
+	if checkAddress {
+		j, _ := json.Marshal("You already have " + params["currency"] + "address")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(j)
+		return
+	}
 	body := NewAddressEndpoint(params["currency"], params["label"])
 	if string(body) == "Error" {
 		j, _ := json.Marshal("Block.io error")
