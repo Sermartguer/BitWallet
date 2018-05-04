@@ -3,6 +3,20 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ReactTable from "react-table";
+import Modal from 'react-modal';
+const customStyles = {
+    content : {
+      top                   : '50%',
+      left                  : '50%',
+      right                 : 'auto',
+      bottom                : 'auto',
+      marginRight           : '-50%',
+      transform             : 'translate(-50%, -50%)',
+      width                 : '500px',
+      overflow:'hidden'
+    }
+  };
+  Modal.setAppElement('#modal')
 
 class Send extends PureComponent {
     constructor(props){
@@ -10,21 +24,20 @@ class Send extends PureComponent {
         this.state = {
             isThorIn: true,
             isHulkIn: true,
-            isIronmanIn: true
+            isIronmanIn: true,
+            modalIsOpen: false,
+            currencyModalActive: 'Nothing'
         };
         this.onButtonClick = this.onButtonClick.bind(this);
         this.handleCheckClicked = this.handleCheckClicked.bind(this);
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+
 
     }
     componentWillMount(){
         this.props.getUserAddresses();
-    }
-    renderCurrency() {
-        if (this.props.addresses) {
-            return (
-                    <span>a</span>
-            );
-        }
     }
     onButtonClick(e) {
         e.preventDefault();
@@ -36,38 +49,44 @@ class Send extends PureComponent {
           [e.target.name]: e.target.checked,
         });
       }
-    render() {
+    openModal(e) {
+        this.setState({modalIsOpen: true,currencyModalActive:e.target.id});
+        console.log(e.target.id)
+    }
+    closeModal() {
+        this.setState({modalIsOpen: false});
+    }
+    handleSubmit(event) {
+        event.preventDefault();
+        console.log(event.target.label.value)
+        console.log(this.state.currencyModalActive)
+        this.props.addNewAddress({currency: this.state.currencyModalActive, label:event.target.label.value})
+        //this.props.addNewOrder(this.state);
+        this.closeModal();
+    }
+      render() {
         let bitcoinAddresses = null;
         let dogecoinAddresses = null;
         let litecoinAddresses = null;
         if(this.props.addresses){
-                        bitcoinAddresses = this.props.addresses.sort()
-                        .reverse().map((address, index)=>{
+            bitcoinAddresses = this.props.addresses.map((address, index)=>{
                 if(address.currency === "BTC"){
-                    return <span key={index}>{address.address}</span>
-                }else{
-                    return null;
+                    return <span key={index}>{address.address} {address.label}</span>
                 }
             });
-            dogecoinAddresses = this.props.addresses.sort()
-            .reverse().map((address, index)=>{
+            dogecoinAddresses = this.props.addresses.map((address, index)=>{
                 if(address.currency === "DOGE"){
-                    return <span>{address.address}</span>
-                }else{
-                    return null;
+                    return <span key={index}>{address.address} {address.label}</span>
                 }
             });
-            litecoinAddresses = this.props.addresses.sort()
-            .reverse().map((address,index)=>{
+            litecoinAddresses = this.props.addresses.map((address,index)=>{
                 if(address.currency === "LTC"){
-                    return <span key={index}>{address.address}</span>
-                }else{
-                    return null;
+                    return <span key={index}>{address.address} {address.label}</span>
                 }
             });
         }else{
             bitcoinAddresses = 'Loading...'
-            dogecoinAddresses = [];
+            dogecoinAddresses = 'Loading...';
             litecoinAddresses = 'Loading...';
         }
         if(litecoinAddresses[0] === null){
@@ -79,56 +98,69 @@ class Send extends PureComponent {
         if(bitcoinAddresses[0] === null){
             bitcoinAddresses = <span onClick={this.onButtonClick} id="BTC">No Bitcoin Addresses yet, click to create...</span>
         }
-        console.log({dogecoinAddresses})
         return (
             <div className="dash dash__send">
-            <div className="dash__send--size">
-                <div className="pane pane__currency">
-                    <Tabs>
-                        <TabList className="react-tabs__tab-list">
-                            {this.state.isThorIn && <Tab><img src="http://localhost:8080/static/bitcoin.svg" alt="Bitcoin" height="32" width="32" /></Tab>}
-                            {this.state.isHulkIn && <Tab><img src="http://localhost:8080/static/dogecoin.svg" alt="Hulk" height="32" width="32" /></Tab>}
-                            {this.state.isIronmanIn && <Tab><img src="http://localhost:8080/static/litecoin.svg" alt="Ironman" height="32" width="32" /></Tab>}
-                        </TabList>
-                        {this.state.isThorIn && 
-                        <TabPanel>
-                            <div className="address__pane">
-                                <div className="add__address">
-                                    <span className="add__title">Your BTC Addresses</span>
-                                    <span className="add__cursor" onClick={this.onButtonClick} id="BTC"><i className="far fa-plus-square"></i> Add Address</span>
-                                    {bitcoinAddresses}
+                <div className="dash__send--size">
+                    <div className="pane pane__currency">
+                        <Tabs>
+                            <TabList className="react-tabs__tab-list">
+                                {this.state.isThorIn && <Tab><img src="http://localhost:8080/static/bitcoin.svg" alt="Bitcoin" height="32" width="32" /></Tab>}
+                                {this.state.isHulkIn && <Tab><img src="http://localhost:8080/static/dogecoin.svg" alt="Hulk" height="32" width="32" /></Tab>}
+                                {this.state.isIronmanIn && <Tab><img src="http://localhost:8080/static/litecoin.svg" alt="Ironman" height="32" width="32" /></Tab>}
+                            </TabList>
+                            {this.state.isThorIn && 
+                            <TabPanel>
+                                <div className="address__pane">
+                                    <div className="add__address">
+                                        <span className="add__title">Your BTC Addresses</span>
+                                        <span className="add__cursor" onClick={this.openModal} id="BTC"><i className="far fa-plus-square"></i> Add Address</span>
+                                        {bitcoinAddresses}
+                                    </div>
                                 </div>
-                            </div>
-                        </TabPanel>}
-                        {this.state.isHulkIn && 
-                        <TabPanel>
-                            <div className="address__pane">
-                                <div className="add__address">
-                                    <span className="add__title">Your Dogecoin Addresses</span>
-                                    <span className="add__cursor" onClick={this.onButtonClick} id="DOGE"><i className="far fa-plus-square"></i> Add Address</span>
-                                    {dogecoinAddresses}
+                            </TabPanel>}
+                            {this.state.isHulkIn && 
+                            <TabPanel>
+                                <div className="address__pane">
+                                    <div className="add__address">
+                                        <span className="add__title">Your Dogecoin Addresses</span>
+                                        <span className="add__cursor" onClick={this.openModal} id="DOGE"><i className="far fa-plus-square"></i> Add Address</span>
+                                        {dogecoinAddresses}
+                                    </div>
                                 </div>
-                            </div>
-                        </TabPanel>}
-                        {this.state.isIronmanIn && 
-                        <TabPanel>
-                            <div className="address__pane">
-                                <div className="add__address">
-                                    <span className="add__title">Your LTC Addresses</span>
-                                    <span className="add__cursor" onClick={this.onButtonClick} id="LTC"><i className="far fa-plus-square"></i> Add Address</span>
-                                    {litecoinAddresses}
+                            </TabPanel>}
+                            {this.state.isIronmanIn && 
+                            <TabPanel>
+                                <div className="address__pane">
+                                    <div className="add__address">
+                                        <span className="add__title">Your LTC Addresses</span>
+                                        <span className="add__cursor" onClick={this.openModal} id="LTC"><i className="far fa-plus-square"></i> Add Address</span>
+                                        {litecoinAddresses}
+                                    </div>
                                 </div>
-                            </div>
-                        </TabPanel>}
-                    </Tabs>
+                            </TabPanel>}
+                        </Tabs>
+                    </div>
                 </div>
-            </div>
+                <Modal
+                    isOpen={this.state.modalIsOpen}
+                    onAfterOpen={this.afterOpenModal}
+                    onRequestClose={this.closeModal}
+                    style={customStyles}
+                    contentLabel="Example Modal">
+                        <span>Pon nombre a tu direccion</span>
+                        <form onSubmit={this.handleSubmit}>
+                            <input type="text" name="label"></input>
+                            <button className="form__button" type="submit">Create Order</button>
+                        </form>
+                        
+                    </Modal>
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => {
+    console.log(state)
     return { addresses: state.send.addresses }
 }
 

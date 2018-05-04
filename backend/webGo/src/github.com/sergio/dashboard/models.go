@@ -16,6 +16,7 @@ type Data struct {
 type GetAddressesStructure struct {
 	Address  string `json:"address"`
 	Currency string `json:"currency"`
+	Label    string `json:"label"`
 }
 type GetOrdersStructure struct {
 	Amount   string `json:"amount"`
@@ -109,12 +110,14 @@ func GetAddresses(id string) []GetAddressesStructure {
 	for rows.Next() {
 		var currency string
 		var address string
-		err = rows.Scan(&address, &currency)
+		var label string
+		err = rows.Scan(&address, &currency, &label)
 		if err != nil {
 			panic(err.Error())
 		}
 		row.Currency = currency
 		row.Address = address
+		row.Label = label
 		data = append(data, row)
 	}
 	db.Close()

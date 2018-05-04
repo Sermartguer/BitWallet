@@ -47,7 +47,7 @@ class Dashboard extends PureComponent {
                 <section className="dash__board">
                 
                     
-                    <this.state.component /> 
+                    <this.state.component key={1}/> 
                 </section>
             </div>
         );

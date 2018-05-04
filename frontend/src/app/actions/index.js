@@ -123,8 +123,8 @@ export const getUserAddresses = () =>{
             });
     };   
 }
-export const addNewAddress = (id) => {
-    let response = {token: localStorage.getItem('token'),currency:id}
+export const addNewAddress = (object) => {
+    let response = {token: localStorage.getItem('token'),currency:object.currency, label: object.label}
     return (dispatch) => {
         // submit email/password to the server
         axios.post('http://localhost:8080/api/getNewAddress', response ,{
