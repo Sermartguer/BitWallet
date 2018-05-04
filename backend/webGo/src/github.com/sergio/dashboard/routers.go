@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"reflect"
@@ -56,6 +57,7 @@ func GetNewAddress(w http.ResponseWriter, r *http.Request) {
 		Data: &Address{},
 	}
 	json.Unmarshal(body, data)
+	log.Println(data.Data.Address)
 	save := SaveAddress(userID, data.Data.Address, params["currency"], params["label"])
 
 	if save {

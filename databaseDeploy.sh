@@ -27,14 +27,16 @@ CREATE TABLE accounts (
   PRIMARY KEY (id)
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE addrs (
-  id_addrs INT(50) NOT NULL AUTO_INCREMENT,
+CREATE TABLE addresses (
+  id_address INT(50) NOT NULL AUTO_INCREMENT,
   id_user VARCHAR(50) NOT NULL,
-  address VARCHAR(50) NOT NULL,
-  label VARCHAR(50) NOT NULL,
-  currency VARCHAR(30) NOT NULL,
-  create_at VARCHAR(30) NOT NULL,
-  PRIMARY KEY (id_addrs),
+  address VARCHAR(50) DEFAULT "",
+  label VARCHAR(50) DEFAULT "",
+  currency VARCHAR(30) DEFAULT "",
+  amount DECIMAL(30,25) DEFAULT NULL,
+  create_at VARCHAR(30) DEFAULT NULL,
+  active VARCHAR(10) NOT NULL,
+  PRIMARY KEY (id_address),
   FOREIGN KEY (id_user) REFERENCES accounts(id) ON DELETE CASCADE
 ) ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
@@ -55,6 +57,7 @@ CREATE TABLE transactions (
   hash_id VARCHAR(50) NOT NULL,
   amount DECIMAL(30,25) NOT NULL,
   currency VARCHAR(30) NOT NULL,
+  trans_type VARCHAR(10) NOT NULL,
   trans_time VARCHAR(30) NOT NULL,
   PRIMARY KEY (id_transactions),
   FOREIGN KEY (id_account) REFERENCES accounts(id) ON DELETE CASCADE
@@ -76,9 +79,9 @@ DELIMITER $$
 CREATE TRIGGER add_addreses AFTER INSERT
     ON accounts
     FOR EACH ROW BEGIN
-	INSERT INTO users_total (id_user,amount,currency,create_at) VALUES (NEW.id,0,'BTC',NOW());
-	INSERT INTO users_total (id_user,amount,currency,create_at) VALUES (NEW.id,0,'DOGE',NOW());
-	INSERT INTO users_total (id_user,amount,currency,create_at) VALUES (NEW.id,0,'LTC',NOW());
+	INSERT INTO addresses (id_user,currency,amount,create_at,active) VALUES (NEW.id,'BTC',0,NOW(),'0');
+	INSERT INTO addresses (id_user,currency,amount,create_at,active) VALUES (NEW.id,'DOGE',0,NOW(),'0');
+	INSERT INTO addresses (id_user,currency,amount,create_at,active) VALUES (NEW.id,'LTC',0,NOW(),'0');
     END$$
 
 DELIMITER ;
@@ -86,7 +89,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE get_accounts (IN id_account VARCHAR(50))
 BEGIN
- SELECT address,currency FROM addrs WHERE id_user = id_account;
+ SELECT address,label,currency FROM addresses WHERE id_user = id_account;
 END$$
 
 DELIMITER ;

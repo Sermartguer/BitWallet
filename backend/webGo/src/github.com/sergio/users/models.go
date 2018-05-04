@@ -22,8 +22,9 @@ func SaveUser(user_data UserModelValidator, mobile string) bool {
 
 	insForm, err := db.Prepare("INSERT INTO accounts (id, username, email,password,acc_type,update_at, create_at, active, mobile_hash) VALUES(?,?,?,?,?,?,?,?,?)")
 	if err != nil {
-		return false
 		log.Fatal(err)
+		return false
+
 	}
 	insForm.Exec(user_data.ID, user_data.Username, user_data.Email, user_data.Password, user_data.AccountType, user_data.CreatedAt, user_data.CreatedAt, false, mobile)
 	defer db.Close()

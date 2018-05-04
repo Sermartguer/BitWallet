@@ -31,6 +31,9 @@ type TransactionsStructure struct {
 	Currency  string `json:"currency"`
 	TransTime string `json:"trans_time"`
 }
+type AddressStruct struct {
+	Activo string `json:"activo"`
+}
 
 func GetIdByUsername(username string) string {
 	db := common.DbConn()
@@ -48,39 +51,52 @@ func GetIdByUsername(username string) string {
 }
 
 func SaveAddress(id string, address string, currency string, label string) bool {
+	log.Println("SaveAddress")
+	log.Println(id)
+	log.Println(address)
+	log.Println(currency)
+	log.Println(label)
 	db := common.DbConn()
-	fmt.Println(id)
-	fmt.Println(address)
-	fmt.Println(currency)
-	insForm, err := db.Prepare("INSERT INTO addrs (id_user,address,label,currency,create_at) VALUES(?,?,?,?,?)")
+	insForm, err := db.Prepare("UPDATE addresses SET address=?,label=?,active=1 WHERE id_user=? AND currency=?")
 	if err != nil {
-		return false
+		panic(err)
 	}
-	insForm.Exec(id, address, label, currency, time.Now())
-	defer db.Close()
-	return true
-}
-func CheckAddress(id string, currency string) bool {
-	db := common.DbConn()
-	err := db.QueryRow("SELECT address,currency FROM addrs WHERE id_user=? AND currency=?", id, currency).Scan(&id, &currency)
-	switch {
-	case err == sql.ErrNoRows:
-		log.Printf("No user with that username.")
-		return false
-	case err != nil:
+	_, err = insForm.Exec(address, label, id, currency)
+
+	if err != nil {
 		log.Fatal(err)
 		return false
-	default:
-		fmt.Printf("id is %s\n", id)
-		return true
+
 	}
 	defer db.Close()
+	return true
+
+}
+func CheckAddress(id string, currency string) bool {
+	log.Println("CheckAddress")
+	log.Println(id)
+	log.Println(currency)
+	db := common.DbConn()
+	rows, err := db.Query("SELECT active FROM addresses WHERE id_user=? AND currency=?", id, currency)
+	for rows.Next() {
+		var activo string
+		err = rows.Scan(&activo)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		log.Println(activo)
+		if activo == "0" {
+			return false
+		} else {
+			return true
+		}
+	}
 	return true
 }
 func GetGenericData(id_account string) []Data {
 	var data []Data
 	db := common.DbConn()
-	rows, err := db.Query("SELECT amount,currency FROM users_total WHERE id_user=?", id_account)
+	rows, err := db.Query("SELECT amount,currency FROM addresses WHERE id_user=?", id_account)
 	if err != nil {
 		panic(err.Error())
 	}
