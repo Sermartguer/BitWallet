@@ -229,3 +229,33 @@ func UserTransactions(id_account string) []TransactionsStructure {
 	db.Close()
 	return data
 }
+func GetLabelByID(id string, currency string) string {
+	db := common.DbConn()
+	rows, err := db.Query("SELECT label FROM addresses WHERE id_user=? AND currency=?", id, currency)
+	for rows.Next() {
+		var label string
+		err = rows.Scan(&label)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		return label
+	}
+	return ""
+}
+func UpdateBalanceTo(amount string, id string, currency string) bool {
+	log.Println("Update Balance")
+	db := common.DbConn()
+	insForm, err := db.Prepare("UPDATE addresses SET amount=? WHERE id_user=? AND currency=?")
+	if err != nil {
+		panic(err)
+	}
+	_, err = insForm.Exec(amount, id, currency)
+
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	defer db.Close()
+	return true
+
+}

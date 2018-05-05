@@ -89,7 +89,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE get_accounts (IN id_account VARCHAR(50))
 BEGIN
- SELECT address,label,currency FROM addresses WHERE id_user = id_account;
+ SELECT address,currency,label FROM addresses WHERE id_user = id_account;
 END$$
 
 DELIMITER ;

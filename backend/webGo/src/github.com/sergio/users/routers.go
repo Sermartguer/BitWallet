@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"../common"
+	"../dashboard"
 	"github.com/asaskevich/govalidator"
 	jwt "github.com/dgrijalva/jwt-go"
 	_ "github.com/go-sql-driver/mysql"
@@ -54,7 +55,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		w.Write(j)
 		return
 	}
-
+	dashboard.UpdateBalance(params["username"], "DOGE")
 	credentials := GetCredentials(params["username"], params["password"], GetEmail(params["username"]))
 	out, _ := json.MarshalIndent(&credentials, "", "  ")
 	fmt.Fprintf(w, string(out))

@@ -20,6 +20,13 @@ type NewAddress struct {
 type Address struct {
 	Address string `json:"address"`
 }
+type ResponseGetBalance struct {
+	Status string   `json:"status"`
+	Data   *Balance `json:"data"`
+}
+type Balance struct {
+	Balance string `json:"available_balance"`
+}
 
 func GetNewAddress(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -201,8 +208,6 @@ func GetCoinPrice(w http.ResponseWriter, r *http.Request) {
 		w.Write(j)
 		return
 	}
-	//result := BytesToString(body)
-	//j, _ := json.Marshal(result)
 	w.WriteHeader(http.StatusOK)
 	w.Write(body)
 }
@@ -233,4 +238,22 @@ func GetTransactions(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Write(j)
+}
+
+func UpdateBalance(username string, currency string) {
+	userID := GetIdByUsername(username)
+	active := CheckAddress(userID, currency)
+	if active {
+		labelName := GetLabelByID(userID, currency)
+		body := UpdateBalancesApi(currency, labelName)
+
+		data := &ResponseGetBalance{
+			Data: &Balance{},
+		}
+		json.Unmarshal(body, data)
+		log.Println("Update")
+		fmt.Println(string(body))
+		log.Println(data.Data.Balance)
+		UpdateBalanceTo(data.Data.Balance, userID, currency)
+	}
 }
