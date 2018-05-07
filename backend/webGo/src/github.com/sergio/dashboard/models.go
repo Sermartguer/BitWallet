@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	"../common"
@@ -257,5 +258,57 @@ func UpdateBalanceTo(amount string, id string, currency string) bool {
 	}
 	defer db.Close()
 	return true
-
+}
+func checkBalances(id string, currency string, amount string) bool {
+	db := common.DbConn()
+	rows, err := db.Query("SELECT amount FROM addresses WHERE id_user=? AND currency=?", id, currency)
+	for rows.Next() {
+		var label string
+		err = rows.Scan(&label)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		fmt.Println(label)
+		fmt.Println(amount)
+		labelValue, _ := strconv.ParseFloat(label, 64)
+		amountValue, _ := strconv.ParseFloat(amount, 64)
+		if labelValue > amountValue {
+			return true
+		} else {
+			return false
+		}
+	}
+	return false
+}
+func checkLabelDestine(destine string, currency string) bool {
+	db := common.DbConn()
+	rows, err := db.Query("SELECT active FROM addresses WHERE label=? AND currency=?", destine, currency)
+	for rows.Next() {
+		var label string
+		err = rows.Scan(&label)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		log.Println()
+		if label == "1" {
+			return true
+		} else {
+			return false
+		}
+	}
+	return false
+}
+func GetLabelFromID(currency string, id string) string {
+	db := common.DbConn()
+	rows, err := db.Query("SELECT label FROM addresses WHERE id_user=? AND currency=?", id, currency)
+	for rows.Next() {
+		var label string
+		err = rows.Scan(&label)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		log.Println(label)
+		return label
+	}
+	return ""
 }

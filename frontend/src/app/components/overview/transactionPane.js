@@ -4,7 +4,7 @@ import * as actions from '../../actions';
 import ReactTable from "react-table";
 class TransactionPane extends PureComponent {
     render() {
-       if(this.props.trans !== undefined){
+       if((this.props.trans !== undefined) && (this.props.trans !== null)){
             var data = [];
             this.props.trans.map((transaction)=>{
                 let object = {}

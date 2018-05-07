@@ -74,16 +74,77 @@ CREATE TABLE orders (
   FOREIGN KEY (id_account) REFERENCES accounts(id) ON DELETE CASCADE
 ) ENGINE=INNODB DEFAULT CHARSET=latin1;
 
+CREATE TABLE activity_login (
+  id_login INT(50) NOT NULL AUTO_INCREMENT,
+  id_account VARCHAR(50) NOT NULL,
+  ip VARCHAR(50) NOT NULL,
+  time VARCHAR(50) NOT NULL,
+  success VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id_login),
+  FOREIGN KEY (id_account) REFERENCES accounts(id) ON DELETE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
+CREATE TABLE activity_address (
+  id_actAddress INT(50) NOT NULL AUTO_INCREMENT,
+  id_account VARCHAR(50) NOT NULL,
+  address VARCHAR(50) NOT NULL,
+  label VARCHAR(50) NOT NULL,
+  time VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id_actAddress),
+  FOREIGN KEY (id_account) REFERENCES accounts(id) ON DELETE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
+CREATE TABLE activity_actions (
+  id_action INT(50) NOT NULL AUTO_INCREMENT,
+  id_account VARCHAR(50) NOT NULL,
+  amount DECIMAL(30,25) NOT NULL,
+  address_local VARCHAR(50) NOT NULL,
+  address_external VARCHAR(50) NOT NULL,
+  currency VARCHAR(50) NOT NULL,
+  time VARCHAR(50) NOT NULL,
+  action VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id_action),
+  FOREIGN KEY (id_account) REFERENCES accounts(id) ON DELETE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
+CREATE TABLE activity_orders (
+  id_order INT(50) NOT NULL AUTO_INCREMENT,
+  id_account VARCHAR(50) NOT NULL,
+  currency VARCHAR(50),
+  amount DECIMAL(30,25) NOT NULL,
+  price DECIMAL(30,25) NOT NULL,
+  action VARCHAR(10) NOT NULL,
+  time VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id_order),
+  FOREIGN KEY (id_account) REFERENCES accounts(id) ON DELETE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
 DELIMITER $$
 
 CREATE TRIGGER add_addreses AFTER INSERT
     ON accounts
     FOR EACH ROW BEGIN
-	INSERT INTO addresses (id_user,currency,amount,create_at,active) VALUES (NEW.id,'BTC',0,NOW(),'0');
-	INSERT INTO addresses (id_user,currency,amount,create_at,active) VALUES (NEW.id,'DOGE',0,NOW(),'0');
-	INSERT INTO addresses (id_user,currency,amount,create_at,active) VALUES (NEW.id,'LTC',0,NOW(),'0');
+      INSERT INTO addresses (id_user,currency,amount,create_at,active) VALUES (NEW.id,'BTC',0,NOW(),'0');
+      INSERT INTO addresses (id_user,currency,amount,create_at,active) VALUES (NEW.id,'DOGE',0,NOW(),'0');
+      INSERT INTO addresses (id_user,currency,amount,create_at,active) VALUES (NEW.id,'LTC',0,NOW(),'0');
     END$$
 
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER addresses_activity AFTER UPDATE
+    ON addresses
+    FOR EACH ROW BEGIN
+	    INSERT INTO activity_address (id_account,address,label,time) VALUES (NEW.id_user,NEW.address,NEW.label,NOW());
+    END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER order_publish_activity AFTER INSERT
+    ON orders
+    FOR EACH ROW BEGIN
+	    INSERT INTO activity_orders (id_account,currency,amount,price,time,action) VALUES (NEW.id_account,NEW.currency,NEW.amount,NEW.price,NOW(),'Publish');
+    END$$
 DELIMITER ;
 
 DELIMITER $$

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	"../common"
 )
@@ -200,6 +201,19 @@ func NewAccountPassword(password string, id string) bool {
 		log.Fatal(err)
 		return false
 	}
+	defer db.Close()
+	return true
+}
+func LoginActivity(id string, ip string, success string) bool {
+	db := common.DbConn()
+
+	insForm, err := db.Prepare("INSERT INTO activity_login (id_account,ip,time,success) VALUES(?,?,?,?)")
+	if err != nil {
+		log.Fatal(err)
+		return false
+
+	}
+	insForm.Exec(id, ip, time.Now().Format("Mon Jan _2 15:04:05 2006"), success)
 	defer db.Close()
 	return true
 }

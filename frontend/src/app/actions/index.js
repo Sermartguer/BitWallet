@@ -17,11 +17,12 @@ import {
 
 const ROOT_URL = 'http://localhost:8080/api';
 
-export const signinUser = ({ username, password }) => {
-    console.log('asi')
+export const signinUser = (param) => {
+    console.log(param);
+    let response = {"username":param.username,"password":param.password,"ip":'123'}
     return (dispatch) => {
         // submit email/password to the server
-        axios.post('http://localhost:8080/api/login', { username, password },{
+        axios.post('http://localhost:8080/api/login', response,{
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
           })

@@ -50,12 +50,16 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	passwordHash := GetPassword(params["username"])
 	checkPass := CheckPasswordHash(params["password"], passwordHash)
 	if !checkPass {
+		LoginActivity(GetIdByUsername(params["username"]), params["ip"], "0")
 		w.WriteHeader(http.StatusBadRequest)
 		j, _ := json.Marshal("Password not match")
 		w.Write(j)
 		return
 	}
 	dashboard.UpdateBalance(params["username"], "DOGE")
+	dashboard.UpdateBalance(params["username"], "BTC")
+	dashboard.UpdateBalance(params["username"], "LTC")
+	LoginActivity(GetIdByUsername(params["username"]), params["ip"], "1")
 	credentials := GetCredentials(params["username"], params["password"], GetEmail(params["username"]))
 	out, _ := json.MarshalIndent(&credentials, "", "  ")
 	fmt.Fprintf(w, string(out))
