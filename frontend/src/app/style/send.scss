@@ -18,7 +18,6 @@
 }
 .add__cursor{
     cursor: pointer;
-    border-bottom: 1px solid #333;
     font-size: 17px;
     text-align: center;
     padding:2%;
@@ -54,6 +53,7 @@
 }
 .react-tabs__tab-list{
     text-align: center;
+    border: none !important;
 }
 .pane__currency{
     
@@ -85,4 +85,51 @@
     .dash__send{
         align-items: center;
     }
+ }
+ .send{
+     width: 100%;
+     display: flex;
+     flex-direction: column;
+ }
+.send--center{
+    display: flex;
+    justify-content: center;
+}
+ .react-tabs__tab{
+     display: flex !important;
+     align-items: center !important;
+     justify-content:space-around;
+     background: white;
+     box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+     margin: 10px;
+     padding: 10px;
+     min-width: 125px;
+ }
+ .react-tabs__tab-list{
+     overflow: hidden !important;
+     display: flex;
+ }
+ .react-tabs__tab--selected{
+    background: $colorBase !important;
+    color: white !important;
+    border:none !important;
+    border-radius: 0px !important;
+ }
+ .tab__display{
+     display: flex !important;
+     justify-content: space-around;
+ }
+ .send__pane{
+    background: white;
+    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 10px;
+    min-width: 700px;
+ }
+ .address__pane{
+    background: white;
+    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 10px;
+    min-width: 400px;
  }

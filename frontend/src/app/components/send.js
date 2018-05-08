@@ -25,6 +25,9 @@ class Send extends PureComponent {
             isThorIn: true,
             isHulkIn: true,
             isIronmanIn: true,
+            isBTC:true,
+            isDOGE:true,
+            isLTC:true,
             modalIsOpen: false,
             currencyModalActive: 'Nothing'
         };
@@ -71,17 +74,41 @@ class Send extends PureComponent {
         if(this.props.addresses){
             bitcoinAddresses = this.props.addresses.map((address, index)=>{
                 if(address.currency === "BTC"){
-                    return <span key={index}>{address.address} {address.label}</span>
+                    return <span key={index}>{address.address}</span>
                 }
             });
             dogecoinAddresses = this.props.addresses.map((address, index)=>{
                 if(address.currency === "DOGE"){
-                    return <span key={index}>{address.address} {address.label}</span>
+                    return <span key={index}>{address.address}</span>
                 }
             });
             litecoinAddresses = this.props.addresses.map((address,index)=>{
                 if(address.currency === "LTC"){
-                    return <span key={index}>{address.address} {address.label}</span>
+                    return <span key={index}>{address.address}</span>
+                }
+            });
+        }else{
+            bitcoinAddresses = 'Loading...'
+            dogecoinAddresses = 'Loading...';
+            litecoinAddresses = 'Loading...';
+        }
+        let bitcoinLabel = null;
+        let dogecoinLabel = null;
+        let litecoinLabel = null;
+        if(this.props.addresses){
+            bitcoinLabel = this.props.addresses.map((address, index)=>{
+                if(address.currency === "BTC"){
+                    return <span key={index}>{address.label}</span>
+                }
+            });
+            dogecoinLabel = this.props.addresses.map((address, index)=>{
+                if(address.currency === "DOGE"){
+                    return <span key={index}>{address.label}</span>
+                }
+            });
+            litecoinLabel = this.props.addresses.map((address,index)=>{
+                if(address.currency === "LTC"){
+                    return <span key={index}>{address.label}</span>
                 }
             });
         }else{
@@ -100,46 +127,66 @@ class Send extends PureComponent {
         }
         return (
             <div className="dash dash__send">
-                <div className="dash__send--size">
-                    <div className="pane pane__currency">
-                        <Tabs>
-                            <TabList className="react-tabs__tab-list">
-                                {this.state.isThorIn && <Tab><img src="http://localhost:8080/static/bitcoin.svg" alt="Bitcoin" height="32" width="32" /></Tab>}
-                                {this.state.isHulkIn && <Tab><img src="http://localhost:8080/static/dogecoin.svg" alt="Hulk" height="32" width="32" /></Tab>}
-                                {this.state.isIronmanIn && <Tab><img src="http://localhost:8080/static/litecoin.svg" alt="Ironman" height="32" width="32" /></Tab>}
-                            </TabList>
-                            {this.state.isThorIn && 
-                            <TabPanel>
-                                <div className="address__pane">
-                                    <div className="add__address">
-                                        <span className="add__title">Your BTC Addresses</span>
-                                        <span className="add__cursor" onClick={this.openModal} id="BTC"><i className="far fa-plus-square"></i> Add Address</span>
-                                        {bitcoinAddresses}
-                                    </div>
-                                </div>
-                            </TabPanel>}
-                            {this.state.isHulkIn && 
-                            <TabPanel>
-                                <div className="address__pane">
-                                    <div className="add__address">
-                                        <span className="add__title">Your Dogecoin Addresses</span>
-                                        <span className="add__cursor" onClick={this.openModal} id="DOGE"><i className="far fa-plus-square"></i> Add Address</span>
-                                        {dogecoinAddresses}
-                                    </div>
-                                </div>
-                            </TabPanel>}
-                            {this.state.isIronmanIn && 
-                            <TabPanel>
-                                <div className="address__pane">
-                                    <div className="add__address">
-                                        <span className="add__title">Your LTC Addresses</span>
-                                        <span className="add__cursor" onClick={this.openModal} id="LTC"><i className="far fa-plus-square"></i> Add Address</span>
-                                        {litecoinAddresses}
-                                    </div>
-                                </div>
-                            </TabPanel>}
-                        </Tabs>
+                <div className="send">
+                <Tabs>
+                    <div className="send--center">
+                        <TabList className="react-tabs__tab-list">
+                            {this.state.isBTC && <Tab><img src="http://localhost:8080/static/bitcoin.svg" alt="Bitcoin" height="32" width="32" /> Bitcoin</Tab>}
+                            {this.state.isDOGE && <Tab><img src="http://localhost:8080/static/dogecoin.png" alt="Dogecoin" height="32" width="32" /> Dogecoin</Tab>}
+                            {this.state.isLTC && <Tab><img src="http://localhost:8080/static/litecoin.svg" alt="Litecoin" height="32" width="32" /> Litecoin</Tab>}
+                        </TabList>
                     </div>
+                    <div>
+                    {
+                        this.state.isBTC && 
+                        <TabPanel className="tab__display">
+                            <div className="send__pane">
+                                send
+                            </div>
+                            <div className="address__pane">
+                                <div className="add__address">
+                                    <span className="add__title">Your BTC Addresses</span>
+                                    <span className="add__cursor" onClick={this.openModal} id="BTC"><i className="far fa-plus-square"></i> Add Address</span>
+                                    {bitcoinAddresses}
+                                </div>
+                            </div>
+                        </TabPanel>
+                    }
+                    {
+                        this.state.isDOGE && 
+                        <TabPanel className="tab__display">
+                            <div className="send__pane">
+                                send
+                            </div>
+                            <div className="address__pane">
+                                <div className="add__address">
+                                    <span className="add__title">Your Dogecoin Addresses</span>
+                                    <span className="add__cursor" onClick={this.openModal} id="DOGE"><i className="far fa-plus-square"></i> Add Address</span>
+                                    Your dogecoin public address:
+                                    <span className="body__pin">{dogecoinAddresses}</span>
+                                    Your BitWallet criptocurrency id:
+                                    <span className="body__pin">{dogecoinLabel}</span>
+                                </div>
+                            </div>
+                        </TabPanel>
+                    }
+                    {
+                        this.state.isLTC && 
+                        <TabPanel className="tab__display">
+                            <div className="send__pane">
+                                send
+                            </div>
+                            <div className="address__pane">
+                                <div className="add__address">
+                                    <span className="add__title">Your LTC Addresses</span>
+                                    <span className="add__cursor" onClick={this.openModal} id="LTC"><i className="far fa-plus-square"></i> Add Address</span>
+                                    {litecoinAddresses}
+                                </div>
+                            </div>
+                        </TabPanel>
+                    }
+                    </div>
+                </Tabs>
                 </div>
                 <Modal
                     isOpen={this.state.modalIsOpen}

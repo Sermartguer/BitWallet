@@ -170,6 +170,8 @@ func main() {
 	r.HandleFunc("/api/getCurrencyPrice", dashboard.GetCoinPrice).Methods("POST")
 	r.HandleFunc("/api/getUserTrans", dashboard.GetTransactions).Methods("POST")
 	r.HandleFunc("/api/sendLocal", dashboard.SendLocal).Methods("POST")
+	r.HandleFunc("/api/sendExternal", dashboard.SendExternal).Methods("POST")
+	r.HandleFunc("/api/getFee", dashboard.GetNetworkFee).Methods("POST")
 	server := &http.Server{
 		Addr:           ":8080",
 		Handler:        cors.Default().Handler(r),

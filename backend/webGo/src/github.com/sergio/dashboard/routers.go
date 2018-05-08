@@ -40,6 +40,15 @@ type ResponseSendLocalData struct {
 	BlockIOFee   string `json:"blockio_fee"`
 	ErrorMessage string `json:"error_message"`
 }
+type ResponseGetNetworkFee struct {
+	Status string                     `json:"status"`
+	Data   *ResponseGetNetworkFeeData `json:"data"`
+}
+type ResponseGetNetworkFeeData struct {
+	Network      string `json:"network"`
+	EstimatedFee string `json:"estimated_network_fee"`
+	ErrorMessage string `json:"error_message"`
+}
 
 func GetNewAddress(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -317,6 +326,98 @@ func SendLocal(w http.ResponseWriter, r *http.Request) {
 	log.Println(data.Status)
 	if data.Status == "success" {
 		mapD := map[string]string{"status": "success", "txid": data.Data.TXID, "network": data.Data.Network, "sent": data.Data.ASent, "NetworkFee": data.Data.NetWorkFee}
+		mapB, _ := json.Marshal(mapD)
+		UpdateBalance(fmt.Sprintf("%v", claims["sub"]), params["currency"])
+		w.WriteHeader(http.StatusOK)
+		w.Write(mapB)
+		return
+	} else {
+		mapD := map[string]string{"status": "error", "error": data.Data.ErrorMessage}
+		mapB, _ := json.Marshal(mapD)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(mapB)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func SendExternal(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	dat, _ := ioutil.ReadAll(r.Body)
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+
+	claims, err := common.GetTokenParsed(params["token"])
+	if err == false {
+		j, _ := json.Marshal("Error in token check")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(j)
+		return
+	}
+	userID := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+	checkAddress := CheckAddress(userID, params["currency"])
+	if !checkAddress {
+		j, _ := json.Marshal("Please create " + params["currency"] + " address")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(j)
+		return
+	}
+	checkBalances := checkBalances(userID, params["currency"], params["amount"])
+	if !checkBalances {
+		j, _ := json.Marshal("Not enought " + params["currency"] + " balance")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(j)
+		return
+	}
+
+	labelName := GetLabelFromID(params["currency"], userID)
+	log.Printf(labelName)
+	SendRequest := SendBalanceByAddress(params["currency"], params["amount"], labelName, params["to"])
+	fmt.Println(string(SendRequest))
+
+	data := &ResponseSendLocal{
+		Data: &ResponseSendLocalData{},
+	}
+	json.Unmarshal(SendRequest, data)
+	log.Println(data.Status)
+	if data.Status == "success" {
+		mapD := map[string]string{"status": "success", "txid": data.Data.TXID, "network": data.Data.Network, "sent": data.Data.ASent, "NetworkFee": data.Data.NetWorkFee}
+		mapB, _ := json.Marshal(mapD)
+		UpdateBalance(fmt.Sprintf("%v", claims["sub"]), params["currency"])
+		w.WriteHeader(http.StatusOK)
+		w.Write(mapB)
+		return
+	} else {
+		mapD := map[string]string{"status": "error", "error": data.Data.ErrorMessage}
+		mapB, _ := json.Marshal(mapD)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(mapB)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+func GetNetworkFee(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	dat, _ := ioutil.ReadAll(r.Body)
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+
+	claims, err := common.GetTokenParsed(params["token"])
+	if err == false {
+		j, _ := json.Marshal("Error in token check")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(j)
+		return
+	}
+	GetNetworkFee := GetFee(params["currency"], params["amount"], params["address"])
+
+	data := &ResponseGetNetworkFee{
+		Data: &ResponseGetNetworkFeeData{},
+	}
+	json.Unmarshal(GetNetworkFee, data)
+	log.Println(data.Status)
+	if data.Status == "success" {
+		mapD := map[string]string{"status": "success", "network_fee": data.Data.EstimatedFee}
 		mapB, _ := json.Marshal(mapD)
 		UpdateBalance(fmt.Sprintf("%v", claims["sub"]), params["currency"])
 		w.WriteHeader(http.StatusOK)
