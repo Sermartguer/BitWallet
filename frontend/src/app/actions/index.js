@@ -12,7 +12,11 @@ import {
     SAVE_ORDER,
     GET_PROFILE_DATA,
     GET_COIN_PRICE,
-    GET_TRANSACTIONS
+    GET_TRANSACTIONS,
+    SEND_LOCAL_ERROR,
+    SEND_LOCAL_SUCCESS,
+    SEND_EXTERNAL_SUCCESS,
+    SEND_EXTERNAL_ERROR
 } from './types';
 
 const ROOT_URL = 'http://localhost:8080/api';
@@ -298,3 +302,48 @@ export const setPin = (pin) =>{
     };*/
     }
 }
+export const sendLocalBalances = (data)=>{
+    data.token = localStorage.getItem('token');
+    return (dispatch) => {
+        console.log(data)
+        axios.post('http://localhost:8080/api/sendLocal', data ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+        }).then(response => {
+            console.log(response.data)
+            dispatch({type: SEND_LOCAL_SUCCESS, payload:response.data})
+        }).catch((err) => {
+            dispatch(sendErrorLocalBalances(err.response))
+            console.log(err.response)
+        });
+    };
+}
+export const sendExternalBalances = (data)=>{
+    data.token = localStorage.getItem('token');
+    return (dispatch) => {
+        console.log(data)
+        axios.post('http://localhost:8080/api/sendExternal', data ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+        }).then(response => {
+            console.log(response.data)
+            dispatch({type: SEND_EXTERNAL_SUCCESS, payload:response.data})
+        }).catch((err) => {
+            dispatch(sendErrorExternalBalances(err.response))
+            console.log(err.response)
+        });
+    };
+}
+
+export const sendErrorLocalBalances = (error) => {
+    return {
+        type: SEND_LOCAL_ERROR,
+        payload: error.data
+    };
+};
+export const sendErrorExternalBalances = (error) => {
+    return {
+        type: SEND_EXTERNAL_ERROR,
+        payload: error.data
+    };
+};

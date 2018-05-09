@@ -4,20 +4,8 @@ import * as actions from '../actions';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ReactTable from "react-table";
 import Modal from 'react-modal';
-const customStyles = {
-    content : {
-      top                   : '50%',
-      left                  : '50%',
-      right                 : 'auto',
-      bottom                : 'auto',
-      marginRight           : '-50%',
-      transform             : 'translate(-50%, -50%)',
-      width                 : '500px',
-      overflow:'hidden'
-    }
-  };
-  Modal.setAppElement('#modal')
-
+import AddressesComponent from './send/tabContent';
+import GestBalanceComponent from './send/GestBalance';
 class Send extends PureComponent {
     constructor(props){
         super(props);
@@ -74,17 +62,17 @@ class Send extends PureComponent {
         if(this.props.addresses){
             bitcoinAddresses = this.props.addresses.map((address, index)=>{
                 if(address.currency === "BTC"){
-                    return <span key={index}>{address.address}</span>
+                    return address.address
                 }
             });
             dogecoinAddresses = this.props.addresses.map((address, index)=>{
                 if(address.currency === "DOGE"){
-                    return <span key={index}>{address.address}</span>
+                    return address.address
                 }
             });
             litecoinAddresses = this.props.addresses.map((address,index)=>{
                 if(address.currency === "LTC"){
-                    return <span key={index}>{address.address}</span>
+                    return address.address
                 }
             });
         }else{
@@ -98,17 +86,17 @@ class Send extends PureComponent {
         if(this.props.addresses){
             bitcoinLabel = this.props.addresses.map((address, index)=>{
                 if(address.currency === "BTC"){
-                    return <span key={index}>{address.label}</span>
+                    return address.label
                 }
             });
             dogecoinLabel = this.props.addresses.map((address, index)=>{
                 if(address.currency === "DOGE"){
-                    return <span key={index}>{address.label}</span>
+                    return address.label
                 }
             });
             litecoinLabel = this.props.addresses.map((address,index)=>{
                 if(address.currency === "LTC"){
-                    return <span key={index}>{address.label}</span>
+                    return address.label
                 }
             });
         }else{
@@ -136,71 +124,46 @@ class Send extends PureComponent {
                             {this.state.isLTC && <Tab><img src="http://localhost:8080/static/litecoin.svg" alt="Litecoin" height="32" width="32" /> Litecoin</Tab>}
                         </TabList>
                     </div>
-                    <div>
+                    <div className="send__card">
                     {
                         this.state.isBTC && 
                         <TabPanel className="tab__display">
-                            <div className="send__pane">
-                                send
-                            </div>
-                            <div className="address__pane">
-                                <div className="add__address">
-                                    <span className="add__title">Your BTC Addresses</span>
-                                    <span className="add__cursor" onClick={this.openModal} id="BTC"><i className="far fa-plus-square"></i> Add Address</span>
-                                    {bitcoinAddresses}
+                            <GestBalanceComponent props={{currency:'BTC'}}/>
+                            {
+                                this.props.addresses ? <AddressesComponent props={{address:bitcoinAddresses[0],label:bitcoinLabel[0],currency:'BTC'}}/> : 
+                                <div className="address__pane">
+                                    Loading...
                                 </div>
-                            </div>
+                            }
                         </TabPanel>
                     }
                     {
                         this.state.isDOGE && 
                         <TabPanel className="tab__display">
-                            <div className="send__pane">
-                                send
-                            </div>
-                            <div className="address__pane">
-                                <div className="add__address">
-                                    <span className="add__title">Your Dogecoin Addresses</span>
-                                    <span className="add__cursor" onClick={this.openModal} id="DOGE"><i className="far fa-plus-square"></i> Add Address</span>
-                                    Your dogecoin public address:
-                                    <span className="body__pin">{dogecoinAddresses}</span>
-                                    Your BitWallet criptocurrency id:
-                                    <span className="body__pin">{dogecoinLabel}</span>
+                            <GestBalanceComponent props={{currency:'DOGE'}}/>
+                            {
+                                this.props.addresses ? <AddressesComponent props={{address:dogecoinAddresses[1],label:dogecoinLabel[1],currency:'DOGE'}}/> : 
+                                <div className="address__pane">
+                                    Loading...
                                 </div>
-                            </div>
+                            }
                         </TabPanel>
                     }
                     {
                         this.state.isLTC && 
                         <TabPanel className="tab__display">
-                            <div className="send__pane">
-                                send
-                            </div>
-                            <div className="address__pane">
-                                <div className="add__address">
-                                    <span className="add__title">Your LTC Addresses</span>
-                                    <span className="add__cursor" onClick={this.openModal} id="LTC"><i className="far fa-plus-square"></i> Add Address</span>
-                                    {litecoinAddresses}
+                            <GestBalanceComponent props={{currency:'LTC'}}/>
+                            {
+                                this.props.addresses ? <AddressesComponent props={{address:litecoinAddresses[2],label:litecoinLabel[2],currency:'LTC'}}/> : 
+                                <div className="address__pane">
+                                    Loading...
                                 </div>
-                            </div>
+                            }
                         </TabPanel>
                     }
                     </div>
                 </Tabs>
                 </div>
-                <Modal
-                    isOpen={this.state.modalIsOpen}
-                    onAfterOpen={this.afterOpenModal}
-                    onRequestClose={this.closeModal}
-                    style={customStyles}
-                    contentLabel="Example Modal">
-                        <span>Pon nombre a tu direccion</span>
-                        <form onSubmit={this.handleSubmit}>
-                            <input type="text" name="label"></input>
-                            <button className="form__button" type="submit">Create Order</button>
-                        </form>
-                        
-                    </Modal>
             </div>
         );
     }

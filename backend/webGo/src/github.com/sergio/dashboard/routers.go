@@ -332,8 +332,7 @@ func SendLocal(w http.ResponseWriter, r *http.Request) {
 		w.Write(mapB)
 		return
 	} else {
-		mapD := map[string]string{"status": "error", "error": data.Data.ErrorMessage}
-		mapB, _ := json.Marshal(mapD)
+		mapB, _ := json.Marshal(data.Data.ErrorMessage)
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(mapB)
 		return
@@ -388,8 +387,7 @@ func SendExternal(w http.ResponseWriter, r *http.Request) {
 		w.Write(mapB)
 		return
 	} else {
-		mapD := map[string]string{"status": "error", "error": data.Data.ErrorMessage}
-		mapB, _ := json.Marshal(mapD)
+		mapB, _ := json.Marshal(data.Data.ErrorMessage)
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(mapB)
 		return
