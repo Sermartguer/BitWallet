@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"./common"
-	"./dashboard"
 	"./overview"
+	"./send"
 	"./store"
 	"./users"
 
@@ -172,12 +172,12 @@ func main() {
 	r.HandleFunc("/api/getOrders", store.GetOrdersEndpoint).Methods("POST")
 	r.HandleFunc("/api/getUserOrders", store.GetOrdersUserEndpoint).Methods("POST")
 	r.HandleFunc("/api/saveOrder", store.CreateOrder).Methods("POST")
-
-	r.HandleFunc("/api/getNewAddress", dashboard.GetNewAddress).Methods("POST")
-	r.HandleFunc("/api/getAddresses", dashboard.GetUserAddresses).Methods("POST")
-	r.HandleFunc("/api/sendLocal", dashboard.SendLocal).Methods("POST")
-	r.HandleFunc("/api/sendExternal", dashboard.SendExternal).Methods("POST")
-	r.HandleFunc("/api/getFee", dashboard.GetNetworkFee).Methods("POST")
+	//SEND API ENDPOINTS
+	r.HandleFunc("/api/getAddresses", send.GetUserAddresses).Methods("POST")
+	r.HandleFunc("/api/getNewAddress", send.GetNewAddress).Methods("POST")
+	r.HandleFunc("/api/sendLocal", send.SendLocal).Methods("POST")
+	r.HandleFunc("/api/sendExternal", send.SendExternal).Methods("POST")
+	r.HandleFunc("/api/getFee", send.GetNetworkFee).Methods("POST")
 	server := &http.Server{
 		Addr:           ":8080",
 		Handler:        cors.Default().Handler(r),
