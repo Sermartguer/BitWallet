@@ -9,15 +9,6 @@ import (
 	"../common"
 )
 
-type AccountStruct struct {
-	Username   string `json:"username"`
-	Email      string `json:"email"`
-	FirstName  string `json:"firstname"`
-	Surname    string `json:"surname"`
-	AcountType string `json:"acc_type"`
-	MobileHash string `json:"mobile_hash"`
-}
-
 func SaveUser(user_data UserModelValidator, mobile string) bool {
 	db := common.DbConn()
 

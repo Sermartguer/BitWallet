@@ -13,19 +13,6 @@ import (
 	"../common"
 )
 
-type NewAddress struct {
-	Status string   `json:"status"`
-	Data   *Address `json:"data"`
-}
-type Address struct {
-	Address string `json:"address"`
-}
-type GetAddressesStructure struct {
-	Address  string `json:"address"`
-	Currency string `json:"currency"`
-	Label    string `json:"label"`
-}
-
 func GetIdByUsername(username string) string {
 	db := common.DbConn()
 	err := db.QueryRow("SELECT id FROM accounts WHERE username=?", username).Scan(&username)

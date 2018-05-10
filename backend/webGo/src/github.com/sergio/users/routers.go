@@ -16,14 +16,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Creds struct {
-	AuthToken string
-}
-
-type Error struct {
-	TextError string `json:"error"`
-}
-
 func Islogged(w http.ResponseWriter, r *http.Request) {
 	//var jwtResponse jwtKey
 	dat, _ := ioutil.ReadAll(r.Body) // Read the body of the POST request

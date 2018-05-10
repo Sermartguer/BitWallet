@@ -11,14 +11,6 @@ import (
 	"../common"
 )
 
-type ResponseGetBalance struct {
-	Status string   `json:"status"`
-	Data   *Balance `json:"data"`
-}
-type Balance struct {
-	Balance string `json:"available_balance"`
-}
-
 func GetUserGenericData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 

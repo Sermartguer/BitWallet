@@ -11,18 +11,6 @@ import (
 	"../common"
 )
 
-type Data struct {
-	Amount   string `json:"amount"`
-	Currency string `json:"currency"`
-}
-type TransactionsStructure struct {
-	SendTo    string `json:"send_to"`
-	HashId    string `json:"hash_id"`
-	Amount    string `json:"amount"`
-	Currency  string `json:"currency"`
-	TransTime string `json:"trans_time"`
-}
-
 func GetIdByUsername(username string) string {
 	db := common.DbConn()
 	err := db.QueryRow("SELECT id FROM accounts WHERE username=?", username).Scan(&username)
