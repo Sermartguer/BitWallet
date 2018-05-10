@@ -9,6 +9,7 @@ import (
 
 	"./common"
 	"./dashboard"
+	"./overview"
 	"./users"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -157,7 +158,7 @@ func main() {
 	r.HandleFunc("/api/isLoged", users.Islogged).Methods("POST")
 	r.HandleFunc("/api/register", users.Register).Methods("POST")
 	r.HandleFunc("/api/getNewAddress", dashboard.GetNewAddress).Methods("POST")
-	r.HandleFunc("/api/getUserData", dashboard.GetUserGenericData).Methods("POST")
+	r.HandleFunc("/api/getUserData", overview.GetUserGenericData).Methods("POST")
 	r.HandleFunc("/api/getAddresses", dashboard.GetUserAddresses).Methods("POST")
 	r.HandleFunc("/api/saveOrder", dashboard.CreateOrder).Methods("POST")
 	r.HandleFunc("/api/getOrders", dashboard.GetOrdersEndpoint).Methods("POST")
@@ -167,8 +168,8 @@ func main() {
 	r.HandleFunc("/api/getAccountProfile", users.GetAccountProfile).Methods("POST")
 	r.HandleFunc("/api/recoverPassword", users.RecoverPassword).Methods("POST")
 	r.HandleFunc("/api/newPassword", users.NewPassword).Methods("POST")
-	r.HandleFunc("/api/getCurrencyPrice", dashboard.GetCoinPrice).Methods("POST")
-	r.HandleFunc("/api/getUserTrans", dashboard.GetTransactions).Methods("POST")
+	r.HandleFunc("/api/getCurrencyPrice", overview.GetCoinPrice).Methods("POST")
+	r.HandleFunc("/api/getUserTrans", overview.GetTransactions).Methods("POST")
 	r.HandleFunc("/api/sendLocal", dashboard.SendLocal).Methods("POST")
 	r.HandleFunc("/api/sendExternal", dashboard.SendExternal).Methods("POST")
 	r.HandleFunc("/api/getFee", dashboard.GetNetworkFee).Methods("POST")

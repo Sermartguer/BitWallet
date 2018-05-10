@@ -97,30 +97,6 @@ func GetNewAddress(w http.ResponseWriter, r *http.Request) {
 		w.Write(j)
 	}
 }
-
-func GetUserGenericData(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	dat, _ := ioutil.ReadAll(r.Body)
-	var params map[string]string
-	json.Unmarshal(dat, &params)
-
-	claims, err := common.GetTokenParsed(params["token"])
-	if err == false {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
-		return
-	}
-	id := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
-	data := GetGenericData(id)
-
-	j, _ := json.Marshal(data)
-	fmt.Println(string(j))
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(j)
-}
 func GetUserAddresses(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -325,12 +301,20 @@ func SendLocal(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(SendRequest, data)
 	log.Println(data.Status)
 	if data.Status == "success" {
-		mapD := map[string]string{"status": "success", "txid": data.Data.TXID, "network": data.Data.Network, "sent": data.Data.ASent, "NetworkFee": data.Data.NetWorkFee}
-		mapB, _ := json.Marshal(mapD)
-		UpdateBalance(fmt.Sprintf("%v", claims["sub"]), params["currency"])
-		w.WriteHeader(http.StatusOK)
-		w.Write(mapB)
-		return
+		save := SaveTransaction(userID, params["to"], data.Data.TXID, params["amount"], params["currency"], "local")
+		if save {
+			mapD := map[string]string{"status": "success", "txid": data.Data.TXID, "network": data.Data.Network, "sent": data.Data.ASent, "NetworkFee": data.Data.NetWorkFee}
+			mapB, _ := json.Marshal(mapD)
+			UpdateBalance(fmt.Sprintf("%v", claims["sub"]), params["currency"])
+			w.WriteHeader(http.StatusOK)
+			w.Write(mapB)
+			return
+		} else {
+			mapB, _ := json.Marshal("Server error")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(mapB)
+			return
+		}
 	} else {
 		mapB, _ := json.Marshal(data.Data.ErrorMessage)
 		w.WriteHeader(http.StatusBadRequest)
@@ -380,12 +364,20 @@ func SendExternal(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(SendRequest, data)
 	log.Println(data.Status)
 	if data.Status == "success" {
-		mapD := map[string]string{"status": "success", "txid": data.Data.TXID, "network": data.Data.Network, "sent": data.Data.ASent, "NetworkFee": data.Data.NetWorkFee}
-		mapB, _ := json.Marshal(mapD)
-		UpdateBalance(fmt.Sprintf("%v", claims["sub"]), params["currency"])
-		w.WriteHeader(http.StatusOK)
-		w.Write(mapB)
-		return
+		save := SaveTransaction(userID, params["to"], data.Data.TXID, params["amount"], params["currency"], "external")
+		if save {
+			mapD := map[string]string{"status": "success", "txid": data.Data.TXID, "network": data.Data.Network, "sent": data.Data.ASent, "NetworkFee": data.Data.NetWorkFee}
+			mapB, _ := json.Marshal(mapD)
+			UpdateBalance(fmt.Sprintf("%v", claims["sub"]), params["currency"])
+			w.WriteHeader(http.StatusOK)
+			w.Write(mapB)
+			return
+		} else {
+			mapB, _ := json.Marshal("Server error")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(mapB)
+			return
+		}
 	} else {
 		mapB, _ := json.Marshal(data.Data.ErrorMessage)
 		w.WriteHeader(http.StatusBadRequest)

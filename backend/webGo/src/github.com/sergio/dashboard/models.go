@@ -312,3 +312,13 @@ func GetLabelFromID(currency string, id string) string {
 	}
 	return ""
 }
+func SaveTransaction(id string, to string, hash_id string, amount string, currency string, trans_type string) bool {
+	db := common.DbConn()
+	insForm, err := db.Prepare("INSERT INTO transactions (id_account,send_to,hash_id,amount,currency,trans_type,trans_time) VALUES(?,?,?,?,?,?,?)")
+	if err != nil {
+		return false
+	}
+	insForm.Exec(id, to, hash_id, "-"+amount, currency, trans_type, time.Now())
+	defer db.Close()
+	return true
+}

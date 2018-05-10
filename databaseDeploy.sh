@@ -53,8 +53,8 @@ CREATE TABLE users_total (
 CREATE TABLE transactions (
   id_transactions INT(50) NOT NULL AUTO_INCREMENT,
   id_account VARCHAR(50) NOT NULL,
-  send_to VARCHAR(30) NOT NULL,
-  hash_id VARCHAR(50) NOT NULL,
+  send_to VARCHAR(100) NOT NULL,
+  hash_id VARCHAR(100) NOT NULL,
   amount DECIMAL(30,25) NOT NULL,
   currency VARCHAR(30) NOT NULL,
   trans_type VARCHAR(10) NOT NULL,
@@ -146,6 +146,15 @@ CREATE TRIGGER order_publish_activity AFTER INSERT
 	    INSERT INTO activity_orders (id_account,currency,amount,price,time,action) VALUES (NEW.id_account,NEW.currency,NEW.amount,NEW.price,NOW(),'Publish');
     END$$
 DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER activity_transaction_activity AFTER INSERT
+    ON transactions
+    FOR EACH ROW BEGIN
+	    INSERT INTO activity_actions (id_account,amount,address_local,address_external,currency,TIME,ACTION) VALUES (NEW.id_account,NEW.amount,NEW.send_to,NEW.send_to,NEW.currency,NOW(),NEW.trans_type);
+    END$$
+DELIMITER ;
+
 
 DELIMITER $$
 CREATE PROCEDURE get_accounts (IN id_account VARCHAR(50))

@@ -47,7 +47,7 @@ class TransactionPane extends PureComponent {
         ]
         return (
             <div className="pane transaction__pane">
-                <span className="pane__title">Transactions</span>
+                <span className="pane__title">Last Transactions</span>
                 <ReactTable
                 data={data}
                 columns={columns}
