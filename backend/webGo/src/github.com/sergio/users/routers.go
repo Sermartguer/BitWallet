@@ -192,14 +192,14 @@ func GetAccountProfile(w http.ResponseWriter, r *http.Request) {
 	// Unmarshall this into a map
 	var params map[string]string
 	json.Unmarshal(dat, &params)
-	claims, err := common.GetTokenParsed(params["token"])
-	if err == false {
+	username, errorToken := common.GetUsernameByToken(params["token"])
+	if errorToken {
 		j, _ := json.Marshal("Error in token check")
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(j)
 		return
 	}
-	userID := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+	userID := GetIdByUsername(username)
 	data := GetAccount(userID)
 	j, _ := json.Marshal(data)
 	fmt.Println(string(j))

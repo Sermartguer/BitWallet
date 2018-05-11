@@ -18,18 +18,18 @@ func GetUserGenericData(w http.ResponseWriter, r *http.Request) {
 	var params map[string]string
 	json.Unmarshal(dat, &params)
 
-	claims, err := common.GetTokenParsed(params["token"])
-	if err == false {
+	username, errorToken := common.GetUsernameByToken(params["token"])
+	if errorToken {
 		j, _ := json.Marshal("Error in token check")
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(j)
 		return
 	}
-	id := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+	id := GetIdByUsername(username)
 	data := GetGenericData(id)
-	UpdateBalance(fmt.Sprintf("%v", claims["sub"]), "DOGE")
-	UpdateBalance(fmt.Sprintf("%v", claims["sub"]), "LTC")
-	UpdateBalance(fmt.Sprintf("%v", claims["sub"]), "BTC")
+	UpdateBalance(username, "DOGE")
+	UpdateBalance(username, "LTC")
+	UpdateBalance(username, "BTC")
 	j, _ := json.Marshal(data)
 	fmt.Println(string(j))
 
@@ -62,15 +62,15 @@ func GetTransactions(w http.ResponseWriter, r *http.Request) {
 	var params map[string]string
 	json.Unmarshal(dat, &params)
 
-	claims, err := common.GetTokenParsed(params["token"])
-	if err == false {
+	username, errorToken := common.GetUsernameByToken(params["token"])
+	if errorToken {
 		j, _ := json.Marshal("Error in token check")
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(j)
 		return
 	}
 
-	userID := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+	userID := GetIdByUsername(username)
 	data := UserTransactions(userID)
 	j, _ := json.Marshal(data)
 	fmt.Println(string(j))

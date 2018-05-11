@@ -17,14 +17,15 @@ func GetUserAddresses(w http.ResponseWriter, r *http.Request) {
 	var params map[string]string
 	json.Unmarshal(dat, &params)
 
-	claims, err := common.GetTokenParsed(params["token"])
-	if err == false {
+	username, errorToken := common.GetUsernameByToken(params["token"])
+	if errorToken {
 		j, _ := json.Marshal("Error in token check")
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(j)
 		return
 	}
-	id := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+
+	id := GetIdByUsername(username)
 	data := GetAddresses(id)
 
 	j, _ := json.Marshal(data)
@@ -40,15 +41,15 @@ func GetNewAddress(w http.ResponseWriter, r *http.Request) {
 	var params map[string]string
 	json.Unmarshal(dat, &params)
 
-	claims, err := common.GetTokenParsed(params["token"])
-	if err == false {
+	username, errorToken := common.GetUsernameByToken(params["token"])
+	if errorToken {
 		j, _ := json.Marshal("Error in token check")
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(j)
 		return
 	}
 
-	userID := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+	userID := GetIdByUsername(username)
 
 	checkAddress := CheckAddress(userID, params["currency"])
 	if checkAddress {
@@ -86,14 +87,14 @@ func SendLocal(w http.ResponseWriter, r *http.Request) {
 	var params map[string]string
 	json.Unmarshal(dat, &params)
 
-	claims, err := common.GetTokenParsed(params["token"])
-	if err == false {
+	username, errorToken := common.GetUsernameByToken(params["token"])
+	if errorToken {
 		j, _ := json.Marshal("Error in token check")
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(j)
 		return
 	}
-	userID := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+	userID := GetIdByUsername(username)
 	checkAddress := CheckAddress(userID, params["currency"])
 	if !checkAddress {
 		j, _ := json.Marshal("Please create " + params["currency"] + " address")
@@ -130,7 +131,7 @@ func SendLocal(w http.ResponseWriter, r *http.Request) {
 		if save {
 			mapD := map[string]string{"status": "success", "txid": data.Data.TXID, "network": data.Data.Network, "sent": data.Data.ASent, "NetworkFee": data.Data.NetWorkFee}
 			mapB, _ := json.Marshal(mapD)
-			UpdateBalance(fmt.Sprintf("%v", claims["sub"]), params["currency"])
+			UpdateBalance(username, params["currency"])
 			w.WriteHeader(http.StatusOK)
 			w.Write(mapB)
 			return
@@ -154,14 +155,14 @@ func SendExternal(w http.ResponseWriter, r *http.Request) {
 	var params map[string]string
 	json.Unmarshal(dat, &params)
 
-	claims, err := common.GetTokenParsed(params["token"])
-	if err == false {
+	username, errorToken := common.GetUsernameByToken(params["token"])
+	if errorToken {
 		j, _ := json.Marshal("Error in token check")
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(j)
 		return
 	}
-	userID := GetIdByUsername(fmt.Sprintf("%v", claims["sub"]))
+	userID := GetIdByUsername(username)
 	checkAddress := CheckAddress(userID, params["currency"])
 	if !checkAddress {
 		j, _ := json.Marshal("Please create " + params["currency"] + " address")
@@ -192,7 +193,7 @@ func SendExternal(w http.ResponseWriter, r *http.Request) {
 		if save {
 			mapD := map[string]string{"status": "success", "txid": data.Data.TXID, "network": data.Data.Network, "sent": data.Data.ASent, "NetworkFee": data.Data.NetWorkFee}
 			mapB, _ := json.Marshal(mapD)
-			UpdateBalance(fmt.Sprintf("%v", claims["sub"]), params["currency"])
+			UpdateBalance(username, params["currency"])
 			w.WriteHeader(http.StatusOK)
 			w.Write(mapB)
 			return
@@ -216,8 +217,8 @@ func GetNetworkFee(w http.ResponseWriter, r *http.Request) {
 	var params map[string]string
 	json.Unmarshal(dat, &params)
 
-	claims, err := common.GetTokenParsed(params["token"])
-	if err == false {
+	username, errorToken := common.GetUsernameByToken(params["token"])
+	if errorToken {
 		j, _ := json.Marshal("Error in token check")
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(j)
@@ -233,7 +234,7 @@ func GetNetworkFee(w http.ResponseWriter, r *http.Request) {
 	if data.Status == "success" {
 		mapD := map[string]string{"status": "success", "network_fee": data.Data.EstimatedFee}
 		mapB, _ := json.Marshal(mapD)
-		UpdateBalance(fmt.Sprintf("%v", claims["sub"]), params["currency"])
+		UpdateBalance(username, params["currency"])
 		w.WriteHeader(http.StatusOK)
 		w.Write(mapB)
 		return
