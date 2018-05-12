@@ -8,9 +8,6 @@ type AccountStruct struct {
 	AcountType string `json:"acc_type"`
 	MobileHash string `json:"mobile_hash"`
 }
-type Creds struct {
-	AuthToken string
-}
 
 type Error struct {
 	TextError string `json:"error"`

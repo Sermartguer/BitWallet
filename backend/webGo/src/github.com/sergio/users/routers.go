@@ -7,12 +7,10 @@ import (
 	"log"
 	"net/http"
 	"reflect"
-	"time"
 
 	"../common"
 	"../dashboard"
 	"github.com/asaskevich/govalidator"
-	jwt "github.com/dgrijalva/jwt-go"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -23,7 +21,7 @@ func Islogged(w http.ResponseWriter, r *http.Request) {
 	var params map[string]string
 	json.Unmarshal(dat, &params)
 	log.Println(reflect.TypeOf(params["jwt"]))
-	hasValidToken(params["jwt"])
+	common.HasValidToken(params["jwt"])
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +50,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	dashboard.UpdateBalance(params["username"], "BTC")
 	dashboard.UpdateBalance(params["username"], "LTC")
 	LoginActivity(GetIdByUsername(params["username"]), params["ip"], "1")
-	credentials := GetCredentials(params["username"], params["password"], GetEmail(params["username"]))
+	credentials := common.GetCredentials(params["username"], params["password"], GetEmail(params["username"]))
 	out, _ := json.MarshalIndent(&credentials, "", "  ")
 	fmt.Fprintf(w, string(out))
 }
@@ -99,49 +97,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Saved on DB")
 	w.WriteHeader(http.StatusCreated)
 }
-func hasValidToken(jwtToken string) bool {
-	ret := false
-	token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-		}
-		return myLookupKey(), nil
-	})
 
-	if err == nil && token.Valid {
-		ret = true
-	}
-	log.Println(ret)
-
-	return ret
-}
-func GetCredentials(username string, password string, email string) Creds {
-	credentials := Creds{
-		AuthToken: "",
-	}
-	// Now create a JWT for user
-	// Create the token
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := make(jwt.MapClaims)
-	// Set some claims
-	claims["sub"] = username
-	claims["iss"] = email
-	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
-
-	token.Claims = claims
-	var err error
-	credentials.AuthToken, err = token.SignedString([]byte("do or do not there is no try"))
-	if err != nil {
-		log.Println(err)
-	}
-
-	return credentials
-}
-
-func myLookupKey() []byte {
-	return []byte("do or do not there is no try")
-}
 func VerifyAccount(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	dat, _ := ioutil.ReadAll(r.Body)
