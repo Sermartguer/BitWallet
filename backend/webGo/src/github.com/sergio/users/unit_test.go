@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net/http"
 	"net/http/httptest"
+	"strings"
+	"testing"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -31,13 +34,14 @@ func Handlers() *mux.Router {
 }
 
 var (
-	server       *httptest.Server
-	reader       io.Reader //Ignore this for now
-	usersUrl     string
-	userDataUrl  string
-	userTransUrl string
-	token        string
-	tokenFail    string
+	server         *httptest.Server
+	reader         io.Reader //Ignore this for now
+	usersUrl       string
+	userDataUrl    string
+	userTransUrl   string
+	userAccountUrl string
+	token          string
+	tokenFail      string
 )
 
 func init() {
@@ -47,8 +51,81 @@ func init() {
 	usersUrl = fmt.Sprintf("%s/api/login", server.URL)        //Grab the address for the API endpoint
 	userDataUrl = fmt.Sprintf("%s/api/isLoged", server.URL)   //Grab the address for the API endpoint
 	userTransUrl = fmt.Sprintf("%s/api/register", server.URL) //Grab the address for the API endpoint
+	userAccountUrl = fmt.Sprintf("%s/api/getAccountProfile", server.URL)
 }
 
 /*
 	API TEST - GetOrdersEndpoint METHOD
 */
+func TestIsLoged(t *testing.T) {
+	userJson := `{"token":"` + token + `"}`
+	reader = strings.NewReader(userJson)
+	req, err := http.NewRequest("POST", userDataUrl, reader)
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Error(err)
+	}
+	if res.StatusCode != 200 {
+		t.Errorf("Success expected: %d", res.StatusCode)
+	}
+}
+func TestIsLogedFail(t *testing.T) {
+	userJson := `{"token":"` + tokenFail + `"}`
+	reader = strings.NewReader(userJson)
+	req, err := http.NewRequest("POST", userDataUrl, reader)
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Error(err)
+	}
+	if res.StatusCode != 200 {
+		t.Errorf("Success expected: %d", res.StatusCode)
+	}
+}
+func TestLogin(t *testing.T) {
+	userJson := `{"username": "sermarguer", "password": "111111","ip":"123"}`
+	reader = strings.NewReader(userJson)
+	req, err := http.NewRequest("POST", usersUrl, reader)
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Error(err)
+	}
+	if res.StatusCode != 200 {
+		t.Errorf("Success expected: %d", res.StatusCode)
+	}
+}
+func TestLoginFail(t *testing.T) {
+	userJson := `{"username": "sermarguer3", "password": "111111","ip":"123"}`
+	reader = strings.NewReader(userJson)
+	req, err := http.NewRequest("POST", usersUrl, reader)
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Error(err)
+	}
+	if res.StatusCode != 400 {
+		t.Errorf("Success expected: %d", res.StatusCode)
+	}
+}
+func TestGetAccount(t *testing.T) {
+	userJson := `{"token":"` + token + `"}`
+	reader = strings.NewReader(userJson)
+	req, err := http.NewRequest("POST", userAccountUrl, reader)
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Error(err)
+	}
+	if res.StatusCode != 200 {
+		t.Errorf("Success expected: %d", res.StatusCode)
+	}
+}
+func TestGetAccountFail(t *testing.T) {
+	userJson := `{"token":"` + tokenFail + `"}`
+	reader = strings.NewReader(userJson)
+	req, err := http.NewRequest("POST", userAccountUrl, reader)
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Error(err)
+	}
+	if res.StatusCode != 400 {
+		t.Errorf("Success expected: %d", res.StatusCode)
+	}
+}

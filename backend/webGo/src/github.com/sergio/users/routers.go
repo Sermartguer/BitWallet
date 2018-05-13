@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"reflect"
 
 	"../common"
 	"../overview"
@@ -20,7 +19,6 @@ func Islogged(w http.ResponseWriter, r *http.Request) {
 	// Unmarshall this into a map
 	var params map[string]string
 	json.Unmarshal(dat, &params)
-	log.Println(reflect.TypeOf(params["jwt"]))
 	common.HasValidToken(params["jwt"])
 }
 
