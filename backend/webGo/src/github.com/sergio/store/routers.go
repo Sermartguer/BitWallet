@@ -17,9 +17,7 @@ func GetOrdersEndpoint(w http.ResponseWriter, r *http.Request) {
 
 	_, err := common.GetTokenParsed(params["token"])
 	if err == false {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Error in token check")
 		return
 	} else {
 		data := GetOrders()
@@ -40,9 +38,7 @@ func GetOrdersUserEndpoint(w http.ResponseWriter, r *http.Request) {
 
 	username, errorToken := common.GetUsernameByToken(params["token"])
 	if errorToken {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Error in token check")
 		return
 	}
 	id := GetIdByUsername(username)
@@ -63,9 +59,7 @@ func CreateOrder(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(dat, &params)
 	username, errorToken := common.GetUsernameByToken(params["token"])
 	if errorToken {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Error in token check")
 		return
 	}
 	id := GetIdByUsername(username)
@@ -76,9 +70,7 @@ func CreateOrder(w http.ResponseWriter, r *http.Request) {
 		w.Write(j)
 		return
 	} else {
-		j, _ := json.Marshal("Database error")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Database error")
 		return
 	}
 }

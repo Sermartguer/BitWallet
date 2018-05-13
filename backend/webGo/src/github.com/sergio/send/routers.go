@@ -19,9 +19,7 @@ func GetUserAddresses(w http.ResponseWriter, r *http.Request) {
 
 	username, errorToken := common.GetUsernameByToken(params["token"])
 	if errorToken {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Error in token check")
 		return
 	}
 
@@ -43,9 +41,7 @@ func GetNewAddress(w http.ResponseWriter, r *http.Request) {
 
 	username, errorToken := common.GetUsernameByToken(params["token"])
 	if errorToken {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Error in token check")
 		return
 	}
 
@@ -53,16 +49,12 @@ func GetNewAddress(w http.ResponseWriter, r *http.Request) {
 
 	checkAddress := CheckAddress(userID, params["currency"])
 	if checkAddress {
-		j, _ := json.Marshal("You already have " + params["currency"] + "address")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "You already have "+params["currency"]+"address")
 		return
 	}
 	body := NewAddressEndpoint(params["currency"], params["label"])
 	if string(body) == "Error" {
-		j, _ := json.Marshal("Block.io error")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Block.io error")
 		return
 	}
 
@@ -89,31 +81,28 @@ func SendLocal(w http.ResponseWriter, r *http.Request) {
 
 	username, errorToken := common.GetUsernameByToken(params["token"])
 	if errorToken {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Error in token check")
 		return
 	}
 	userID := GetIdByUsername(username)
+	pinChecked := CheckPin(userID, params["pin"])
+	if !pinChecked {
+		common.StatusBadError(w, r, "Pin error")
+		return
+	}
 	checkAddress := CheckAddress(userID, params["currency"])
 	if !checkAddress {
-		j, _ := json.Marshal("Please create " + params["currency"] + " address")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Please create "+params["currency"]+" address")
 		return
 	}
 	checkBalances := checkBalances(userID, params["currency"], params["amount"])
 	if !checkBalances {
-		j, _ := json.Marshal("Not enought " + params["currency"] + " balance")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Not enought "+params["currency"]+" balance")
 		return
 	}
 	destineToCheck := checkLabelDestine(params["to"], params["currency"])
 	if !destineToCheck {
-		j, _ := json.Marshal("Not label " + params["currency"] + " with name " + params["to"])
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Not label "+params["currency"]+" with name "+params["to"])
 		return
 	}
 	labelName := GetLabelFromID(params["currency"], userID)
@@ -136,9 +125,7 @@ func SendLocal(w http.ResponseWriter, r *http.Request) {
 			w.Write(mapB)
 			return
 		} else {
-			mapB, _ := json.Marshal("Server error")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write(mapB)
+			common.StatusBadError(w, r, "Server error")
 			return
 		}
 	} else {
@@ -157,24 +144,23 @@ func SendExternal(w http.ResponseWriter, r *http.Request) {
 
 	username, errorToken := common.GetUsernameByToken(params["token"])
 	if errorToken {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Error in token check")
 		return
 	}
 	userID := GetIdByUsername(username)
+	pinChecked := CheckPin(userID, params["pin"])
+	if !pinChecked {
+		common.StatusBadError(w, r, "Pin error")
+		return
+	}
 	checkAddress := CheckAddress(userID, params["currency"])
 	if !checkAddress {
-		j, _ := json.Marshal("Please create " + params["currency"] + " address")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Please create "+params["currency"]+" address")
 		return
 	}
 	checkBalances := checkBalances(userID, params["currency"], params["amount"])
 	if !checkBalances {
-		j, _ := json.Marshal("Not enought " + params["currency"] + " balance")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Not enought "+params["currency"]+" balance")
 		return
 	}
 
@@ -198,9 +184,7 @@ func SendExternal(w http.ResponseWriter, r *http.Request) {
 			w.Write(mapB)
 			return
 		} else {
-			mapB, _ := json.Marshal("Server error")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write(mapB)
+			common.StatusBadError(w, r, "Server error")
 			return
 		}
 	} else {
@@ -219,9 +203,7 @@ func GetNetworkFee(w http.ResponseWriter, r *http.Request) {
 
 	username, errorToken := common.GetUsernameByToken(params["token"])
 	if errorToken {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Error in token check")
 		return
 	}
 	GetNetworkFee := GetFee(params["currency"], params["amount"], params["address"])
@@ -230,7 +212,6 @@ func GetNetworkFee(w http.ResponseWriter, r *http.Request) {
 		Data: &ResponseGetNetworkFeeData{},
 	}
 	json.Unmarshal(GetNetworkFee, data)
-	log.Println(data.Status)
 	if data.Status == "success" {
 		mapD := map[string]string{"status": "success", "network_fee": data.Data.EstimatedFee}
 		mapB, _ := json.Marshal(mapD)
@@ -259,9 +240,6 @@ func UpdateBalance(username string, currency string) {
 			Data: &Balance{},
 		}
 		json.Unmarshal(body, data)
-		log.Println("Update")
-		fmt.Println(string(body))
-		log.Println(data.Data.Balance)
 		UpdateBalanceTo(data.Data.Balance, userID, currency)
 	}
 }

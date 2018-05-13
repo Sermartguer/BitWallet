@@ -2,40 +2,12 @@ package overview
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 
 	"../common"
 )
-
-func GetUserGenericData(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	dat, _ := ioutil.ReadAll(r.Body)
-	var params map[string]string
-	json.Unmarshal(dat, &params)
-
-	username, errorToken := common.GetUsernameByToken(params["token"])
-	if errorToken {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
-		return
-	}
-	id := GetIdByUsername(username)
-	data := GetGenericData(id)
-	UpdateBalance(username, "DOGE")
-	UpdateBalance(username, "LTC")
-	UpdateBalance(username, "BTC")
-	j, _ := json.Marshal(data)
-	fmt.Println(string(j))
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(j)
-}
 
 func GetCoinPrice(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -46,13 +18,32 @@ func GetCoinPrice(w http.ResponseWriter, r *http.Request) {
 
 	body := GetCurrencyPrice(os.Getenv(params["currency"] + "TST"))
 	if string(body) == "Error" {
-		j, _ := json.Marshal("Block.io error")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Block.io error")
 		return
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write(body)
+}
+func GetUserGenericData(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	dat, _ := ioutil.ReadAll(r.Body)
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+
+	username, errorToken := common.GetUsernameByToken(params["token"])
+	if errorToken {
+		common.StatusBadError(w, r, "Error in token check")
+		return
+	}
+	id := GetIdByUsername(username)
+	data := GetGenericData(id)
+	UpdateBalance(username, "DOGE")
+	UpdateBalance(username, "LTC")
+	UpdateBalance(username, "BTC")
+	j, _ := json.Marshal(data)
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
 }
 
 func GetTransactions(w http.ResponseWriter, r *http.Request) {
@@ -64,16 +55,13 @@ func GetTransactions(w http.ResponseWriter, r *http.Request) {
 
 	username, errorToken := common.GetUsernameByToken(params["token"])
 	if errorToken {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Error in token check")
 		return
 	}
 
 	userID := GetIdByUsername(username)
 	data := UserTransactions(userID)
 	j, _ := json.Marshal(data)
-	fmt.Println(string(j))
 
 	w.WriteHeader(http.StatusOK)
 	w.Write(j)
@@ -89,9 +77,6 @@ func UpdateBalance(username string, currency string) {
 			Data: &Balance{},
 		}
 		json.Unmarshal(body, data)
-		log.Println("Update")
-		fmt.Println(string(body))
-		log.Println(data.Data.Balance)
 		UpdateBalanceTo(data.Data.Balance, userID, currency)
 	}
 }

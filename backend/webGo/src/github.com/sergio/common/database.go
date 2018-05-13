@@ -1,7 +1,9 @@
 package common
 
 import "database/sql"
+import _ "github.com/go-sql-driver/mysql"
 
+//DbConn used to connect server to mysql database
 func DbConn() (db *sql.DB) {
 	dbDriver := "mysql"
 	dbUser := "root"

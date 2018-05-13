@@ -52,9 +52,6 @@ func GetAddresses(id string) []GetAddressesStructure {
 	return data
 }
 func CheckAddress(id string, currency string) bool {
-	log.Println("CheckAddress")
-	log.Println(id)
-	log.Println(currency)
 	db := common.DbConn()
 	rows, err := db.Query("SELECT active FROM addresses WHERE id_user=? AND currency=?", id, currency)
 	for rows.Next() {
@@ -72,12 +69,28 @@ func CheckAddress(id string, currency string) bool {
 	}
 	return true
 }
+func CheckPin(id string, pin string) bool {
+	db := common.DbConn()
+	rows, err := db.Query("SELECT pin FROM accounts WHERE id=?", id)
+	for rows.Next() {
+		var pinDB string
+		err = rows.Scan(&pinDB)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		if pinDB == pin {
+			return true
+		} else {
+			return false
+		}
+	}
+	return false
+}
 func NewAddressEndpoint(currency string, label string) []byte {
 	res, err := http.Get(os.Getenv("BASE_API") + "/get_new_address/?api_key=" + os.Getenv(currency) + "&label=" + label)
 	if err != nil {
 		return []byte("Error")
 	}
-
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return []byte("Error")
@@ -86,22 +99,15 @@ func NewAddressEndpoint(currency string, label string) []byte {
 	}
 }
 func SaveAddress(id string, address string, currency string, label string) bool {
-	log.Println("SaveAddress")
-	log.Println(id)
-	log.Println(address)
-	log.Println(currency)
-	log.Println(label)
 	db := common.DbConn()
 	insForm, err := db.Prepare("UPDATE addresses SET address=?,label=?,active=1 WHERE id_user=? AND currency=?")
 	if err != nil {
 		panic(err)
 	}
 	_, err = insForm.Exec(address, label, id, currency)
-
 	if err != nil {
 		log.Fatal(err)
 		return false
-
 	}
 	defer db.Close()
 	return true
@@ -184,7 +190,6 @@ func SaveTransaction(id string, to string, hash_id string, amount string, curren
 	return true
 }
 func UpdateBalanceTo(amount string, id string, currency string) bool {
-	log.Println("Update Balance")
 	db := common.DbConn()
 	insForm, err := db.Prepare("UPDATE addresses SET amount=? WHERE id_user=? AND currency=?")
 	if err != nil {

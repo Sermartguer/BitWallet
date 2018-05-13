@@ -9,7 +9,7 @@ import (
 	"reflect"
 
 	"../common"
-	"../dashboard"
+	"../overview"
 	"github.com/asaskevich/govalidator"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -32,23 +32,19 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(dat, &params)
 	userExist := SearchUser(params["username"])
 	if !userExist {
-		w.WriteHeader(http.StatusBadRequest)
-		j, _ := json.Marshal("Username not found")
-		w.Write(j)
+		common.StatusBadError(w, r, "Username not found")
 		return
 	}
 	passwordHash := GetPassword(params["username"])
 	checkPass := CheckPasswordHash(params["password"], passwordHash)
 	if !checkPass {
 		LoginActivity(GetIdByUsername(params["username"]), params["ip"], "0")
-		w.WriteHeader(http.StatusBadRequest)
-		j, _ := json.Marshal("Password not match")
-		w.Write(j)
+		common.StatusBadError(w, r, "Password not match")
 		return
 	}
-	dashboard.UpdateBalance(params["username"], "DOGE")
-	dashboard.UpdateBalance(params["username"], "BTC")
-	dashboard.UpdateBalance(params["username"], "LTC")
+	overview.UpdateBalance(params["username"], "DOGE")
+	overview.UpdateBalance(params["username"], "BTC")
+	overview.UpdateBalance(params["username"], "LTC")
 	LoginActivity(GetIdByUsername(params["username"]), params["ip"], "1")
 	credentials := common.GetCredentials(params["username"], params["password"], GetEmail(params["username"]))
 	out, _ := json.MarshalIndent(&credentials, "", "  ")
@@ -79,9 +75,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	//Comprovacio si el usuari ja existeix en la BD
 	userExist := CheckUser(userData)
 	if userExist {
-		w.WriteHeader(http.StatusBadRequest)
-		j, _ := json.Marshal("Username or email already exist")
-		w.Write(j)
+		common.StatusBadError(w, r, "Username or email already exist")
 		return
 	}
 
@@ -109,9 +103,7 @@ func VerifyAccount(w http.ResponseWriter, r *http.Request) {
 	if ver {
 		w.WriteHeader(http.StatusOK)
 	} else {
-		w.WriteHeader(http.StatusBadRequest)
-		j, _ := json.Marshal("Error on verify")
-		w.Write(j)
+		common.StatusBadError(w, r, "Error on verify")
 	}
 	log.Println(params["param"])
 }
@@ -123,11 +115,9 @@ func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	var params map[string]string
 	json.Unmarshal(dat, &params)
 	log.Println(params["fistname"])
-	claims, err := common.GetTokenParsed(params["token"])
-	if err == false {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+	claims, errorToken := common.GetTokenParsed(params["token"])
+	if errorToken {
+		common.StatusBadError(w, r, "Error in token check")
 		return
 	}
 
@@ -136,9 +126,7 @@ func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	if updateCheck {
 		w.WriteHeader(http.StatusOK)
 	} else {
-		w.WriteHeader(http.StatusBadRequest)
-		j, _ := json.Marshal("Error on update")
-		w.Write(j)
+		common.StatusBadError(w, r, "Error on update")
 	}
 }
 func GetAccountProfile(w http.ResponseWriter, r *http.Request) {
@@ -150,9 +138,7 @@ func GetAccountProfile(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(dat, &params)
 	username, errorToken := common.GetUsernameByToken(params["token"])
 	if errorToken {
-		j, _ := json.Marshal("Error in token check")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Error in token check")
 		return
 	}
 	userID := GetIdByUsername(username)
@@ -192,15 +178,11 @@ func NewPassword(w http.ResponseWriter, r *http.Request) {
 			w.Write(j)
 			return
 		} else {
-			j, _ := json.Marshal("Not updated")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write(j)
+			common.StatusBadError(w, r, "Not updated")
 			return
 		}
 	} else {
-		j, _ := json.Marshal("Passwords not match")
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write(j)
+		common.StatusBadError(w, r, "Passwords not match")
 		return
 	}
 	w.WriteHeader(http.StatusOK)

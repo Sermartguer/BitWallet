@@ -2,7 +2,6 @@ package overview
 
 import (
 	"database/sql"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -20,7 +19,6 @@ func GetIdByUsername(username string) string {
 	case err != nil:
 		log.Fatal(err)
 	default:
-		fmt.Printf("email is %s\n", username)
 	}
 	defer db.Close()
 	return username
@@ -48,9 +46,6 @@ func GetGenericData(id_account string) []Data {
 	return data
 }
 func CheckAddress(id string, currency string) bool {
-	log.Println("CheckAddress")
-	log.Println(id)
-	log.Println(currency)
 	db := common.DbConn()
 	rows, err := db.Query("SELECT active FROM addresses WHERE id_user=? AND currency=?", id, currency)
 	for rows.Next() {
@@ -59,7 +54,6 @@ func CheckAddress(id string, currency string) bool {
 		if err != nil {
 			log.Println(err.Error())
 		}
-		log.Println(activo)
 		if activo == "0" {
 			return false
 		} else {
@@ -82,7 +76,6 @@ func GetLabelByID(id string, currency string) string {
 	return ""
 }
 func UpdateBalanceTo(amount string, id string, currency string) bool {
-	log.Println("Update Balance")
 	db := common.DbConn()
 	insForm, err := db.Prepare("UPDATE addresses SET amount=? WHERE id_user=? AND currency=?")
 	if err != nil {
