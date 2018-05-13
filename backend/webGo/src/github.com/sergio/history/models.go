@@ -14,7 +14,7 @@ func GetIdByUsername(username string) string {
 	case err == sql.ErrNoRows:
 		log.Printf("No user with that username.")
 	case err != nil:
-		log.Fatal(err)
+		log.Println(err.Error())
 	default:
 	}
 	defer db.Close()
@@ -27,7 +27,7 @@ func GetLoginLog(id_account string) []LoginStructure {
 	db := common.DbConn()
 	rows, err := db.Query("SELECT ip,time,success FROM activity_login WHERE id_account=?", id_account)
 	if err != nil {
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	row := LoginStructure{}
 	for rows.Next() {
@@ -36,7 +36,7 @@ func GetLoginLog(id_account string) []LoginStructure {
 		var success string
 		err = rows.Scan(&ip, &time, &success)
 		if err != nil {
-			panic(err.Error())
+			log.Println(err.Error())
 		}
 		row.IP = ip
 		row.Time = time
@@ -53,7 +53,7 @@ func GetActionsLog(id_account string) []ActionStructure {
 	db := common.DbConn()
 	rows, err := db.Query("SELECT amount,address_local,currency,time,action FROM activity_actions WHERE id_account=?", id_account)
 	if err != nil {
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	row := ActionStructure{}
 	for rows.Next() {
@@ -64,7 +64,7 @@ func GetActionsLog(id_account string) []ActionStructure {
 		var action string
 		err = rows.Scan(&amount, &address, &currency, &time, &action)
 		if err != nil {
-			panic(err.Error())
+			log.Println(err.Error())
 		}
 		row.Amount = amount
 		row.Address = address
@@ -83,7 +83,7 @@ func GetOrderLog(id_account string) []Ordertructure {
 	db := common.DbConn()
 	rows, err := db.Query("SELECT action,amount,price,currency,time FROM activity_orders WHERE id_account=?", id_account)
 	if err != nil {
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	row := Ordertructure{}
 	for rows.Next() {
@@ -94,7 +94,7 @@ func GetOrderLog(id_account string) []Ordertructure {
 		var action string
 		err = rows.Scan(&action, &amount, &price, &currency, &time)
 		if err != nil {
-			panic(err.Error())
+			log.Println(err.Error())
 		}
 		row.Amount = amount
 		row.Price = price

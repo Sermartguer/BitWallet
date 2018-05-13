@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
-import CurrencyPane from './overview/currencyPane';
-import Chart from './overview/chart';
-import TransactionPane from './overview/transactionPane';
-class Overview extends PureComponent {
+import * as actions from '../../actions';
+import CurrencyInfoComponent from './components/currencyInfoComponent';
+import ChartComponent from './components/chartComponent';
+import TransactionComponent from './components/transactionComponent';
+class OverviewContainer extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
@@ -12,6 +12,7 @@ class Overview extends PureComponent {
           };
     }
     componentWillMount(){
+        console.log(this.props)
         this.props.getUserBasic();
         this.props.getCoinPrice('DOGE');
         this.props.getCoinPrice('BTC');
@@ -21,12 +22,13 @@ class Overview extends PureComponent {
     renderCurrency() {
         if (this.props.overview) {
             return (
-                <CurrencyPane props={true}/>,
-                <CurrencyPane props={true}/>
+                <CurrencyInfoComponent props={true}/>,
+                <CurrencyInfoComponent props={true}/>
             );
         }
     }
     render() {
+        
         if((this.props.overview !== undefined) && (this.props.DOGE !== undefined) && (this.props.BTC !== undefined) && (this.props.LTC !== undefined) && (this.props.transactions !== undefined)){
             var curr = this.props.overview.map((item, index)=>{
                 let curr;
@@ -59,7 +61,7 @@ class Overview extends PureComponent {
                         });
                     }
                 }
-                return <CurrencyPane key={index} props={{currency:item.currency, amount:item.amount,prices:curr,transactions:this.props.transactions,transaction:trans}}/>
+                return <CurrencyInfoComponent key={index} props={{currency:item.currency, amount:item.amount,prices:curr,transactions:this.props.transactions,transaction:trans}}/>
             })
         }else{
             var curr = 'Loading...'
@@ -70,10 +72,10 @@ class Overview extends PureComponent {
                     {curr}
                 </div>
                 <div>
-                    <Chart />
+                    <ChartComponent />
                 </div>
                 <div>
-                    <TransactionPane />
+                    <TransactionComponent />
                 </div>
             </div>
         );
@@ -92,4 +94,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, actions)(Overview);
+export default connect(mapStateToProps, actions)(OverviewContainer);

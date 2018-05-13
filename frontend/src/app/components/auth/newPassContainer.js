@@ -2,19 +2,21 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
-class Recover extends PureComponent {
+class NewPasswordComponent extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-            email:''
+            password:'',
+            repassword:'',
+            id:this.props.match.params.id
           };
           this.handleInputChange = this.handleInputChange.bind(this);
           this.handleSubmit = this.handleSubmit.bind(this);      
         }
     handleSubmit(event) {       
         event.preventDefault();
+        this.props.newPassword(this.state)
         console.log(this.state)
-        this.props.recoverPassword(this.state);
     }
     handleInputChange(event) {
         const target = event.target;
@@ -29,11 +31,14 @@ class Recover extends PureComponent {
         return (
             <div className="login">
                  <div className="login__modal">
-                    <span className="login__title recover__title">Recover password</span>
-                    <span>Enter email to recover your password</span>
+                    <span className="login__title recover__title">New password</span>
+                    <span>Please enter new password</span>
                     <form className="modal" onSubmit={this.handleSubmit}>
                         <div className="input__pattert">
-                            <input className="form__input" name="email" type="text" defaultValue={this.state.email} onChange={this.handleInputChange} placeholder="Email"/>
+                            <input className="form__input" name="password" type="password" defaultValue={this.state.email} onChange={this.handleInputChange} placeholder="Password"/>
+                        </div>
+                        <div className="input__pattert">
+                            <input className="form__input" name="repassword" type="password" defaultValue={this.state.email} onChange={this.handleInputChange} placeholder="Repeat Password"/>
                         </div>
                         <div className="form__button__pattern">
                             <button className="form__button" action="submit" >Sign in</button>
@@ -45,4 +50,4 @@ class Recover extends PureComponent {
     }
 }
 
-export default connect(null, actions)(Recover);
+export default connect(null, actions)(NewPasswordComponent);

@@ -1,8 +1,5 @@
 .send__view{
-        background: white;
-        box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
-        margin: 10px;
-        padding: 10px;
+    @include make-panel(white,0 5px 10px 0px rgba(0, 0, 0, 0.1),'auto','auto');
 }
 .view__f{
     display: flex;
@@ -55,16 +52,6 @@
     text-align: center;
     border: none !important;
 }
-.pane__currency{
-    
-}
-.address__pane{
-
-}
-.sendView{
-
-
-}
 .table__styles{
     border-collapse: collapse;
 }
@@ -99,11 +86,9 @@
      display: flex !important;
      align-items: center !important;
      justify-content:space-around;
-     background: white;
-     box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
-     margin: 10px;
-     padding: 10px;
      min-width: 125px;
+     @include make-panel(white,0 5px 10px 0px rgba(0, 0, 0, 0.1),'auto','auto');
+
  }
  .react-tabs__tab-list{
      overflow: hidden !important;
@@ -120,18 +105,13 @@
      justify-content: space-around;
  }
  .send__pane{
-    background: white;
-    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
-    margin: 10px;
-    padding: 10px;
     min-width: 700px;
+    @include make-panel(white,0 5px 10px 0px rgba(0, 0, 0, 0.1),'auto','auto');
  }
  .address__pane{
-    background: white;
-    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
-    margin: 10px;
-    padding: 10px;
     min-width: 400px;
+    @include make-panel(white,0 5px 10px 0px rgba(0, 0, 0, 0.1),'auto','auto');
+
  }
  .form__input--color{
      background: #ececec;

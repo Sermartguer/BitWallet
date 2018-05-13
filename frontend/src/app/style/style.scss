@@ -9,6 +9,7 @@ html {
     position: relative;
   }
 $colorBase:#0099e5;
+@import '_mixins.scss';
 @import "./header.scss";
 @import "./footer.scss";
 @import "./dashboard.scss";

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import Profile from './profile';
+import Profile from './auth/profileContainer';
 class ProfileMiddleware extends PureComponent {
     componentWillMount(){
         this.props.getProfileData();

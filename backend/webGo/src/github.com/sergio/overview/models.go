@@ -28,7 +28,7 @@ func GetGenericData(id_account string) []Data {
 	db := common.DbConn()
 	rows, err := db.Query("SELECT amount,currency FROM addresses WHERE id_user=?", id_account)
 	if err != nil {
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	row := Data{}
 	for rows.Next() {
@@ -36,7 +36,7 @@ func GetGenericData(id_account string) []Data {
 		var responseCurrency string
 		err = rows.Scan(&responseAmount, &responseCurrency)
 		if err != nil {
-			panic(err.Error())
+			log.Println(err.Error())
 		}
 		row.Amount = responseAmount
 		row.Currency = responseCurrency
@@ -79,7 +79,7 @@ func UpdateBalanceTo(amount string, id string, currency string) bool {
 	db := common.DbConn()
 	insForm, err := db.Prepare("UPDATE addresses SET amount=? WHERE id_user=? AND currency=?")
 	if err != nil {
-		panic(err)
+		log.Println(err.Error())
 	}
 	_, err = insForm.Exec(amount, id, currency)
 
@@ -111,7 +111,7 @@ func UserTransactions(id_account string) []TransactionsStructure {
 	db := common.DbConn()
 	rows, err := db.Query("SELECT send_to,hash_id,amount,currency,trans_time FROM transactions WHERE id_account=?", id_account)
 	if err != nil {
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	row := TransactionsStructure{}
 	for rows.Next() {
@@ -122,7 +122,7 @@ func UserTransactions(id_account string) []TransactionsStructure {
 		var responseTransTime string
 		err = rows.Scan(&responseSendTo, &responseHashId, &responseAmount, &responseCurrency, &responseTransTime)
 		if err != nil {
-			panic(err.Error())
+			log.Println(err.Error())
 		}
 		row.SendTo = responseSendTo
 		row.HashId = responseHashId

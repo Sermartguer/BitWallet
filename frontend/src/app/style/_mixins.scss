@@ -1,0 +1,16 @@
+@mixin make-panel($background,$shadow,$margin,$padding) {
+    background: $background;
+    box-shadow: $shadow;
+    @if $margin == 'auto' {
+        margin: 10px;
+       }@else if $margin == 'none'{   
+        } @else {
+        margin:$margin
+       }
+    @if $padding == 'auto'{
+        padding: 10px;
+        }@else if $padding == 'none'{
+        }@else{
+            padding:$padding
+        }
+  }

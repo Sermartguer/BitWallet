@@ -2,30 +2,31 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import App from '../components/app';
 import RequireAuth from '../components/auth/require_auth';
-import Signin from '../components/auth/signin';
-import Signout from '../components/auth/signout';
-import Signup from '../components/auth/signup';
+import LoginComponent from '../components/auth/loginContainer';
+import RegisterComponent from '../components/auth/registerContainer';
+import LogoutComponent from '../components/auth/logoutContainer';
+import RecoverComponent from '../components/auth/recoverContainer';
+import NewPasswordComponent from '../components/auth/newPassContainer';
+import HomeContainer from '../components/home/homeContainer';
+import ProfileContainer from '../components/auth/profileContainer';
+import PinViewContainer from '../components/auth/pinViewContainer';
+
 import Feature from '../components/feature';
-import Welcome from '../components/welcome';
 import Dashboard from '../components/dashboard';
-import Profile from '../components/profile';
 import ProfileMiddleware from '../components/feature';
-import Recover from '../components/auth/recover';
-import NewPassword from '../components/auth/newPass';
-import PinView from '../components/pinView';
 const Routes = () => {
     return (
         <App>
-            <Route exact path="/" component={Welcome} />
-            <Route exact path="/signin" component={Signin} />
-            <Route exact path="/signout" component={Signout} />
-            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/" component={HomeContainer} />
+            <Route exact path="/signin" component={LoginComponent} />
+            <Route exact path="/signout" component={LogoutComponent} />
+            <Route exact path="/signup" component={RegisterComponent} />
             <Route exact path="/feature" component={RequireAuth(Feature)} />
             <Route exact path="/dashboard" component={RequireAuth(Dashboard)} />
             <Route exact path="/profile" component={RequireAuth(ProfileMiddleware)} />
-            <Route exact path="/verify/:id" component={PinView} />
-            <Route exact path="/recover" component={Recover}/>
-            <Route exact path="/newpassword/:id" component={NewPassword}/>
+            <Route exact path="/verify/:id" component={PinViewContainer} />
+            <Route exact path="/recover" component={PinViewContainer}/>
+            <Route exact path="/newpassword/:id" component={NewPasswordComponent}/>
         </App>
     );
 };

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
-import Orders from './store/orders';
+import * as actions from '../../actions';
+import OrderComponent from './components/orderComponent';
 import Modal from 'react-modal';
 const customStyles = {
     content : {
@@ -17,7 +17,7 @@ const customStyles = {
   };
   Modal.setAppElement('#modal')
 
-class Buy extends PureComponent {
+class OrdersContainer extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
@@ -74,14 +74,14 @@ class Buy extends PureComponent {
             var orders = this.props.buy.map((order,index)=>{
                 let amount = Math.round(order.amount * 100)/100;
                 let price = Math.round(order.price * 100)/100;
-                return <Orders props={{amount:amount,currency:order.currency,price:price}}/>
+                return <OrderComponent props={{amount:amount,currency:order.currency,price:price}}/>
             });
         }
         if(this.props.userOrders){
             var userOrders = this.props.userOrders.map((order,index)=>{
                 let amount = Math.round(order.amount * 100)/100;
                 let price = Math.round(order.price * 100)/100;
-                return <Orders props={{amount:amount,currency:order.currency,price:price}}/>
+                return <OrderComponent props={{amount:amount,currency:order.currency,price:price}}/>
             });
         }
         if(this.props.newOrder !== false){
@@ -166,4 +166,4 @@ const mapStateToProps = (state) => {
             }
 }
 
-export default connect(mapStateToProps, actions)(Buy);
+export default connect(mapStateToProps, actions)(OrdersContainer);

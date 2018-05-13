@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../actions';
+import * as actions from '../../../actions';
 import ReactTable from "react-table";
-class TransactionPane extends PureComponent {
+class TransactionComponent extends PureComponent {
     render() {
        if((this.props.trans !== undefined) && (this.props.trans !== null)){
             var data = [];
@@ -63,4 +63,4 @@ const mapStateToProps = (state) => {
      }
 }
 
-export default connect(mapStateToProps, actions)(TransactionPane);
+export default connect(mapStateToProps, actions)(TransactionComponent);

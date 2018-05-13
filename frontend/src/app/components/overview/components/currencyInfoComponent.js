@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../actions';
-import TransactionSection from './transactionsSection';
-class CurrencyPane extends PureComponent {
+import * as actions from '../../../actions';
+import TransactionInfoComponent from './transactionInfoComponent';
+class CurrencyInfoComponent extends PureComponent {
     constructor(props){
         super(props)
         this.state = {
@@ -26,7 +26,7 @@ class CurrencyPane extends PureComponent {
         let mon = this.state.prices[0].price_base;
         var transactionUI;
         if(this.state.transactions !== undefined){
-            transactionUI = <TransactionSection transactions={this.state.transactions} />
+            transactionUI = <TransactionInfoComponent transactions={this.state.transactions} />
         }else{
             transactionUI =  <span className="center__trans">No transactions found</span>;
         }
@@ -54,4 +54,4 @@ const mapStateToProps = (state) => {
     return { features: state.features.homePageFeatures }
 }
 
-export default connect(mapStateToProps, actions)(CurrencyPane);
+export default connect(mapStateToProps, actions)(CurrencyInfoComponent);

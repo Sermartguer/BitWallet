@@ -5,11 +5,11 @@
     padding: 10px;
 }
 .profile__box{
-    background: white;
-    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
     border-radius: 2px;
     overflow: hidden;
     width: 500px;
+    @include make-panel(white,0 5px 10px 0px rgba(0, 0, 0, 0.1),'none','none');
+
 }
 //Box Header
 .box__header{

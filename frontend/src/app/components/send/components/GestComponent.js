@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../actions';
+import * as actions from '../../../actions';
 import ReactTable from "react-table";
 import Modal from 'react-modal';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -19,7 +19,7 @@ const customStyles = {
     }
   };
   Modal.setAppElement('#modal')
-class GestBalanceComponent extends PureComponent {
+class GestComponent extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
@@ -164,4 +164,4 @@ const mapStateToProps = (state) => {
      }
 }
 
-export default connect(mapStateToProps, actions)(GestBalanceComponent);
+export default connect(mapStateToProps, actions)(GestComponent);

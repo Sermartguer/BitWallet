@@ -3,7 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
 
-class Signin extends PureComponent {
+class LoginComponent extends PureComponent {
 
     handleFormSubmit({ username, password }) {
         this.props.signinUser({ username, password })
@@ -58,4 +58,4 @@ const mapStateToProps = (state) => {
 
 export default reduxForm({
     form: 'signin'
-})(connect(mapStateToProps, actions)(Signin));
+})(connect(mapStateToProps, actions)(LoginComponent));

@@ -1,6 +1,3 @@
 .login__panel{
-    background: white;
-    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
-    margin: 10px;
-    padding: 10px;
+    @include make-panel(white,0 5px 10px 0px rgba(0, 0, 0, 0.1),'auto','auto');
 }

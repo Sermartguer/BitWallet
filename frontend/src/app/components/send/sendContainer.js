@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import * as actions from '../../actions';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ReactTable from "react-table";
 import Modal from 'react-modal';
-import AddressesComponent from './send/tabContent';
-import GestBalanceComponent from './send/GestBalance';
-class Send extends PureComponent {
+import AddressesComponent from './components/addressInfoComponent';
+import GestBalanceComponent from './components/GestComponent';
+class SendContainer extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
@@ -174,4 +174,4 @@ const mapStateToProps = (state) => {
     return { addresses: state.send.addresses }
 }
 
-export default connect(mapStateToProps, actions)(Send);
+export default connect(mapStateToProps, actions)(SendContainer);

@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
-import LoginHistoryComponent from './history/loginHistory';
-import ActionHistoryComponent from './history/actionHistory';
-import OrderHistoryComponent from './history/orderHistory';
+import * as actions from '../../actions';
+import LoginHistoryComponent from './components/loginHistoryComponent';
+import ActionHistoryComponent from './components/actionHistoryComponent';
+import OrderHistoryComponent from './components/orderHistoryComponent';
 class History extends PureComponent {
     constructor(props){
         super(props);

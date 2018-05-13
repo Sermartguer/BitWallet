@@ -1,15 +1,15 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import Overview from './overview';
-import Buy from './buy';
-import Send from './send';
-import History from './history';
+import OverviewContainer from './overview/overviewContainer';
+import OrdersContainer from './store/ordersContainer';
+import SendContainer from './send/sendContainer';
+import History from './history/historyContainer';
 class Dashboard extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-            component: Overview,
+            component: OverviewContainer,
             currencyDetail: ''
           };
         this.onButtonClick = this.onButtonClick.bind(this);
@@ -18,11 +18,11 @@ class Dashboard extends PureComponent {
         console.log(e.target.id)
         let component;
         if(e.target.id === 'Overview'){
-            component = Overview
+            component = OverviewContainer
         }else if(e.target.id === 'Buy'){
-            component = Buy
+            component = OrdersContainer
         }else if(e.target.id === 'Send'){
-            component = Send
+            component = SendContainer
         }else if(e.target.id === 'History'){
             component = History
         }

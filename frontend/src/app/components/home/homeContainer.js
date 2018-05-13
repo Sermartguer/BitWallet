@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import * as actions from '../../actions';
 
-class Welcome extends PureComponent {
+class HomeComponent extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
@@ -173,4 +173,4 @@ const mapStateToProps = (state) => {
     return { features: state.features.homePageFeatures }
 }
 
-export default connect(mapStateToProps, actions)(Welcome);
+export default connect(mapStateToProps, actions)(HomeComponent);

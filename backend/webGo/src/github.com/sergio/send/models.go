@@ -32,7 +32,7 @@ func GetAddresses(id string) []GetAddressesStructure {
 	db := common.DbConn()
 	rows, err := db.Query("CALL get_accounts(?)", id)
 	if err != nil {
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	row := GetAddressesStructure{}
 	for rows.Next() {
@@ -41,7 +41,7 @@ func GetAddresses(id string) []GetAddressesStructure {
 		var label string
 		err = rows.Scan(&address, &currency, &label)
 		if err != nil {
-			panic(err.Error())
+			log.Println(err.Error())
 		}
 		row.Currency = currency
 		row.Address = address
@@ -102,7 +102,7 @@ func SaveAddress(id string, address string, currency string, label string) bool 
 	db := common.DbConn()
 	insForm, err := db.Prepare("UPDATE addresses SET address=?,label=?,active=1 WHERE id_user=? AND currency=?")
 	if err != nil {
-		panic(err)
+		log.Println(err.Error())
 	}
 	_, err = insForm.Exec(address, label, id, currency)
 	if err != nil {
@@ -193,7 +193,7 @@ func UpdateBalanceTo(amount string, id string, currency string) bool {
 	db := common.DbConn()
 	insForm, err := db.Prepare("UPDATE addresses SET amount=? WHERE id_user=? AND currency=?")
 	if err != nil {
-		panic(err)
+		log.Println(err.Error())
 	}
 	_, err = insForm.Exec(amount, id, currency)
 

@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../actions';
+import * as actions from '../../../actions';
 var LineChart = require("react-chartjs").Line;
 
-class Chart extends PureComponent {
+class ChartComponent extends PureComponent {
     constructor(props){
         super(props)
         this.state = {
@@ -24,4 +24,4 @@ const mapStateToProps = (state) => {
     return { features: state.features.homePageFeatures }
 }
 
-export default connect(mapStateToProps, actions)(Chart);
+export default connect(mapStateToProps, actions)(ChartComponent);

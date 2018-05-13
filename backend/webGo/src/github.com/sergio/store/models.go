@@ -14,7 +14,7 @@ func GetOrders() []GetOrdersStructure {
 	db := common.DbConn()
 	rows, err := db.Query("SELECT amount,currency,price,create_at FROM orders")
 	if err != nil {
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	row := GetOrdersStructure{}
 	for rows.Next() {
@@ -24,7 +24,7 @@ func GetOrders() []GetOrdersStructure {
 		var responseCreateAt string
 		err = rows.Scan(&responseAmount, &responseCurrency, &responsePrice, &responseCreateAt)
 		if err != nil {
-			panic(err.Error())
+			log.Println(err.Error())
 		}
 		row.Amount = responseAmount
 		row.Currency = responseCurrency
@@ -54,7 +54,7 @@ func GetUserOrders(id_account string) []GetOrdersStructure {
 	db := common.DbConn()
 	rows, err := db.Query("SELECT amount,currency,price,create_at FROM orders WHERE id_account=?", id_account)
 	if err != nil {
-		panic(err.Error())
+		log.Println(err.Error())
 	}
 	row := GetOrdersStructure{}
 	for rows.Next() {
@@ -64,7 +64,7 @@ func GetUserOrders(id_account string) []GetOrdersStructure {
 		var responseCreateAt string
 		err = rows.Scan(&responseAmount, &responseCurrency, &responsePrice, &responseCreateAt)
 		if err != nil {
-			panic(err.Error())
+			log.Println(err.Error())
 		}
 		row.Amount = responseAmount
 		row.Currency = responseCurrency

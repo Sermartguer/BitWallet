@@ -92,7 +92,7 @@ func Verify(id string, pin string) bool {
 
 	insForm, err := db.Prepare("UPDATE accounts SET active=true, pin=? WHERE id=?")
 	if err != nil {
-		panic(err)
+		log.Println(err.Error())
 	}
 	_, err = insForm.Exec(pin, id)
 
@@ -109,7 +109,7 @@ func Update(firstname string, surname string, id string) bool {
 	db := common.DbConn()
 	insForm, err := db.Prepare("UPDATE accounts SET firstname=?, surname=? WHERE id=?")
 	if err != nil {
-		panic(err)
+		log.Println(err.Error())
 	}
 	_, err = insForm.Exec(firstname, surname, id)
 
@@ -184,7 +184,7 @@ func NewAccountPassword(password string, id string) bool {
 	db := common.DbConn()
 	insForm, err := db.Prepare("UPDATE accounts SET password=? WHERE id=?")
 	if err != nil {
-		panic(err)
+		log.Println(err.Error())
 	}
 	_, err = insForm.Exec(password, id)
 

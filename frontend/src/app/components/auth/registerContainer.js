@@ -2,8 +2,7 @@ import React, { PureComponent } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
-import AccType from './accType';
-class Signup extends PureComponent {
+class RegisterComponent extends PureComponent {
     handleFormSubmit(formProps) {
         console.log(formProps)
         this.props.signupUser(formProps)
@@ -112,4 +111,4 @@ const mapStateToProps = (state) => {
 export default reduxForm({
     form: 'signin',
     validate
-})(connect(mapStateToProps, actions)(Signup));
+})(connect(mapStateToProps, actions)(RegisterComponent));
