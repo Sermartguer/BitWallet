@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"time"
 
+	"./history"
 	"./overview"
 	"./send"
 	"./store"
 	"./users"
-
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -42,6 +42,10 @@ func main() {
 	r.HandleFunc("/api/sendLocal", send.SendLocal).Methods("POST")
 	r.HandleFunc("/api/sendExternal", send.SendExternal).Methods("POST")
 	r.HandleFunc("/api/getFee", send.GetNetworkFee).Methods("POST")
+	//HISTORY API ENDPOINTS
+	r.HandleFunc("/api/loginHistory", history.GetLoginHistory).Methods("POST")
+	r.HandleFunc("/api/actionHistory", history.GetActionsHistory).Methods("POST")
+	r.HandleFunc("/api/orderHistory", history.GetOrderHistory).Methods("POST")
 	server := &http.Server{
 		Addr:           ":8080",
 		Handler:        cors.Default().Handler(r),

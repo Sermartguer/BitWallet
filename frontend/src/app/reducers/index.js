@@ -5,13 +5,15 @@ import { reducer as formReducer } from 'redux-form';
 import { reducer as overviewReducer } from './overview.reducer';
 import { reducer as sendReducer } from './send.reducer';
 import { reducer as buyReducer } from './buy.reducer';
+import { reducer as historyReducer} from './history.reducer';
 const rootReducer = combineReducers({
     form: formReducer,
     auth: authReducer,
     features: featureReducer,
     overview: overviewReducer,
     send: sendReducer,
-    buy: buyReducer
+    buy: buyReducer,
+    history: historyReducer
 });
 
 export default rootReducer;

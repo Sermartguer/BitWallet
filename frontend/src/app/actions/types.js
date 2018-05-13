@@ -14,3 +14,6 @@ export const SEND_LOCAL_ERROR = 'sendErrorLocalBalances';
 export const SEND_LOCAL_SUCCESS = 'sendSuccessLocalBalances';
 export const SEND_EXTERNAL_ERROR = 'sendErrorExternalBalances';
 export const SEND_EXTERNAL_SUCCESS = 'sendSuccessExernalBalances';
+export const LOGIN_HISTORY_SUCCESS = 'loginHistorySuccess';
+export const ACTION_HISTORY_SUCCESS = 'actionHistorySuccess';
+export const ORDER_HISTORY_SUCCESS = 'orderHistorySuccess';
