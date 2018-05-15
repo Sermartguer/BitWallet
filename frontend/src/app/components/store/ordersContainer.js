@@ -26,7 +26,8 @@ class OrdersContainer extends PureComponent {
             price:0,
             newOrders:false,
             modalIsOpen: false,
-            maxCURR:0
+            maxCURR:0,
+            actualBalance:0,
           };
           this.handleInputChange = this.handleInputChange.bind(this);
           this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,21 +38,38 @@ class OrdersContainer extends PureComponent {
     componentWillMount(){
         this.props.getOrders();
         this.props.getUserOrders();
+        this.props.getOrderBalanceOrders('DOGE');
+        this.props.getOrderBalanceOrders('BTC');
+        this.props.getOrderBalanceOrders('LTC');
+
     }
     handleInputChange(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
         let currAmount;
+        let totalVali = null;
+        var currencyActual = null;
+        var orderValidation = 0;
+
         if(name === 'currency'){
             let that = this;
-            console.log(this.props.validationCur)
             this.props.validationCur.forEach(element => {
-                if(element.currency === value){
-                    document.getElementById('curr').innerHTML = element.amount + ' '+element.currency + ' available';
-                    currAmount = element.amount
+                if(element.currency === value){                    
+                    if(this.props['orders'+element.currency] != ""){
+                        orderValidation = this.props['orders'+element.currency]
+                    }else{
+                        orderValidation = 0;
+                    }
+                    document.getElementById('curr').innerHTML = (parseFloat(element.amount)-parseFloat(orderValidation)) + ' '+element.currency + ' available';
+                    currAmount = element.amount;
                 }
             });
+            console.log(orderValidation)
+            let finalVali = (parseFloat(currAmount)-parseFloat(orderValidation))
+            this.setState({
+                actualBalance:finalVali
+            })
         }
         this.setState({
             maxCURR:currAmount,
@@ -60,7 +78,14 @@ class OrdersContainer extends PureComponent {
       }
     handleSubmit(event) {
         event.preventDefault();
-        this.props.addNewOrder(this.state);
+        console.log(this.state.actualBalance);
+        console.log(this.state.amount);
+        if(this.state.amount > this.state.actualBalance){
+            alert("Can't do this");
+        }else{
+            this.props.addNewOrder(this.state);
+        }
+        
         this.closeModal();
     }
     openModal() {
@@ -89,7 +114,6 @@ class OrdersContainer extends PureComponent {
             this.props.getUserOrders();
             this.props.disableOrderNew();
         }
-        console.log(this)
         return (
             <div>
                 <div className="dash dashboard__title">
@@ -158,11 +182,15 @@ class OrdersContainer extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
+    console.log(state)
     return { 
                 buy: state.buy.buy,
                 userOrders:state.buy.userOrder,
                 newOrder:state.buy.newOrder,
-                validationCur: state.overview.overview
+                validationCur: state.overview.overview,
+                ordersDOGE: state.buy.ordersDOGE,
+                ordersLTC: state.buy.ordersLTC,
+                ordersBTC: state.buy.ordersBTC
             }
 }
 

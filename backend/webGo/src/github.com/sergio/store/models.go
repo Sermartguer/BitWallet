@@ -85,3 +85,21 @@ func SaveOrder(id_account string, amount string, currency string, price string) 
 	defer db.Close()
 	return true
 }
+func GetBalance(id_account string, currency string) string {
+	db := common.DbConn()
+	rows, err := db.Query("SELECT sum(amount) FROM orders WHERE id_account=? AND currency=?", id_account, currency)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	for rows.Next() {
+		var amount string
+		err = rows.Scan(&amount)
+		if err != nil {
+			log.Println(err.Error())
+		}
+		defer db.Close()
+		return amount
+	}
+	defer db.Close()
+	return ""
+}

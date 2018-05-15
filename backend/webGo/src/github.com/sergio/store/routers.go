@@ -74,3 +74,25 @@ func CreateOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+func GetBalanceOnOrder(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
+
+	dat, _ := ioutil.ReadAll(r.Body)
+	var params map[string]string
+	json.Unmarshal(dat, &params)
+	username, errorToken := common.GetUsernameByToken(params["token"])
+	if errorToken {
+		common.StatusBadError(w, r, "Error in token check")
+		return
+	}
+	id := GetIdByUsername(username)
+	data := GetBalance(id, params["currency"])
+
+	j, _ := json.Marshal(data)
+	fmt.Println(string(j))
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+
+}

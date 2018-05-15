@@ -36,6 +36,8 @@ func main() {
 	r.HandleFunc("/api/getOrders", store.GetOrdersEndpoint).Methods("POST")
 	r.HandleFunc("/api/getUserOrders", store.GetOrdersUserEndpoint).Methods("POST")
 	r.HandleFunc("/api/saveOrder", store.CreateOrder).Methods("POST")
+	r.HandleFunc("/api/getOrderBalance", store.GetBalanceOnOrder).Methods("POST")
+
 	//SEND API ENDPOINTS
 	r.HandleFunc("/api/getAddresses", send.GetUserAddresses).Methods("POST")
 	r.HandleFunc("/api/getNewAddress", send.GetNewAddress).Methods("POST")

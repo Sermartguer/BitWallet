@@ -10,10 +10,25 @@ class CurrencyInfoComponent extends PureComponent {
             currency: props.props.currency,
             amount: props.props.amount,
             prices:props.props.prices,
-            
+            orderBalance:null
         }
     }
+    componentWillMount(){
+        this.props.getOrderBalance(this.state.currency);
+    }
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            orderBalance:nextProps["order"+this.state.currency]
+        })
+    }
     render() {
+        console.log(this.state.orderBalance)
+        var balanceOrders = null;
+        if((this.state.orderBalance != null) && (this.state.orderBalance != "")){
+            balanceOrders = this.state.orderBalance;
+        }else{
+            balanceOrders = 0;
+        }
         var curr = null;
         if(this.state.currency === "DOGE"){
             curr = "dogecoin";
@@ -39,7 +54,7 @@ class CurrencyInfoComponent extends PureComponent {
                     <div className="body__info">
                         <span className="info__title">{curr.toUpperCase()}</span>
                         <div className="info__desc">
-                            <span className="info__amount">{parseFloat(this.state.amount)} {this.state.currency}</span>
+                            <span className="info__amount">{parseFloat(balanceOrders)} {parseFloat(this.state.amount)-parseFloat(balanceOrders)} {this.state.currency}</span>
                             <span className="info__total">{price}{mon}</span>
                         </div>
                     </div>
@@ -50,8 +65,6 @@ class CurrencyInfoComponent extends PureComponent {
     }
 }
 
-const mapStateToProps = (state) => {
-    return { features: state.features.homePageFeatures }
-}
+const mapStateToProps = (state) => ({...state.overview})
 
 export default connect(mapStateToProps, actions)(CurrencyInfoComponent);

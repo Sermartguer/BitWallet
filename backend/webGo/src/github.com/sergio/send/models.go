@@ -216,4 +216,5 @@ func GetLabelByID(id string, currency string) string {
 		return label
 	}
 	return ""
+
 }

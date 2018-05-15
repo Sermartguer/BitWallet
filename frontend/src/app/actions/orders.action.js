@@ -3,7 +3,8 @@ import History from '../history.js';
 import {
     GET_ORDERS,
     GET_USER_ORDERS,
-    SAVE_ORDER
+    SAVE_ORDER,
+    OVERVIEW_ORDER_BALANCE
 } from './types';
 
 const ROOT_URL = 'http://localhost:8080/api';
@@ -56,5 +57,20 @@ export const addNewOrder = (orderData) => {
 export const disableOrderNew = () => {
     return (dispatch) => {
         dispatch({type: SAVE_ORDER, payload:false});
+    };
+}
+export const getOrderBalanceOrders= (currency) => {
+    let data = {}
+    data.token = localStorage.getItem('token');
+    data.currency = currency;
+    return (dispatch) => {
+        axios.post('http://localhost:8080/api/getOrderBalance', data ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+        }).then(response => {
+            //console.log(response.data)
+            dispatch({type: OVERVIEW_ORDER_BALANCE, payload:response.data, currency:currency})
+        }).catch((err) => {
+        });
     };
 }

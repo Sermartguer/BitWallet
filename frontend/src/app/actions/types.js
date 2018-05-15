@@ -17,3 +17,5 @@ export const SEND_EXTERNAL_SUCCESS = 'sendSuccessExernalBalances';
 export const LOGIN_HISTORY_SUCCESS = 'loginHistorySuccess';
 export const ACTION_HISTORY_SUCCESS = 'actionHistorySuccess';
 export const ORDER_HISTORY_SUCCESS = 'orderHistorySuccess';
+export const OVERVIEW_ORDER_STATUS = 'overview_order_status';
+export const OVERVIEW_ORDER_BALANCE = 'order_balance';
