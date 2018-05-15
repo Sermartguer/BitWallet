@@ -41,14 +41,12 @@
     
 }
 .form__button{
-    border-radius: 25px;
     width: 100%;
     height: 50px;
     border: none;
     outline: none;
     font-size: 15px;
-    background: $colorBase;
-    color: white;
+    @include make-button($colorBase,white);
     cursor: pointer;
 }
 .alert__danger{
@@ -58,6 +56,7 @@
 }
 .login__question{
     text-align: center;
+    margin:15px;
 }
 .question--color{
     color: #666;

@@ -1,0 +1,32 @@
+  .pin{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 80vh;
+  }
+.pin__view{
+    @include make-panel(white,0 5px 10px 0px rgba(0, 0, 0, 0.1),'auto','auto');
+    min-width: 250px;
+}
+.pin__view__title{
+    display: block;
+    font-size:40px;
+    text-align: center;
+}
+.pin__view__title--color{
+    color: $colorBase;
+}
+.pin__view__subtitle{
+    display: block;
+    font-size:15px;
+    text-align: center;
+    width: 50%;
+    margin:0 auto;
+}
+.pin__view__subtitle--color{
+    color: lighten($color: #333, $amount:10%)
+}
+.success__text{
+    text-align: center;
+}

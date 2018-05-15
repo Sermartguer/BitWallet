@@ -97,11 +97,18 @@ func VerifyAccount(w http.ResponseWriter, r *http.Request) {
 	// Unmarshall this into a map
 	var params map[string]string
 	json.Unmarshal(dat, &params)
+	exists := CheckIfIdExists(params["param"])
+	fmt.Println(exists)
+	if !exists {
+		common.StatusBadError(w, r, "Error verify")
+		return
+	}
 	ver := Verify(params["param"], params["pin"])
 	if ver {
 		w.WriteHeader(http.StatusOK)
 	} else {
 		common.StatusBadError(w, r, "Error on verify")
+		return
 	}
 	log.Println(params["param"])
 }

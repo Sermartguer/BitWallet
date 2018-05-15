@@ -72,7 +72,6 @@ func UpdateBalance(username string, currency string) {
 	if active {
 		labelName := GetLabelByID(userID, currency)
 		body := UpdateBalancesApi(currency, labelName)
-
 		data := &ResponseGetBalance{
 			Data: &Balance{},
 		}

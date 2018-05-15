@@ -10,11 +10,11 @@ class LoginComponent extends PureComponent {
     }
 
     renderError() {
-        if (this.props.errorMessage) {
-            console.log(this.props.errorMessage)
+        if (this.props.error) {
+            console.log(this.props.error)
             return (
                 <div className="alert__danger">
-                    <string>Oops! {this.props.errorMessage}</string>
+                    <string>Oops! {this.props.error}</string>
                 </div>
             );
         }
@@ -51,10 +51,8 @@ class LoginComponent extends PureComponent {
     }
 }
 
-const mapStateToProps = (state) => {
-    console.log(state.auth )
-    return { errorMessage: state.auth.error }
-};
+const mapStateToProps = (state) => ({...state.auth})
+
 
 export default reduxForm({
     form: 'signin'

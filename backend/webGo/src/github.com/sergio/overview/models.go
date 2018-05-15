@@ -2,6 +2,7 @@ package overview
 
 import (
 	"database/sql"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -76,6 +77,7 @@ func GetLabelByID(id string, currency string) string {
 	return ""
 }
 func UpdateBalanceTo(amount string, id string, currency string) bool {
+	fmt.Println(amount)
 	db := common.DbConn()
 	insForm, err := db.Prepare("UPDATE addresses SET amount=? WHERE id_user=? AND currency=?")
 	if err != nil {

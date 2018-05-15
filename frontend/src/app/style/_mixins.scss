@@ -14,3 +14,7 @@
             padding:$padding
         }
   }
+  @mixin make-button($background,$color){
+    background: $background;
+    color: $color;
+  }

@@ -19,3 +19,7 @@ export const ACTION_HISTORY_SUCCESS = 'actionHistorySuccess';
 export const ORDER_HISTORY_SUCCESS = 'orderHistorySuccess';
 export const OVERVIEW_ORDER_STATUS = 'overview_order_status';
 export const OVERVIEW_ORDER_BALANCE = 'order_balance';
+export const VERIFY_ERROR = 'verify_error';
+export const VERIFY_SUCCESS = 'verify_success';
+export const UPDATE_RECOVER_FIELD = 'updateRecoverPassFields';
+export const UPDATE_PASSWORD = 'update_password'

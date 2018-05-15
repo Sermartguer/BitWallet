@@ -89,7 +89,6 @@ func GetEmail(username string) string {
 }
 func Verify(id string, pin string) bool {
 	db := common.DbConn()
-
 	insForm, err := db.Prepare("UPDATE accounts SET active=true, pin=? WHERE id=?")
 	if err != nil {
 		log.Println(err.Error())
@@ -207,4 +206,21 @@ func LoginActivity(id string, ip string, success string) bool {
 	insForm.Exec(id, ip, time.Now().Format("Mon Jan _2 15:04:05 2006"), success)
 	defer db.Close()
 	return true
+}
+func CheckIfIdExists(id string) bool {
+	var exist string
+	db := common.DbConn()
+	err := db.QueryRow("SELECT id FROM accounts WHERE id=?", id).Scan(&exist)
+	switch {
+	case err == sql.ErrNoRows:
+		log.Println(err)
+		return false
+	case err != nil:
+		log.Println(err)
+		return false
+	default:
+		return true
+	}
+	defer db.Close()
+	return false
 }

@@ -17,10 +17,10 @@ class RegisterComponent extends PureComponent {
     );
 
     renderError() {
-        if (this.props.errorMessage) {
+        if (this.props.error) {
             return (
                 <div className="alert__danger">
-                    <string>Oops! {this.props.errorMessage}</string>
+                    <string>Oops! {this.props.error}</string>
                 </div>
             );
         }
@@ -28,13 +28,18 @@ class RegisterComponent extends PureComponent {
 
     render() {
         const { handleSubmit, submitting } = this.props;
-        console.log(this.props)
         return (
             <div className="login">
                 <div className="login__modal">
-
                 <form className="modal" onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
                         <span className="login__title">Sign Up</span>
+                        <div className="login__question">
+                            <span className="question--color">Already have account? </span>
+                            <a className="question__a" href="/signin">Login</a>
+                            <br/>
+                            <span className="question--color">Forgot password? </span>
+                            <a className="question__a" href="/recover">Recover</a>
+                        </div>
                         <div className="input__pattert">
                             <Field name="username" component={this.renderField} type="text" label="Username"/>
                         </div>
@@ -50,7 +55,6 @@ class RegisterComponent extends PureComponent {
                         <div className="accounts">
                             <div className="account__section">
                                 <i className="far fa-user fa-3x"></i>
-                                
                                 <label><div>Basic</div><Field type="radio" className="size__radio" component={this.renderField} name="account" value="Basic"/></label>
                             </div>
                             <div className="account__section">
@@ -104,9 +108,7 @@ const validate = values => {
     return errors;
 };
 
-const mapStateToProps = (state) => {
-    return { errorMessage: state.auth.error }
-};
+const mapStateToProps = (state) => ({...state.auth})
 
 export default reduxForm({
     form: 'signin',
