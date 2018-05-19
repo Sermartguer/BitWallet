@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"./history"
+	"./mobile"
 	"./overview"
 	"./send"
 	"./store"
@@ -48,6 +49,9 @@ func main() {
 	r.HandleFunc("/api/loginHistory", history.GetLoginHistory).Methods("POST")
 	r.HandleFunc("/api/actionHistory", history.GetActionsHistory).Methods("POST")
 	r.HandleFunc("/api/orderHistory", history.GetOrderHistory).Methods("POST")
+	//MOBILE API ENDPOINT
+	r.HandleFunc("/apiv2/getLogin", mobile.LoginByMobileID).Methods("POST")
+	r.HandleFunc("/apiv2/getMobileBalances", mobile.MobileUserBalances).Methods("POST")
 	server := &http.Server{
 		Addr:           ":8080",
 		Handler:        cors.Default().Handler(r),
