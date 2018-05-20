@@ -24,10 +24,13 @@ class OrdersContainer extends PureComponent {
             currency:'DOGE',
             amount:0,
             price:0,
+            currency_to:'',
             newOrders:false,
             modalIsOpen: false,
             maxCURR:0,
+            minCURR:3,
             actualBalance:0,
+            total:0
           };
           this.handleInputChange = this.handleInputChange.bind(this);
           this.handleSubmit = this.handleSubmit.bind(this);
@@ -48,6 +51,7 @@ class OrdersContainer extends PureComponent {
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
         let currAmount;
+        let minCurrAmount;
         let totalVali = null;
         var currencyActual = null;
         var orderValidation = 0;
@@ -63,17 +67,36 @@ class OrdersContainer extends PureComponent {
                     }
                     document.getElementById('curr').innerHTML = (parseFloat(element.amount)-parseFloat(orderValidation)) + ' '+element.currency + ' available';
                     currAmount = element.amount;
+                    if(value==="DOGE"){
+                        minCurrAmount = "3";
+                    }else if(value==="LTC"){
+                        minCurrAmount="0.006"
+                    }else if(value==="BTC"){
+                        minCurrAmount="0.001060"
+                    }
                 }
             });
-            console.log(orderValidation)
-            let finalVali = (parseFloat(currAmount)-parseFloat(orderValidation))
+            let finalVali = (parseFloat(currAmount)-parseFloat(orderValidation));
+            if(value==="DOGE"){
+                minCurrAmount = "3";
+            }else if(value==="LTC"){
+                minCurrAmount="0.006"
+            }else if(value==="BTC"){
+                minCurrAmount="0.001060"
+            }
             this.setState({
-                actualBalance:finalVali
+                actualBalance:finalVali,
+                maxCURR:currAmount,
+                minCURR:minCurrAmount,
             })
         }
+        let balance = 0;
+        if((name === 'amount') && (value != 0)){
+            balance = value-3
+        }
         this.setState({
-            maxCURR:currAmount,
-            [name]: value
+            [name]: value,
+            total:  balance
         });
       }
     handleSubmit(event) {
@@ -97,16 +120,20 @@ class OrdersContainer extends PureComponent {
     render() {
         if(this.props.buy){
             var orders = this.props.buy.map((order,index)=>{
-                let amount = Math.round(order.amount * 100)/100;
-                let price = Math.round(order.price * 100)/100;
-                return <OrderComponent props={{amount:amount,currency:order.currency,price:price}}/>
+                if(order.amount > 0){
+                    let amount = Math.round(order.amount * 100)/100;
+                    let price = Math.round(order.price * 10000000000)/10000000000;
+                    return <OrderComponent props={{amount:amount,currency:order.currency,price:price,id:order.id,currency_to:order.currency_to}}/>
+                }
             });
         }
         if(this.props.userOrders){
             var userOrders = this.props.userOrders.map((order,index)=>{
-                let amount = Math.round(order.amount * 100)/100;
-                let price = Math.round(order.price * 100)/100;
-                return <OrderComponent props={{amount:amount,currency:order.currency,price:price}}/>
+                if(order.amount > 0){
+                    let amount = Math.round(order.amount * 100)/100;
+                    let price = Math.round(order.price * 100)/100;
+                    return <OrderComponent props={{amount:amount,currency:order.currency,price:price,id:order.id,currency_to:order.currency_to}}/>
+                }
             });
         }
         if(this.props.newOrder !== false){
@@ -165,10 +192,16 @@ class OrdersContainer extends PureComponent {
                                 </div>
                                 <span id="curr" className="align__aviable">Choose one currency</span>
                                 <div className="input__pattert">
-                                    <input className="form__input" name="amount" type="number" placeholder="Amount" min="0" max={this.state.maxCURR} step="0.001" onChange={this.handleInputChange}/>
+                                    <input className="form__input" name="amount" type="number" placeholder="Amount" min={this.state.minCURR} max={this.state.maxCURR} step="0.001" onChange={this.handleInputChange}/>
                                 </div>
                                 <div className="input__pattert">
-                                    <input className="form__input" name="price" type="number" placeholder="Price" min="0" onChange={this.handleInputChange}/>
+                                    <input className="form__input" name="price" type="number" placeholder="Price" step="0.001" min="0" onChange={this.handleInputChange}/>
+                                </div>
+                                <div>
+                                    <input className="form__input" name="currency_to" type="text" placeholder="Currency" onChange={this.handleInputChange}/>
+                                </div>
+                                <div>
+                                    <span>Total to sell {this.state.total} {this.state.currency}</span>
                                 </div>
                                 <button className="form__button" type="submit">Create Order</button>
                             </form>
@@ -182,7 +215,6 @@ class OrdersContainer extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state)
     return { 
                 buy: state.buy.buy,
                 userOrders:state.buy.userOrder,
@@ -190,7 +222,7 @@ const mapStateToProps = (state) => {
                 validationCur: state.overview.overview,
                 ordersDOGE: state.buy.ordersDOGE,
                 ordersLTC: state.buy.ordersLTC,
-                ordersBTC: state.buy.ordersBTC
+                ordersBTC: state.buy.ordersBTC,
             }
 }
 

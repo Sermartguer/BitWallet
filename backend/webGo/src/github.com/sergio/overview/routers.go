@@ -2,6 +2,7 @@ package overview
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -67,15 +68,19 @@ func GetTransactions(w http.ResponseWriter, r *http.Request) {
 	w.Write(j)
 }
 func UpdateBalance(username string, currency string) {
+	fmt.Println("ye")
 	userID := GetIdByUsername(username)
+	fmt.Println("Address")
 	active := CheckAddress(userID, currency)
 	if active {
 		labelName := GetLabelByID(userID, currency)
 		body := UpdateBalancesApi(currency, labelName)
+		fmt.Println(string(body))
 		data := &ResponseGetBalance{
 			Data: &Balance{},
 		}
 		json.Unmarshal(body, data)
+		fmt.Println("Update")
 		UpdateBalanceTo(data.Data.Balance, userID, currency)
 	}
 }

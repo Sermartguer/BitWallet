@@ -68,6 +68,7 @@ CREATE TABLE orders (
   id_account VARCHAR(50) NOT NULL,
   amount DECIMAL(30,25) NOT NULL,
   currency VARCHAR(30) NOT NULL,
+  currency_to VARCHAR(30) NOT NULL,
   price DECIMAL(30,25) NOT NULL,
   create_at VARCHAR(30) NOT NULL,
   PRIMARY KEY (id_order),

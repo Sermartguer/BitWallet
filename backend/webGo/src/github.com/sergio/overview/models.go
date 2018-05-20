@@ -77,6 +77,7 @@ func GetLabelByID(id string, currency string) string {
 	return ""
 }
 func UpdateBalanceTo(amount string, id string, currency string) bool {
+	fmt.Println("a")
 	fmt.Println(amount)
 	db := common.DbConn()
 	insForm, err := db.Prepare("UPDATE addresses SET amount=? WHERE id_user=? AND currency=?")

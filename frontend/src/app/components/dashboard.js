@@ -39,7 +39,7 @@ class Dashboard extends PureComponent {
 
                         <span className="alert__verify"><i className="fa fa-info-circle" aria-hidden="true"></i> Please verify your account</span>
                         <div className="item__dashboard" onClick={this.onButtonClick} id="Overview"><i className="fas fa-chart-line space--icons"></i>Overview</div>
-                        <div className="item__dashboard" onClick={this.onButtonClick} id="Buy"><i className="far fa-handshake space--icons"></i>Buy/Sell</div>
+                        <div className="item__dashboard" onClick={this.onButtonClick} id="Buy"><i className="far fa-handshake space--icons"></i>Exchange</div>
                         <div className="item__dashboard" onClick={this.onButtonClick} id="Send"><i className="fab fa-telegram-plane space--icons"></i>Send</div>
                         <div className="item__dashboard" onClick={this.onButtonClick} id="History"><i className="fas fa-history space--icons"></i>History</div>
                     </section>

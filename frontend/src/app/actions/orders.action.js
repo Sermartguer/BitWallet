@@ -41,7 +41,7 @@ export const getUserOrders = () => {
 }
 
 export const addNewOrder = (orderData) => {
-    let response = {token: localStorage.getItem('token'),amount:orderData.amount,price:orderData.price,currency:orderData.currency}
+    let response = {token: localStorage.getItem('token'),amount:orderData.amount,price:orderData.price,currency:orderData.currency,currency_to:orderData.currency_to}
     return (dispatch) => {
         // submit email/password to the server
         axios.post('http://localhost:8080/api/saveOrder', response ,{
@@ -70,6 +70,19 @@ export const getOrderBalanceOrders= (currency) => {
         }).then(response => {
             //console.log(response.data)
             dispatch({type: OVERVIEW_ORDER_BALANCE, payload:response.data, currency:currency})
+        }).catch((err) => {
+        });
+    };
+}
+export const payOrder = (dataPay) =>{
+    dataPay.token = localStorage.getItem('token');
+    return (dispatch) => {
+        axios.post('http://localhost:8080/api/payOrder', dataPay ,{
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+        }).then(response => {
+            console.log(response.data)
+            //dispatch({type: OVERVIEW_ORDER_BALANCE, payload:response.data, currency:currency})
         }).catch((err) => {
         });
     };

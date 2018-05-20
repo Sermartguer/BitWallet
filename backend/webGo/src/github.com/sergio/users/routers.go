@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"../common"
-	"../overview"
 	"github.com/asaskevich/govalidator"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -40,9 +39,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		common.StatusBadError(w, r, "Password not match")
 		return
 	}
-	overview.UpdateBalance(params["username"], "DOGE")
-	overview.UpdateBalance(params["username"], "BTC")
-	overview.UpdateBalance(params["username"], "LTC")
+	fmt.Println("aqui")
+
 	LoginActivity(GetIdByUsername(params["username"]), params["ip"], "1")
 	credentials := common.GetCredentials(params["username"], params["password"], GetEmail(params["username"]))
 	out, _ := json.MarshalIndent(&credentials, "", "  ")
