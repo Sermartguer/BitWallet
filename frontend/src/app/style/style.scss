@@ -46,3 +46,11 @@ body{
         height: 20vh;
         }
  }
+.ReactModal__Overlay{
+    background: rgba( 0, 0, 0, 0.5 ) !important;
+
+}
+.blur{
+    filter: blur(2px);
+    
+}

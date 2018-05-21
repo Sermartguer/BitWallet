@@ -112,9 +112,13 @@ class OrdersContainer extends PureComponent {
         this.closeModal();
     }
     openModal() {
+        let a = document.getElementsByClassName('dash');
+        a[0].classList.add("blur")
         this.setState({modalIsOpen: true});
       }
       closeModal() {
+        let a = document.getElementsByClassName('dash');
+        a[0].classList.remove("blur")
         this.setState({modalIsOpen: false});
       }
     render() {
@@ -201,7 +205,7 @@ class OrdersContainer extends PureComponent {
                                     <input className="form__input" name="currency_to" type="text" placeholder="Currency" onChange={this.handleInputChange}/>
                                 </div>
                                 <div>
-                                    <span>Total to sell {this.state.total} {this.state.currency}</span>
+                                    <div className="modal__pricing">Total to sell: <span className="modal__total modal__total--color">{this.state.total}</span> {this.state.currency}</div>
                                 </div>
                                 <button className="form__button" type="submit">Create Order</button>
                             </form>

@@ -38,11 +38,15 @@ class GestComponent extends PureComponent {
 
     }
     openModal(e) {
+        let a = document.getElementsByClassName('dash');
+        a[0].classList.add("blur")
         console.log(e.target.name)
         this.setState({modalIsOpen: true,currencyModalActive:e.target.id,sendTo:e.target.name});
         
     }
     closeModal() {
+        let a = document.getElementsByClassName('dash');
+        a[0].classList.remove("blur")
         this.setState({modalIsOpen: false});
     }
     handleSubmit(event) {
@@ -133,21 +137,21 @@ class GestComponent extends PureComponent {
                     onRequestClose={this.closeModal}
                     style={customStyles}
                     contentLabel="Example Modal">
-                        <span>Total</span>
+                        <div className="modal__header">Verify pin</div>
+                        <div style={{textAlign:"center"}}  >You must provide your BitWallet pin to make transaction</div>
                         <form onSubmit={this.handleSubmit}>
-                            total
                             <PinInput 
                                 length={4}
                                 onChange={(value, index) => { }} 
                                 type="numeric" 
-                                style={{padding: '10px'}}  
+                                style={{padding: '10px',textAlign:"center"}}  
                                 inputStyle={{borderColor: 'red'}}
                                 inputFocusStyle={{borderColor: 'blue'}}
                                 onComplete={(value, index) => {
                                     this.setState({pin:value})
                                 }}
                             />
-                            <button className="form__btn" type="submit">Create Order</button>
+                            <button className="form__button" type="submit">Send {this.state.currency}</button>
                         </form>
                     </Modal>
             </div>

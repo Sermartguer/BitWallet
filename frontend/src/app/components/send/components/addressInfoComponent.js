@@ -31,10 +31,14 @@ class AddressesComponent extends PureComponent {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     openModal(e) {
+        let a = document.getElementsByClassName('dash');
+        a[0].classList.add("blur")
         this.setState({modalIsOpen: true,currencyModalActive:e.target.id});
         console.log(e.target.id)
     }
     closeModal() {
+        let a = document.getElementsByClassName('dash');
+        a[0].classList.remove("blur")
         this.setState({modalIsOpen: false});
     }
     handleSubmit(event) {
@@ -62,9 +66,12 @@ class AddressesComponent extends PureComponent {
                     onRequestClose={this.closeModal}
                     style={customStyles}
                     contentLabel="Example Modal">
-                        <span>Pon nombre a tu direccion</span>
+                                               
+                        <div className="modal__header">Set name your address</div>
                         <form onSubmit={this.handleSubmit}>
-                            <input type="text" name="label"></input>
+                        <div className="input__pattert">
+                            <input className="form__input" placeholder="Label name" type="text" name="label"></input>
+                        </div>
                             <button className="form__button" type="submit">Create Order</button>
                         </form>
                     </Modal>

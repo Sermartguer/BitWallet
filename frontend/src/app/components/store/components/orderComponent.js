@@ -35,9 +35,13 @@ class OrderComponent extends PureComponent {
         this.submitPay = this.submitPay.bind(this)
     }
     openModal() {
+        let a = document.getElementsByClassName('dash');
+        a[0].classList.add("blur")
         this.setState({modalIsOpen: true});
       }
     closeModal() {
+        let a = document.getElementsByClassName('dash');
+        a[0].classList.remove("blur")
         this.setState({modalIsOpen: false});
     }
     handleInputChange(event) {
@@ -107,13 +111,18 @@ class OrderComponent extends PureComponent {
                     style={customStyles}
                     contentLabel="Example Modal">
                     <div className="modal__pattern">
-                        <div>Amount to buy</div>
-                        <input className="form__input" name="amount_buy" type="number" placeholder="Amount to buy" step="0.001" min="0" max={this.state.amount} onChange={this.handleInputChange}/>
-                        <div>Price by {this.state.currency}: {this.state.price} {this.state.currency_to}</div>
-                        <div>Total Pay {this.state.total_pay}</div>
+                        <div className="modal__header">Amount to buy</div>
+                        <div className="input__pattert">
+                            <input className="form__input" name="amount_buy" type="number" placeholder="Amount to buy" step="0.001" min="0" max={this.state.amount} onChange={this.handleInputChange}/>
+                        </div>
+                        <div className="modal__pricing modal__preview">
+                            <span>Price by {this.state.currency}: {this.state.price} {this.state.currency_to}</span>
+                        </div>
+                        <div className="modal__pricing modal--size">
+                            <span className="modal__total modal__total--color">Total Pay {this.state.total_pay}</span>
+                        </div>
                         <span id="error"></span>
-                        <button className={`order__button ${styleBackGround}`} onClick={this.submitPay}>Buy DOGE</button>
-
+                        <button className="form__button" onClick={this.submitPay}>Buy DOGE</button>
                     </div>
                     </Modal>
             </div>

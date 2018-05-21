@@ -56,7 +56,22 @@ label > input{ /* HIDE RADIO */
   .buy__resposive{
    justify-content: center;
   }
-
+  .modal__total{
+    font-size: 30px;
+  }
+  .modal__pricing{
+    text-align: center;
+  }
+  .modal__total--color{
+    color: $colorBase
+  }
+  .modal__preview{
+    color: rgb(133, 133, 133);
+    margin: 15px;
+  }
+  .modal--size{
+    margin:15px;
+  }
 @media (max-width:1400px){
   .responsive__user{
     flex-direction: column;
