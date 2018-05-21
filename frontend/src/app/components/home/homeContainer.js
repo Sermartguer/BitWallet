@@ -6,14 +6,29 @@ class HomeComponent extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-            currencyDetail: this.props.match.params.id
+            currencyDetail: this.props.match.params.id,
+            btcprice:0,
+            ltcprice:0,
+            dogeprice:"0,00414"
           };
     }
     componentWillMount(){
-        console.log(this.props.match.params.id);
         if(this.props.match.params.id){
             this.props.verifyAccount(this.props.match.params.id);
         }
+        this.props.enableBtcSocket();
+        this.props.enableLtcSocket();
+        this.props.enableDogeSocket();
+    }
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
+        this.setState({
+            btcprice:nextProps.btcprice,
+            ltcprice:nextProps.ltcprice
+        })
+        /*this.setState({
+            orderBalance:nextProps["order"+this.state.currency]
+        })*/
     }
     render() {
         return (
@@ -39,11 +54,11 @@ class HomeComponent extends PureComponent {
                             <div className="panel__body body">
                                 <span className="body__pattern body__pattern--size body__pattern--color">1 BTC</span>
                                 <i className="fas fa-exchange-alt body__pattern--color"></i>
-                                <span className="body__pattern body__pattern--size body__pattern--color">123456 €</span>
+                                <span className="body__pattern body__pattern--size body__pattern--color">{this.state.btcprice} $</span>
                             </div>
                             <div className="panel__footer">
                                 <div className="panel__button">
-                                    <button className="btn btn__more btn__more--color btn__more--font"> View More</button>
+                                    <a href="http://preev.com/btc/usd" style={{textDecoration:"none"}} className="btn btn__more btn__more--color btn__more--font"> View More</a>
                                 </div>
                             </div>
                         </div>
@@ -60,11 +75,11 @@ class HomeComponent extends PureComponent {
                             <div className="panel__body body">
                                 <span className="body__pattern body__pattern--size body__pattern--color">1 DOGE</span>
                                 <i className="fas fa-exchange-alt body__pattern--color"></i>
-                                <span className="body__pattern body__pattern--size body__pattern--color">123456 €</span>
+                                <span className="body__pattern body__pattern--size body__pattern--color">{this.state.dogeprice} €</span>
                             </div>
                             <div className="panel__footer">
                                 <div className="panel__button">
-                                    <button className="btn btn__more btn__more--color btn__more--font"> View More</button>
+                                    <a href="http://preev.com/xdg/usd" style={{textDecoration:"none"}} className="btn btn__more btn__more--color btn__more--font"> View More</a>
                                 </div>
                             </div>
                         </div>
@@ -81,11 +96,11 @@ class HomeComponent extends PureComponent {
                             <div className="panel__body body">
                                 <span className="body__pattern body__pattern--size body__pattern--color">1 LTC</span>
                                 <i className="fas fa-exchange-alt body__pattern--color"></i>
-                                <span className="body__pattern body__pattern--size body__pattern--color">123456 €</span>
+                                <span className="body__pattern body__pattern--size body__pattern--color">{this.state.ltcprice} $</span>
                             </div>
                             <div className="panel__footer">
                                 <div className="panel__button">
-                                    <button className="btn btn__more btn__more--color btn__more--font"> View More</button>
+                                    <a href="http://preev.com/ltc/usd" style={{textDecoration:"none"}} className="btn btn__more btn__more--color btn__more--font"> View More</a>
                                 </div>
                             </div>
                         </div>
@@ -169,8 +184,6 @@ class HomeComponent extends PureComponent {
     }
 }
 
-const mapStateToProps = (state) => {
-    return { features: state.features.homePageFeatures }
-}
+const mapStateToProps = (state) => ({...state.home})
 
 export default connect(mapStateToProps, actions)(HomeComponent);

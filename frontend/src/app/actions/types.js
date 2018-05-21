@@ -23,3 +23,5 @@ export const VERIFY_ERROR = 'verify_error';
 export const VERIFY_SUCCESS = 'verify_success';
 export const UPDATE_RECOVER_FIELD = 'updateRecoverPassFields';
 export const UPDATE_PASSWORD = 'update_password'
+export const UPDATE_BTC_PRICE = 'update_btc_price';
+export const UPDATE_LTC_PRICE = 'update_ltc_price';

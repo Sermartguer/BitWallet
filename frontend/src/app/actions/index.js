@@ -57,3 +57,4 @@ export * from './send.action'
 export * from './history.action'
 export * from './auth.action'
 export * from './overview.action'
+export * from './home.action';

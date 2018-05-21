@@ -6,6 +6,7 @@ import { reducer as overviewReducer } from './overview.reducer';
 import { reducer as sendReducer } from './send.reducer';
 import { reducer as buyReducer } from './buy.reducer';
 import { reducer as historyReducer} from './history.reducer';
+import { reducer as homeReducer } from './home.reducer';
 const rootReducer = combineReducers({
     form: formReducer,
     auth: authReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     overview: overviewReducer,
     send: sendReducer,
     buy: buyReducer,
-    history: historyReducer
+    history: historyReducer,
+    home:homeReducer
 });
 
 export default rootReducer;
