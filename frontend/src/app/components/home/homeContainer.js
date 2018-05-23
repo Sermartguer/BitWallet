@@ -128,7 +128,10 @@ class HomeComponent extends PureComponent {
                             <span className="info__desc">Send and receive cryptocurrencies, generate addresses and send to an address with QR code</span>
                         </div>
                     </div>
-                    
+                </div>
+                <div className="welcome__platform">
+                    <h1 className="plans__title">Multiplatform App</h1>
+                    <img className="platform__style" src="http://localhost:8080/static/multi.png"></img>
                 </div>
                 <div className="welcome__plans">
                     <h1 className="plans__title">BitWallet Plans</h1>

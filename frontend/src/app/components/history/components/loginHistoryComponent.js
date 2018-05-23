@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
+import moment from 'moment'
 class LoginHistoryComponent extends PureComponent {
     constructor(props){
         super(props);
@@ -13,14 +14,18 @@ class LoginHistoryComponent extends PureComponent {
         var loginData = this.state.loginArray.map((loginLog)=>{
             let status = "";
             if(loginLog.success === "1"){
-                status = "Success"
+                status = <i style={{color:"#7BCC70"}}className="fas fa-check-circle"></i>
             }else{
-                status = "Error"
+                status = <i style={{color:"#d94c4c"}} className="fas fa-exclamation-circle"></i>
             }
+            let date = new Date(loginLog.time)
+            console.log(date.getUTCDate())
+            let time = moment([date.getFullYear(),date.getMonth()+1,date.getDate()]).fromNow(true)
+            console.log(loginLog.time)
             return  <tr>
                         <td>{loginLog.ip}</td>
-                        <td>{loginLog.time}</td>
-                        <td>{status}</td>
+                        <td>{time} ago</td>
+                        <td style={{textAlign:"center"}}>{status}</td>
                     </tr>
              });
         return (

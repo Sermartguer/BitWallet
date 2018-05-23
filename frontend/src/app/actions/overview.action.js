@@ -25,14 +25,20 @@ export const getUserBasic = () =>{
     };
 }
 export const getCoinPrice = (currency) => {
+    let curr;
+    if(currency === 'BTC'){
+        curr = 'bitcoin'
+    }else if(currency === 'DOGE'){
+        curr = 'dogecoin'
+    }else if(currency === 'LTC'){
+        curr = 'litecoin'
+    }
     return (dispatch) => {
-        axios.post('http://localhost:8080/api/getCurrencyPrice', {currency:currency} ,{
+        axios.get('https://api.coinmarketcap.com/v1/ticker/'+curr+'/',{
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
         }).then(response => {
-            console.log(response.data.data)
-            let res = {currency:response.data.data.network,data: response.data.data.prices}
-            dispatch({type: GET_COIN_PRICE, payload:res})
+            dispatch({type: GET_COIN_PRICE, payload:{currency:currency+'price',data:response.data[0].price_usd}})
         }).catch((err) => {
         });
     };

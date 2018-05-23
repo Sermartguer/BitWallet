@@ -6,28 +6,28 @@ class CurrencyInfoComponent extends PureComponent {
     constructor(props){
         super(props)
         this.state = {
-            transactions: props.props.transaction,
+            transactions: null,
             currency: props.props.currency,
             amount: props.props.amount,
-            prices:props.props.prices,
-            orderBalance:null
+            price:null,
+            orderBalance:null,
         }
     }
     componentWillMount(){
         this.props.getOrderBalance(this.state.currency);
+        this.props.getCoinPrice(this.state.currency);
     }
     componentWillReceiveProps(nextProps) {
         this.setState({
-            orderBalance:nextProps["order"+this.state.currency]
+            orderBalance:nextProps["order"+this.state.currency],
+            price:nextProps[this.state.currency+'price'],
+            transactions:nextProps['transaction'+this.state.currency]
         })
     }
     render() {
-        console.log(this.state.orderBalance)
-        var balanceOrders = null;
+        var balanceOrders = 0;
         if((this.state.orderBalance != null) && (this.state.orderBalance != "")){
             balanceOrders = this.state.orderBalance;
-        }else{
-            balanceOrders = 0;
         }
         var curr = null;
         if(this.state.currency === "DOGE"){
@@ -37,11 +37,10 @@ class CurrencyInfoComponent extends PureComponent {
         }else if(this.state.currency === "LTC"){
             curr = "litecoin";
         }
-        let price = eval(this.state.amount * this.state.prices[0].price);
-        let mon = this.state.prices[0].price_base;
+        let price = eval(this.state.amount * this.state.price);
         var transactionUI;
-        if(this.state.transactions !== undefined){
-            transactionUI = <TransactionInfoComponent transactions={this.state.transactions} />
+        if(this.state.transactions !== null){
+            transactionUI = <TransactionInfoComponent transactions={this.state.transactions} currency={this.state.currency} />
         }else{
             transactionUI =  <span className="center__trans">No transactions found</span>;
         }
@@ -55,7 +54,7 @@ class CurrencyInfoComponent extends PureComponent {
                         <span className="info__title">{curr.toUpperCase()}</span>
                         <div className="info__desc">
                             <span className="info__amount">{parseFloat(balanceOrders)} {parseFloat(this.state.amount)-parseFloat(balanceOrders)} {this.state.currency}</span>
-                            <span className="info__total">{price}{mon}</span>
+                            <span className="info__total">{price} USD</span>
                         </div>
                     </div>
                 </div>

@@ -6,18 +6,28 @@ class TransactionInfoComponent extends PureComponent {
     constructor(props){
         super(props)
         this.state = {
-            transactions: props.transactions
+            transactions: props.transactions,
+            currency: props.currency
         }
     }
     render() {
+        let trans;
+        if(this.state.transactions != null){
+            if(this.state.transactions.length < 1){
+                trans = <div className="transaction">
+                            <span className="transaction__mount">No transactions found</span>
+                        </div>
+            }else{
+                let transaction = this.state.transactions[this.state.transactions.length-1];
+                trans = <div className="transaction">
+                            <span className="transaction__mount">{Math.round(transaction.amount * 100)/100 } {this.state.currency}</span>
+                            <span className="transaction__to">to:{transaction.send}</span>
+                        </div> 
+            }
+        }
         return (
             <div>
-                {this.state.transactions ? <div className="transaction">
-                    <span className="transaction__mount">{Math.round(this.state.transactions.amount * 100)/100 } {this.state.transactions.currency}</span>
-                    <span className="transaction__to">to:{this.state.transactions.send_to}</span>
-                </div> : <div className="transaction">
-                    <span className="transaction__mount">No transactions found</span>
-                </div>}
+               {trans}
             </div>
         );
     }

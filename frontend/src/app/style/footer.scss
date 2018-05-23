@@ -5,4 +5,15 @@ footer {
     min-height: 100px;
     height: 40px;
     color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .footer__rs{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    img{
+      margin:5px;
+    }
   }

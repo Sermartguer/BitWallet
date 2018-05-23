@@ -8,15 +8,13 @@ class OverviewContainer extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-        
+            btcBalance:null,
+            ltcBalance:null,
+            dogeBalance:null
           };
     }
     componentWillMount(){
-        console.log(this.props)
         this.props.getUserBasic();
-        this.props.getCoinPrice('DOGE');
-        this.props.getCoinPrice('BTC');
-        this.props.getCoinPrice('LTC');
         this.props.getUserTransactions();
     }
     renderCurrency() {
@@ -27,49 +25,37 @@ class OverviewContainer extends PureComponent {
             );
         }
     }
-    render() {
-        
-        if((this.props.overview !== undefined) && (this.props.DOGE !== undefined) && (this.props.BTC !== undefined) && (this.props.LTC !== undefined) && (this.props.transactions !== undefined)){
-            var curr = this.props.overview.map((item, index)=>{
-                let curr;
-                let trans;
-                if(item.currency === 'BTC'){
-                    curr = this.props.BTC.data;
-                    if(this.props.transactions !== null){
-                        this.props.transactions.map((transaction)=>{
-                            if(transaction.currency === 'BTC'){
-                                trans = transaction
-                            }
-                        });
-                    }
-                }else if(item.currency === 'LTC'){
-                    curr = this.props.LTC.data;
-                    if(this.props.transactions !== null){
-                        this.props.transactions.map((transaction)=>{
-                            if(transaction.currency === 'LTC'){
-                                trans = transaction
-                            }
-                        });
-                    }
-                }else if(item.currency === 'DOGE'){
-                    curr = this.props.DOGE.data;
-                    if(this.props.transactions !== null){
-                        this.props.transactions.map((transaction)=>{
-                            if(transaction.currency === 'DOGE'){
-                                trans = transaction
-                            }
-                        });
-                    }
-                }
-                return <CurrencyInfoComponent key={index} props={{currency:item.currency, amount:item.amount,prices:curr,transactions:this.props.transactions,transaction:trans}}/>
+    componentWillReceiveProps(nextProps){
+        if((nextProps.DogeBalance !=undefined) && (nextProps.BtcBalance !=undefined) && (nextProps.LtcBalance !=undefined)){
+            this.setState({
+                dogeBalance:nextProps.DogeBalance,
+                btcBalance:nextProps.BtcBalance,
+                ltcBalance:nextProps.LtcBalance
             })
+        }
+    }
+    render() {
+        if(this.state.dogeBalance != null){
+            var dogeCoin = <CurrencyInfoComponent key={0} props={{currency:'DOGE', amount:this.state.dogeBalance, prices:1, transactions:0, transaction:0}}/>
         }else{
-            var curr = 'Loading...'
+            var dogeCoin = 'Loading'
+        }
+        if(this.state.btcBalance != null){
+            var bitCoin = <CurrencyInfoComponent key={1} props={{currency:'BTC', amount:this.state.btcBalance, prices:2, transactions:0,transaction:0}}/>
+        }else{
+            var bitCoin = 'Loading'
+        }
+        if(this.state.ltcBalance != null){
+            var liteCoin = <CurrencyInfoComponent key={2} props={{currency:'LTC', amount:this.state.ltcBalance, prices:2, transactions:0,transaction:0}}/>
+        }else{
+            var liteCoin = 'Loading'
         }
         return (
             <div className="dash overview">
                 <div className="overview__detail">
-                    {curr}
+                    {bitCoin}
+                    {dogeCoin}
+                    {liteCoin}
                 </div>
                 <div>
                     <ChartComponent />
@@ -82,16 +68,6 @@ class OverviewContainer extends PureComponent {
     }
 }
 
-const mapStateToProps = (state) => {
-    return { 
-        overview: state.overview.overview,
-        currencyPrice: state.overview.currencyPrice,
-        DOGE:state.overview.DOGE,
-        BTC: state.overview.BTC,
-        LTC: state.overview.LTC,
-        transactions: state.overview.transactions
-        
-    }
-}
+const mapStateToProps = (state) => ({...state.overview})
 
 export default connect(mapStateToProps, actions)(OverviewContainer);
