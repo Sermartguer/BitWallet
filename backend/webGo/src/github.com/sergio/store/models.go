@@ -83,6 +83,7 @@ func SaveOrder(id_account string, amount string, currency string, price string, 
 	db := common.DbConn()
 	insForm, err := db.Prepare("INSERT INTO orders (id_account,amount,currency,price,create_at,currency_to) VALUES(?,?,?,?,?,?)")
 	if err != nil {
+		defer db.Close()
 		return false
 	}
 	insForm.Exec(id_account, amount, currency, price, time.Now(), currency_to)
@@ -117,6 +118,7 @@ func SetPayment(amount string, id string, currency string) bool {
 
 	if err != nil {
 		log.Fatal(err)
+		defer db.Close()
 		return false
 	}
 	defer db.Close()

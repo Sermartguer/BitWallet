@@ -62,11 +62,14 @@ func CheckAddress(id string, currency string) bool {
 		}
 		log.Println(activo)
 		if activo == "0" {
+			defer db.Close()
 			return false
 		} else {
+			defer db.Close()
 			return true
 		}
 	}
+	defer db.Close()
 	return true
 }
 func CheckPin(id string, pin string) bool {
@@ -79,11 +82,14 @@ func CheckPin(id string, pin string) bool {
 			log.Println(err.Error())
 		}
 		if pinDB == pin {
+			defer db.Close()
 			return true
 		} else {
+			defer db.Close()
 			return false
 		}
 	}
+	defer db.Close()
 	return false
 }
 func NewAddressEndpoint(currency string, label string) []byte {
@@ -95,6 +101,7 @@ func NewAddressEndpoint(currency string, label string) []byte {
 	if err != nil {
 		return []byte("Error")
 	} else {
+
 		return body
 	}
 }
@@ -107,6 +114,7 @@ func SaveAddress(id string, address string, currency string, label string) bool 
 	_, err = insForm.Exec(address, label, id, currency)
 	if err != nil {
 		log.Fatal(err)
+		defer db.Close()
 		return false
 	}
 	defer db.Close()
@@ -127,11 +135,14 @@ func checkBalances(id string, currency string, amount string) bool {
 		labelValue, _ := strconv.ParseFloat(label, 64)
 		amountValue, _ := strconv.ParseFloat(amount, 64)
 		if labelValue > amountValue {
+			defer db.Close()
 			return true
 		} else {
+			defer db.Close()
 			return false
 		}
 	}
+	defer db.Close()
 	return false
 }
 func checkLabelDestine(destine string, currency string) bool {
@@ -145,11 +156,14 @@ func checkLabelDestine(destine string, currency string) bool {
 		}
 		log.Println()
 		if label == "1" {
+			defer db.Close()
 			return true
 		} else {
+			defer db.Close()
 			return false
 		}
 	}
+	defer db.Close()
 	return false
 }
 func GetLabelFromID(currency string, id string) string {
@@ -162,8 +176,10 @@ func GetLabelFromID(currency string, id string) string {
 			log.Println(err.Error())
 		}
 		log.Println(label)
+		defer db.Close()
 		return label
 	}
+	defer db.Close()
 	return ""
 }
 func SendBalanceByLabels(currency string, amount string, from string, to string) []byte {
@@ -183,6 +199,7 @@ func SaveTransaction(id string, to string, hash_id string, amount string, curren
 	db := common.DbConn()
 	insForm, err := db.Prepare("INSERT INTO transactions (id_account,send_to,hash_id,amount,currency,trans_type,trans_time) VALUES(?,?,?,?,?,?,?)")
 	if err != nil {
+		defer db.Close()
 		return false
 	}
 	insForm.Exec(id, to, hash_id, "-"+amount, currency, trans_type, time.Now())
@@ -199,6 +216,7 @@ func UpdateBalanceTo(amount string, id string, currency string) bool {
 
 	if err != nil {
 		log.Fatal(err)
+		defer db.Close()
 		return false
 	}
 	defer db.Close()
@@ -213,8 +231,10 @@ func GetLabelByID(id string, currency string) string {
 		if err != nil {
 			log.Println(err.Error())
 		}
+		defer db.Close()
 		return label
 	}
+	defer db.Close()
 	return ""
 
 }

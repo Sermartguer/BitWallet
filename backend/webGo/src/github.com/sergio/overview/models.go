@@ -43,7 +43,7 @@ func GetGenericData(id_account string) []Data {
 		row.Currency = responseCurrency
 		data = append(data, row)
 	}
-	db.Close()
+	defer db.Close()
 	return data
 }
 func CheckAddress(id string, currency string) bool {
@@ -56,8 +56,10 @@ func CheckAddress(id string, currency string) bool {
 			log.Println(err.Error())
 		}
 		if activo == "0" {
+			defer db.Close()
 			return false
 		} else {
+			defer db.Close()
 			return true
 		}
 	}
@@ -72,8 +74,10 @@ func GetLabelByID(id string, currency string) string {
 		if err != nil {
 			log.Println(err.Error())
 		}
+		defer db.Close()
 		return label
 	}
+	defer db.Close()
 	return ""
 }
 func UpdateBalanceTo(amount string, id string, currency string) bool {
@@ -88,6 +92,7 @@ func UpdateBalanceTo(amount string, id string, currency string) bool {
 
 	if err != nil {
 		log.Fatal(err)
+		defer db.Close()
 		return false
 	}
 	defer db.Close()
@@ -134,6 +139,6 @@ func UserTransactions(id_account string) []TransactionsStructure {
 		row.TransTime = responseTransTime
 		data = append(data, row)
 	}
-	db.Close()
+	defer db.Close()
 	return data
 }

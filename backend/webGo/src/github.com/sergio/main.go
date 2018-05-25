@@ -52,6 +52,8 @@ func main() {
 	//MOBILE API ENDPOINT
 	r.HandleFunc("/apiv2/getLogin", mobile.LoginByMobileID).Methods("POST")
 	r.HandleFunc("/apiv2/getMobileBalances", mobile.MobileUserBalances).Methods("POST")
+	r.HandleFunc("/apiv2/pay", mobile.MobilePay).Methods("POST")
+	r.HandleFunc("/apiv2/generateMobileOrder", mobile.GenerateMobileOrder).Methods("POST")
 	server := &http.Server{
 		Addr:           ":8080",
 		Handler:        cors.Default().Handler(r),

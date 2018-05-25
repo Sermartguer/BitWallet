@@ -15,6 +15,7 @@ func SaveUser(user_data UserModelValidator, mobile string) bool {
 	insForm, err := db.Prepare("INSERT INTO accounts (id, username, email,password,acc_type,update_at, create_at, active, mobile_hash) VALUES(?,?,?,?,?,?,?,?,?)")
 	if err != nil {
 		log.Fatal(err)
+		defer db.Close()
 		return false
 
 	}
@@ -32,10 +33,13 @@ func CheckUser(user_data UserModelValidator) bool {
 	switch {
 	case err == sql.ErrNoRows:
 		log.Printf("No user with that username.")
+		defer db.Close()
 		return false
 	case err != nil:
+		defer db.Close()
 		log.Fatal(err)
 	default:
+		defer db.Close()
 		return true
 		fmt.Printf("Username is %s\n", username)
 	}
@@ -48,11 +52,14 @@ func SearchUser(username string) bool {
 	switch {
 	case err == sql.ErrNoRows:
 		log.Printf("No user with that username.")
+		defer db.Close()
 		return false
 	case err != nil:
 		log.Fatal(err)
+		defer db.Close()
 		return false
 	default:
+		defer db.Close()
 		return true
 		fmt.Printf("Username is %s\n", username)
 	}
@@ -97,6 +104,7 @@ func Verify(id string, pin string) bool {
 
 	if err != nil {
 		log.Fatal(err)
+		defer db.Close()
 		return false
 
 	}
@@ -114,6 +122,7 @@ func Update(firstname string, surname string, id string) bool {
 
 	if err != nil {
 		log.Fatal(err)
+		defer db.Close()
 		return false
 	}
 	defer db.Close()
@@ -189,6 +198,7 @@ func NewAccountPassword(password string, id string) bool {
 
 	if err != nil {
 		log.Fatal(err)
+		defer db.Close()
 		return false
 	}
 	defer db.Close()
@@ -200,8 +210,8 @@ func LoginActivity(id string, ip string, success string) bool {
 	insForm, err := db.Prepare("INSERT INTO activity_login (id_account,ip,time,success) VALUES(?,?,?,?)")
 	if err != nil {
 		log.Fatal(err)
+		defer db.Close()
 		return false
-
 	}
 	insForm.Exec(id, ip, time.Now().Format("Mon Jan _2 15:04:05 2006"), success)
 	defer db.Close()
@@ -214,11 +224,14 @@ func CheckIfIdExists(id string) bool {
 	switch {
 	case err == sql.ErrNoRows:
 		log.Println(err)
+		defer db.Close()
 		return false
 	case err != nil:
+		defer db.Close()
 		log.Println(err)
 		return false
 	default:
+		defer db.Close()
 		return true
 	}
 	defer db.Close()
